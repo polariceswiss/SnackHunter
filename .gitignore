@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.env
+data/orders.json
+data/book.json
+grok_logs.csv

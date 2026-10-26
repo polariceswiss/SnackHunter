@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>La caja — Snack Hunter Café</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/favicon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,500&family=Outfit:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/caja.css">
+</head>
+<body>
+  <main id="lock">
+    <p class="kicker">Snack Hunter Café</p>
+    <h1>La caja</h1>
+    <form id="pin-form">
+      <label>Clave de la casa
+        <input id="pin" inputmode="numeric" autocomplete="off" maxlength="8" autofocus>
+      </label>
+      <button type="submit">Abrir</button>
+      <p id="pin-error"></p>
+    </form>
+  </main>
+
+  <div id="desk" hidden>
+    <header>
+      <a href="index.html">La carta</a>
+      <strong>La caja</strong>
+      <button id="out" type="button">Cerrar</button>
+    </header>
+    <section class="board">
+      <div>
+        <p class="kicker">Pedidos vivos</p>
+        <h2>Lo que está en la plancha.</h2>
+        <div id="orders"></div>
+      </div>
+      <div class="map-wrap" id="caja-map"></div>
+    </section>
+    <section class="book">
+      <div>
+        <p class="kicker">El libro</p>
+        <h2>Precios de salida.</h2>
+        <p class="note">La carta impresa no traía precios. Estos son el punto de partida. Lo que guardes aquí es lo que ve el que pide.</p>
+        <div id="prices"></div>
+        <button id="save-prices" type="button">Guardar la carta</button>
+      </div>
+      <form id="house-form">
+        <p class="kicker">La casa</p>
+        <label class="check"><input id="delivery" type="checkbox"> El carrito sale hoy</label>
+        <label>Cargo del carrito, dólares <input id="fee" inputmode="decimal"></label>
+        <label>Tax, por ciento <input id="tax" inputmode="decimal"></label>
+        <label>Zelle <input id="zelle" placeholder="Vacío hasta que lo pongas"></label>
+        <label>Clave de la caja <input id="new-pin" inputmode="numeric"></label>
+        <button type="submit">Guardar la casa</button>
+        <p id="house-note"></p>
+      </form>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/house.js?v=14"></script>
+  <script src="js/caja.js?v=2"></script>
+</body>
+</html>

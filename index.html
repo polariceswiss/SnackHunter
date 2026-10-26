@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Snack Hunter Café — Miami</title>
+  <meta name="description" content="Cafetería cubana en el 3799 NW 7th Street, Miami. Sándwiches prensados, desayuno, jugos y colada. El carrito de golf entrega en un círculo de cinco millas.">
+  <meta name="theme-color" content="#000000">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="icon" href="assets/favicon.png?v=6" type="image/png">
+  <link rel="apple-touch-icon" href="assets/apple-touch.png?v=6">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/styles.css?v=25">
+  <link rel="stylesheet" href="css/order.css?v=13">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Snack Hunter Café",
+    "servesCuisine": "Cuban",
+    "telephone": "+1-786-290-5242",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "3799 NW 7th St",
+      "addressLocality": "Miami",
+      "addressRegion": "FL",
+      "postalCode": "33126",
+      "addressCountry": "US"
+    },
+    "geo": { "@type": "GeoCoordinates", "latitude": 25.7808, "longitude": -80.2586 },
+    "url": "https://www.google.com/maps/search/?api=1&query=3799+NW+7th+St+Miami+FL+33126"
+  }
+  </script>
+</head>
+<body id="top">
+  <a class="skip" href="#carta" data-i18n="skip">Saltar a la carta</a>
+
+  <div class="gate" id="gate" role="dialog" data-i18n-aria="gateLabel" aria-label="La cocina está en marcha">
+    <div class="gate-stage">
+      <img class="gate-hunter" src="assets/hunter.png?v=11" alt="">
+      <p class="gate-name">Snack Hunter</p>
+      <p class="gate-cafe">Café</p>
+      <p class="gate-phrase" id="gate-phrase">Horneando el pan</p>
+      <div class="gate-bar" aria-hidden="true"><span id="gate-fill"></span></div>
+    </div>
+    <button class="gate-skip" id="gate-skip" type="button" data-i18n="pass">Pasar</button>
+  </div>
+  <script>
+    (function () {
+      var gate = document.getElementById("gate");
+      var wait = 6000;
+      var fill = document.getElementById("gate-fill");
+      if (fill) fill.style.animationDuration = wait + "ms";
+      var phrase = document.getElementById("gate-phrase");
+      var en = false;
+      try { en = localStorage.getItem("sh.lang") === "en"; } catch (e) {}
+      var lines = en
+        ? ["Baking the bread", "Pressing the Cuban", "Blending the pineapple", "Browning the pastelito", "Pulling the coffee", "Building the midnight"]
+        : ["Horneando el pan", "Prensando el cubano", "Licuando la piña", "Dorando el pastelito", "Colando el café", "Armando la media noche"];
+      if (phrase && en) phrase.textContent = lines[0];
+      var step = 0;
+      var ticker = setInterval(function () {
+        if (!phrase || !document.getElementById("gate")) { clearInterval(ticker); return; }
+        step = (step + 1) % lines.length;
+        phrase.textContent = lines[step];
+      }, 980);
+      function open() {
+        if (!gate || gate.classList.contains("is-open")) return;
+        clearInterval(ticker);
+        gate.classList.add("is-open");
+        try { sessionStorage.setItem("sh.gate", "1"); } catch (e) {}
+        setTimeout(function () { if (gate && gate.parentNode) gate.parentNode.removeChild(gate); }, 800);
+      }
+      var skip = document.getElementById("gate-skip");
+      if (skip) skip.addEventListener("click", open);
+      setTimeout(open, wait);
+    })();
+  </script>
+
+  <header class="site-header">
+    <a class="brand" href="#top">
+      <img src="assets/hunter.png?v=11" alt="">
+      <span>Snack Hunter</span>
+      <em>Café</em>
+    </a>
+    <nav class="nav-desktop" data-i18n-aria="nav" aria-label="Secciones">
+      <a data-spy href="#carta" data-i18n="menu">Carta</a>
+      <a data-spy href="#oficio" data-i18n="craft">Oficio</a>
+      <a data-spy href="#medios" data-i18n="media">Media</a>
+      <a data-spy href="#radio" data-i18n="delivery">Entrega</a>
+      <a data-spy href="#visita" data-i18n="visit">Visita</a>
+    </nav>
+    <div class="lang-switch" role="group" aria-label="Idioma">
+      <button type="button" data-lang="es">ES</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <button class="entrar-btn" id="entrar" type="button" data-account data-i18n="enter">Entrar</button>
+    <button class="cesta-btn" id="cesta" type="button"><span data-i18n="basket">Cesta</span> <b data-count>0</b></button>
+    <a class="call-pill" href="tel:+17862905242" data-i18n="call">Llamar</a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-panel">
+      <span class="nav-toggle-lines" aria-hidden="true"></span>
+      <span class="nav-toggle-label">Menú</span>
+    </button>
+  </header>
+
+  <div class="nav-panel" id="nav-panel" hidden>
+    <nav data-i18n-aria="nav" aria-label="Secciones">
+      <a href="#carta" data-i18n="menu">Carta</a>
+      <a href="#oficio" data-i18n="craft">Oficio</a>
+      <a href="#medios" data-i18n="media">Media</a>
+      <a href="#radio" data-i18n="delivery">Entrega</a>
+      <a href="#visita" data-i18n="visit">Visita</a>
+      <button type="button" data-account data-i18n="enter">Entrar</button>
+      <a class="nav-panel-call" href="tel:+17862905242">786.290.5242</a>
+    </nav>
+  </div>
+
+  <main>
+    <section class="hero" data-i18n-aria="heroLabel" aria-label="La comida">
+      <div class="hero-reel">
+        <article class="hero-slide">
+          <img src="assets/cubano.jpg?v=6" alt="Cubano prensado, con jamón, lechón, queso, pepinillo y mostaza.">
+          <div class="hero-copy">
+            <h1 data-i18n="hCuban">El cubano.</h1>
+            <p class="hero-en" data-i18n="hCubanEn">Cuban sandwich</p>
+            <a class="btn btn-solid" href="#carta" data-i18n="order">Pedir</a>
+          </div>
+        </article>
+        <article class="hero-slide">
+          <img src="assets/jugos.jpg?v=12" alt="La licuadora vertiendo el jugo de piña en el vaso.">
+          <div class="hero-copy">
+            <h1 data-i18n="hJuice">Los jugos.</h1>
+            <p class="hero-en" data-i18n="hJuiceEn">Fresh juices</p>
+            <a class="btn btn-solid" href="#jugos" data-i18n="see">Ver</a>
+          </div>
+        </article>
+        <article class="hero-slide">
+          <img src="assets/bistec.jpg?v=7" alt="Pan con bistec, steak a la plancha con cebolla.">
+          <div class="hero-copy">
+            <h1 data-i18n="hSteak">El bistec.</h1>
+            <p class="hero-en" data-i18n="hSteakEn">Steak sandwich</p>
+            <a class="btn btn-solid" href="#carta" data-i18n="order">Pedir</a>
+          </div>
+        </article>
+        <article class="hero-slide">
+          <img src="assets/tequenos.jpg?v=10" alt="Tequeños recién fritos, con el queso derritiéndose.">
+          <div class="hero-copy">
+            <h1 data-i18n="hTeq">Los tequeños.</h1>
+            <p class="hero-en" data-i18n="hTeqEn">Cheese sticks</p>
+            <a class="btn btn-solid" href="#picar" data-i18n="order">Pedir</a>
+          </div>
+        </article>
+      </div>
+      <div class="hero-dots" aria-hidden="true"><span class="is-on"></span><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="carta" id="carta">
+      <div class="wrap carta-layout">
+        <aside class="carta-index" aria-label="Índice de la carta">
+          <p>La carta</p>
+          <a data-spy href="#sandwiches" data-i18n="secSandwiches">Sándwiches</a>
+          <a data-spy href="#desayuno" data-i18n="secBreakfast">Desayuno</a>
+          <a data-spy href="#calientes" data-i18n="secHot">Calientes</a>
+          <a data-spy href="#picar" data-i18n="secStart">Para picar</a>
+          <a data-spy href="#empanadas" data-i18n="secPatties">Empanadas</a>
+          <a data-spy href="#ensaladas" data-i18n="secSalads">Ensaladas</a>
+          <a data-spy href="#tacos" data-i18n="secTacos">Tacos</a>
+          <a data-spy href="#jugos" data-i18n="secJuices">Jugos</a>
+          <a data-spy href="#bebidas" data-i18n="secDrinks">Bebidas</a>
+        </aside>
+        <div class="carta-body">
+          <header class="carta-open" data-reveal>
+            <p class="eyebrow" data-i18n="orderHere">Para pedir aquí</p>
+            <h2 data-i18n="fits">Cabe en una mano.</h2>
+            <p class="lede" data-i18n="ledeMenu">Español primero, como se pide en el mostrador. El inglés, justo debajo. Aguacate, tomate, queso o lechuga se suman a $2.50.</p>
+          </header>
+          <div id="menu-root"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <p>Cubano · Media noche · Pan con bistec · Lechón · Croquetas · Colada · Tequeños · Pastelito de guayaba · Empanada · Papa rellena · Maracuyá ·&nbsp;</p>
+        <p>Cubano · Media noche · Pan con bistec · Lechón · Croquetas · Colada · Tequeños · Pastelito de guayaba · Empanada · Papa rellena · Maracuyá ·&nbsp;</p>
+      </div>
+    </div>
+
+    <section class="press" id="oficio">
+      <div class="wrap press-intro" data-reveal>
+        <p class="eyebrow eyebrow-light" data-i18n="method">El método</p>
+        <h2 data-i18n="six" data-i18n-html>Seis capas.<br>Una sola prensa.</h2>
+        <p class="lede" data-i18n="methodLede">El cubano no se apila. Se prensa hasta que el pan cruje y el queso se rinde. Este es el armado de siempre.</p>
+      </div>
+      <div class="press-stack">
+        <article class="slab" style="--i:0; --slab:#e6d3b0; --on:#241c14">
+          <p class="slab-index">01</p>
+          <h3 data-i18n="bread">Pan</h3>
+          <p data-i18n="s1">Cubano, mantequilla, plancha. La cacería empieza cuando dora.</p>
+          <figure class="slab-shot"><img src="assets/oficio-pan.jpg?v=1" alt="Pan cubano con mantequilla en la plancha."></figure>
+        </article>
+        <article class="slab" style="--i:1; --slab:#e4c2b6; --on:#2c1a16">
+          <p class="slab-index">02</p>
+          <h3 data-i18n="ham">Jamón</h3>
+          <p data-i18n="s2">Dulce, fino, en su sitio. No es relleno: es una capa.</p>
+          <figure class="slab-shot"><img src="assets/oficio-jamon.jpg?v=1" alt="Jamón en capa fina."></figure>
+        </article>
+        <article class="slab" style="--i:2; --slab:#5c3318; --on:#f6ebdd">
+          <p class="slab-index">03</p>
+          <h3 data-i18n="pork">Lechón</h3>
+          <p data-i18n="s3">El centro. Sin él, el cubano es otra cosa.</p>
+          <figure class="slab-shot"><img src="assets/oficio-lechon.jpg?v=1" alt="Lechón asado, el centro del cubano."></figure>
+        </article>
+        <article class="slab" style="--i:3; --slab:#efe2c0; --on:#241c14">
+          <p class="slab-index">04</p>
+          <h3 data-i18n="swiss">Queso</h3>
+          <p data-i18n="s4">Suizo, americano o pepper jack. Se rinde con el calor.</p>
+          <figure class="slab-shot"><img src="assets/oficio-queso.jpg?v=1" alt="Queso derritiéndose sobre el lechón."></figure>
+        </article>
+        <article class="slab" style="--i:4; --slab:#2c4034; --on:#f3eee4">
+          <p class="slab-index">05</p>
+          <h3 data-i18n="pickle">Pepinillo</h3>
+          <p data-i18n="s5">Mayonesa, mostaza y pepinillo. La línea que despierta el resto.</p>
+          <figure class="slab-shot"><img src="assets/oficio-pepinillo.jpg?v=1" alt="Pepinillo, mostaza y mayonesa."></figure>
+        </article>
+        <article class="slab" style="--i:5; --slab:#c9a66b; --on:#241c14">
+          <p class="slab-index">06</p>
+          <h3 data-i18n="bread">Pan</h3>
+          <p data-i18n="s6">Se cierra. Se prensa. Se sirve caliente, o no se sirve.</p>
+          <figure class="slab-shot"><img src="assets/oficio-prensa.jpg?v=1" alt="El cubano bajo la prensa."></figure>
+        </article>
+      </div>
+    </section>
+
+    <section class="firmas" id="firmas">
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow eyebrow-light" data-i18n="asked">Lo que piden</p>
+          <h2 data-i18n="three">Tres firmas.</h2>
+        </div>
+        <ol class="firma-list">
+          <li data-reveal>
+            <img src="assets/shots/cubano.jpg?v=2" alt="El cubano prensado.">
+            <span>01</span>
+            <h3 data-i18n="fCuban">El cubano</h3>
+            <p class="en" lang="en" data-i18n="fCubanEn">Cuban sandwich</p>
+            <p data-i18n="sig1">Lechón, jamón, queso, mayonesa, mostaza y pepinillo. El queso es suizo, americano o pepper jack.</p>
+          </li>
+          <li data-reveal>
+            <img src="assets/shots/medianoche.jpg?v=2" alt="La media noche.">
+            <span>02</span>
+            <h3 data-i18n="fMidnight">La media noche</h3>
+            <p class="en" lang="en" data-i18n="fMidnightEn">Midnight</p>
+            <p data-i18n="sig2">La misma familia, en pan de huevo. Más suave. Hecha para más tarde.</p>
+          </li>
+          <li data-reveal>
+            <img src="assets/shots/bistec.jpg?v=2" alt="Pan con bistec.">
+            <span>03</span>
+            <h3 data-i18n="fSteak">Pan con bistec</h3>
+            <p class="en" lang="en" data-i18n="fSteakEn">Steak sandwich</p>
+            <p data-i18n="sig3">Cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="jugos" id="color">
+      <div class="wrap">
+        <p class="eyebrow eyebrow-light" data-i18n="juices">Jugos</p>
+        <h2 data-i18n="fresh">Recién licuados.</h2>
+        <ul class="juice-list">
+          <li style="--fruit:#f3d56a"><img src="assets/fruit-pina.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jPina">Piña</span><span class="en" data-i18n="jPinaEn">Pineapple</span></span></li>
+          <li style="--fruit:#d64545"><img src="assets/fruit-melon.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jMelon">Melón de agua</span><span class="en" data-i18n="jMelonEn">Watermelon</span></span></li>
+          <li style="--fruit:#e0a84a"><img src="assets/fruit-maracuya.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jPassion">Maracuyá</span><span class="en" data-i18n="jPassionEn">Passion fruit</span></span></li>
+          <li style="--fruit:#e87820"><img src="assets/fruit-mango.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jMango">Mango</span><span class="en" data-i18n="jMangoEn">Mango</span></span></li>
+          <li style="--fruit:#f4a259"><img src="assets/fruit-naranja.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jOrange">Naranja</span><span class="en" data-i18n="jOrangeEn">Orange</span></span></li>
+          <li style="--fruit:#c4622d"><img src="assets/fruit-zanahoria.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jCarrot">Naranja y zanahoria</span><span class="en" data-i18n="jCarrotEn">Orange and carrot</span></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="medios" id="medios">
+      <div class="wrap">
+        <p class="eyebrow eyebrow-light" data-i18n="mediaEyebrow">Media</p>
+        <h2 data-i18n="mediaTitle">La casa, en cámara.</h2>
+        <p class="lede" data-i18n="mediaLede">El video de la casa. Las fotos y las redes se suman aquí.</p>
+        <div class="video-frame">
+          <iframe src="https://www.youtube-nocookie.com/embed/byuaRRl6s2Y" title="Snack Hunter Café" data-i18n-aria="videoTitle" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+        <ul class="media-row">
+          <li><img src="assets/cubano.jpg?v=6" alt="El cubano."></li>
+          <li><img src="assets/jugos.jpg?v=12" alt="Jugo de piña."></li>
+          <li><img src="assets/bistec.jpg?v=7" alt="Pan con bistec."></li>
+          <li><img src="assets/tequenos.jpg?v=10" alt="Tequeños."></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="radio" id="radio">
+      <div class="wrap radio-grid">
+        <div>
+          <p class="eyebrow eyebrow-light" data-i18n="milesEyebrow">Cinco millas</p>
+          <h2 data-i18n="cartWalk">El carrito no camina.</h2>
+          <p class="lede" data-i18n="cartLede">Un carrito de golf, un círculo. Dentro, sale de la casa. Fuera, se recoge en el mostrador. El pin manda: si la búsqueda falla, se toca la calle en el mapa.</p>
+          <form class="radio-search" id="find-form">
+            <input id="find-street" type="search" data-i18n-placeholder="streetPh" data-i18n-aria="streetLabel" placeholder="Tu calle, Miami" autocomplete="off" aria-label="Dirección de entrega">
+            <button type="submit" data-i18n="find">Buscar</button>
+          </form>
+          <ul class="suggest" id="find-list"></ul>
+          <p class="radio-live" id="radio-live" data-i18n="live">El círculo tiene cinco millas. El carrito no sale a pie.</p>
+        </div>
+        <div class="map-wrap" id="map" role="application" data-i18n-aria="mapLabel" aria-label="Mapa del radio de cinco millas"></div>
+      </div>
+    </section>
+
+    <section class="visita" id="visita">
+      <div class="wrap visita-grid">
+        <div data-reveal>
+          <p class="eyebrow eyebrow-light" data-i18n="addressEyebrow">La dirección no se caza</p>
+          <h2 data-i18n="houseHere">La casa está aquí.</h2>
+          <p class="lede" data-i18n="hours">Abre temprano. El horario se mueve con el día, así que se confirma por teléfono antes de manejar.</p>
+          <div class="matchbook">
+            <p class="match-brand">Snack Hunter <em>Café</em></p>
+            <p class="match-address">3799 NW 7th Street<br>Miami, Florida 33126</p>
+            <p class="match-strike" data-i18n="cafeteria">Cafetería</p>
+          </div>
+        </div>
+        <div class="visita-call" data-reveal>
+          <a href="tel:+17862905242">
+            <span data-i18n="callVerb">Llama</span>
+            786<br>290.5242
+          </a>
+          <a class="btn btn-ghost btn-light" href="https://www.google.com/maps/search/?api=1&query=3799+NW+7th+St+Miami+FL+33126" target="_blank" rel="noopener noreferrer" data-i18n="openMap">Abrir el mapa</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <img src="assets/hunter.png?v=11" alt="">
+    <div>
+      <p class="footer-brand">Snack Hunter <em>Café</em></p>
+      <p>Miami · 3799 NW 7th Street</p>
+      <p><a class="caja-link" href="caja.html" data-i18n="theBox">La caja</a></p>
+    </div>
+    <a href="tel:+17862905242">786.290.5242</a>
+  </footer>
+
+  <button class="ticket-bar" id="ticket-bar" type="button" hidden>
+    <span><span data-i18n="basket">Cesta</span> <span data-count>0</span></span>
+    <strong data-bar-total>$0</strong>
+  </button>
+  <a class="wa-float" href="https://wa.me/17862905242" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.15 6.4 2.15 11.83c0 1.74.46 3.44 1.34 4.94L2 22l5.39-1.41a10.1 10.1 0 0 0 4.65 1.12h.01c5.46 0 9.89-4.4 9.89-9.83C21.94 6.4 17.5 2 12.04 2zm5.76 14.15c-.24.68-1.4 1.25-1.94 1.33-.5.07-1.12.1-1.81-.11-.41-.13-.95-.31-1.64-.61-2.88-1.25-4.76-4.15-4.9-4.34-.14-.2-1.16-1.54-1.16-2.94s.73-2.08 1-2.37c.24-.27.64-.4 1.02-.4.12 0 .23 0 .33.01.29.01.43.03.62.48.24.57.82 1.98.89 2.12.07.15.12.32.02.51-.09.2-.14.32-.28.49-.14.17-.29.37-.41.5-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.89 1.05.93 1.93 1.22 2.2 1.36.27.14.43.12.59-.07.16-.2.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.54.73 1.8.86.27.13.44.2.51.31.06.11.06.64-.18 1.32z"/></svg>
+  </a>
+  <p class="mine" id="mine" hidden></p>
+  <div class="scrim" id="scrim" hidden></div>
+
+  <aside class="drawer" id="drawer" hidden data-i18n-aria="cartLabel" aria-label="Cesta">
+    <div class="drawer-head">
+      <h2 id="drawer-title" data-i18n="basket">La cesta</h2>
+      <button class="icon-x" id="drawer-x" type="button" data-i18n-aria="close" aria-label="Cerrar">×</button>
+    </div>
+    <div class="drawer-body">
+      <div id="view-cart">
+        <p id="cart-empty" data-i18n="cartEmpty">La cesta está vacía. La carta está abierta.</p>
+        <div id="cart-rest" hidden>
+          <p class="cart-hint" data-i18n="eachOne">Cada uno va por su lado. El de al lado puede pedir otra cosa.</p>
+          <div id="cart-lines"></div>
+          <div class="totals">
+            <div><span data-i18n="subtotal">Carta</span><span id="sum-sub">$0</span></div>
+            <div><span data-i18n="cartFee">Carrito</span><span id="sum-fee">$0</span></div>
+            <div><span>Tax</span><span id="sum-tax">$0</span></div>
+            <div><strong>Total</strong><strong id="sum-total">$0</strong></div>
+          </div>
+          <div class="drawer-actions">
+            <button class="btn btn-solid" id="to-check" type="button" data-i18n="order">Pedir</button>
+          </div>
+        </div>
+      </div>
+      <div id="view-check" hidden>
+        <div class="choice-row">
+          <button class="choice is-on" id="opt-recoger" type="button"><b data-i18n="pickup">Recoger</b><small data-i18n="pickupSub">En la casa</small></button>
+          <button class="choice" id="opt-carrito" type="button"><b data-i18n="cart">Carrito</b><small data-i18n="cartSub">Cinco millas</small></button>
+        </div>
+        <div id="drop-fields" hidden>
+          <label class="field"><span data-i18n="street">Calle</span><input id="check-street" type="search" data-i18n-placeholder="streetPh" placeholder="3799 NW 7th St, Miami" autocomplete="off"></label>
+          <ul class="suggest" id="check-list"></ul>
+          <label class="field"><span data-i18n="door">Puerta</span><input id="check-door" data-i18n-placeholder="doorPh" placeholder="Apto, casa, portón" autocomplete="address-line2"></label>
+          <button class="locate-btn" id="locate" type="button" data-i18n="locate">Usar mi ubicación</button>
+          <p class="drop-read" id="drop-read" data-i18n="dropHint">El teléfono marca la calle. El número y la puerta los escribes tú.</p>
+        </div>
+        <label class="field"><span data-i18n="name">Nombre</span><input id="who-name" autocomplete="name"></label>
+        <label class="field"><span data-i18n="phone">Teléfono</span><input id="who-phone" type="tel" autocomplete="tel"></label>
+        <div class="choice-row">
+          <button class="choice is-on" type="button" data-pay="efectivo"><b data-i18n="cash">Efectivo</b><small data-i18n="cashSub">Al llegar</small></button>
+          <button class="choice" type="button" data-pay="tarjeta"><b data-i18n="card">Tarjeta</b><small data-i18n="cardSub">Lector al llegar</small></button>
+          <button class="choice" type="button" data-pay="zelle"><b>Zelle</b><small data-i18n="zelleSub">La casa confirma</small></button>
+          <button class="choice" type="button" data-pay="mostrador"><b data-i18n="counter">Mostrador</b><small data-i18n="counterSub">Al recoger</small></button>
+        </div>
+        <p class="drop-read" id="zelle-line" hidden></p>
+        <p class="pay-total"><span data-i18n="due">A pagar</span><strong id="pay-total">$0</strong></p>
+        <p class="google-note" id="check-error"></p>
+        <div class="drawer-actions">
+          <button class="btn btn-ghost" id="back-cart" type="button" style="color:var(--ink);border-color:var(--line)" data-i18n="back">Volver</button>
+          <button class="btn btn-solid" id="place" type="button" data-i18n="place">Dejar el pedido</button>
+        </div>
+      </div>
+      <div id="view-ticket" hidden>
+        <div id="ticket-body"></div>
+      </div>
+    </div>
+  </aside>
+
+  <aside class="account" id="account" hidden data-i18n-aria="enter" aria-label="Entrar">
+    <div class="account-head">
+      <h2 data-i18n="enter">Entrar</h2>
+      <button class="icon-x" id="account-x" type="button" data-i18n-aria="close" aria-label="Cerrar">×</button>
+    </div>
+    <div class="account-body">
+      <p id="account-state" data-i18n="accountLead">Todavía sin nombre. El teléfono basta.</p>
+      <div id="google-slot"></div>
+      <p class="google-note" id="google-note" hidden data-i18n="googleNote">Google entra cuando la casa pega su client id. Hoy el nombre y el teléfono abren la cuenta, y el pedido queda a tu nombre.</p>
+      <label class="field"><span data-i18n="name">Nombre</span><input id="acc-name" autocomplete="name"></label>
+      <label class="field"><span data-i18n="phone">Teléfono</span><input id="acc-phone" type="tel" autocomplete="tel"></label>
+      <button class="phone-save" id="save-phone" type="button" data-i18n="save">Guardar</button>
+    </div>
+  </aside>
+
+  <nav class="dock" data-i18n-aria="dockLabel" aria-label="La casa">
+    <a href="#top">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/></svg>
+      <span data-i18n="dockHome">Inicio</span>
+    </a>
+    <a href="#carta">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h10a1 1 0 0 1 1 1V20l-6-3.2L6 20V4.5a1 1 0 0 1 1-1z"/></svg>
+      <span data-i18n="menu">Carta</span>
+    </a>
+    <button type="button" id="dock-cesta">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h15l-1.6 9.2a1 1 0 0 1-1 .8H8.2a1 1 0 0 1-1-.8L5 4H3"/><path d="M9 20.5a1 1 0 1 0 0.01 0M17 20.5a1 1 0 1 0 0.01 0"/></svg>
+      <span data-i18n="basket">Cesta</span>
+      <b data-count hidden>0</b>
+    </button>
+    <a href="#radio">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg>
+      <span data-i18n="delivery">Entrega</span>
+    </a>
+    <button type="button" data-account>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 19.2a6.5 6.5 0 0 1 13 0"/></svg>
+      <span class="dock-label" data-i18n="dockMe">Yo</span>
+    </button>
+  </nav>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="js/i18n.js?v=5"></script>
+  <script src="js/house.js?v=14"></script>
+  <script src="js/app.js?v=19"></script>
+  <script src="js/main.js?v=7"></script>
+</body>
+</html>
