@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="css/styles.css?v=25">
-  <link rel="stylesheet" href="css/order.css?v=13">
+  <link rel="stylesheet" href="css/order.css?v=14">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -46,12 +46,18 @@
       <p class="gate-phrase" id="gate-phrase">Horneando el pan</p>
       <div class="gate-bar" aria-hidden="true"><span id="gate-fill"></span></div>
     </div>
-    <button class="gate-skip" id="gate-skip" type="button" data-i18n="pass">Pasar</button>
+    <button class="gate-skip" id="gate-skip" type="button" data-i18n="pass">Entrar</button>
   </div>
   <script>
     (function () {
       var gate = document.getElementById("gate");
-      var wait = 6000;
+      try {
+        if (sessionStorage.getItem("sh.gate") === "1") {
+          if (gate && gate.parentNode) gate.parentNode.removeChild(gate);
+          return;
+        }
+      } catch (e) {}
+      var wait = 1600;
       var fill = document.getElementById("gate-fill");
       if (fill) fill.style.animationDuration = wait + "ms";
       var phrase = document.getElementById("gate-phrase");
@@ -74,8 +80,7 @@
         try { sessionStorage.setItem("sh.gate", "1"); } catch (e) {}
         setTimeout(function () { if (gate && gate.parentNode) gate.parentNode.removeChild(gate); }, 800);
       }
-      var skip = document.getElementById("gate-skip");
-      if (skip) skip.addEventListener("click", open);
+      if (gate) gate.addEventListener("click", open);
       setTimeout(open, wait);
     })();
   </script>
@@ -456,7 +461,7 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="js/i18n.js?v=5"></script>
+  <script src="js/i18n.js?v=6"></script>
   <script src="js/house.js?v=14"></script>
   <script src="js/app.js?v=19"></script>
   <script src="js/main.js?v=7"></script>

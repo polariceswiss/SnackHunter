@@ -4,7 +4,7 @@
     es: {
       skip: "Saltar a la carta",
       gateLabel: "La cocina está en marcha",
-      pass: "Pasar",
+      pass: "Entrar",
       nav: "Secciones",
       menu: "Carta",
       craft: "Oficio",
@@ -134,7 +134,7 @@
     en: {
       skip: "Skip to the menu",
       gateLabel: "The kitchen is moving",
-      pass: "Skip",
+      pass: "Enter",
       nav: "Sections",
       menu: "Menu",
       craft: "The press",
