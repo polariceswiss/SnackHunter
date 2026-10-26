@@ -52,31 +52,59 @@
     }).join("") + '<button class="ghost" type="button" data-paid="' + (order.paid ? "0" : "1") + '" data-id="' + order.id + '">' + (order.paid ? "Pagado" : "Marcar pagado") + "</button>";
   }
 
+  function when(order) {
+    var d = new Date(order.created);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleString("es", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" });
+  }
+
+  function itemLine(order) {
+    var buckets = [];
+    (order.items || []).forEach(function (line) {
+      var key = (line.name || "") + "|" + (line.note || "");
+      var found = null;
+      buckets.forEach(function (row) { if (row.key === key) found = row; });
+      var qty = line.qty || 1;
+      if (!found) buckets.push({ key: key, name: line.name, note: line.note, qty: qty });
+      else found.qty += qty;
+    });
+    return buckets.map(function (row) {
+      return row.qty + " " + row.name + (row.note ? " (" + row.note + ")" : "");
+    }).join(" · ");
+  }
+
+  function whereLine(order) {
+    return order.service === "carrito" && order.drop
+      ? order.drop.label + " · " + order.miles + " mi · " + order.eta + " min"
+      : "Recoge en la casa";
+  }
+
+  function orderCard(order, actions) {
+    return (
+      '<article class="order"><h3>' + order.id + "</h3>" +
+      '<p class="when">' + when(order) + "</p>" +
+      "<p>" + (order.guest ? order.guest.name : "") + " · " + (order.guest ? order.guest.phone : "") + "</p>" +
+      "<p>" + itemLine(order) + "</p>" +
+      "<p>" + whereLine(order) + " · " + SH.money(order.total) + " · " + order.pay + " · " + order.status + (order.paid ? " · pagado" : "") + "</p>" +
+      (actions ? '<div class="actions">' + statusButtons(order) + "</div>" : "") +
+      "</article>"
+    );
+  }
+
   function paint(rows) {
     var box = document.getElementById("orders");
+    var past = document.getElementById("history");
     var live = rows.filter(function (order) {
       return order.status !== "entregada" && order.status !== "recogida" && order.status !== "cancelada";
     });
-    var done = rows.filter(function (order) { return live.indexOf(order) < 0; }).slice(0, 6);
-    var all = live.concat(done);
-    if (!all.length) {
-      box.innerHTML = '<p class="empty">Todavía no entra nadie.</p>';
-    } else {
-      box.innerHTML = all.map(function (order) {
-        var where = order.service === "carrito" && order.drop
-          ? order.drop.label + " · " + order.miles + " mi · " + order.eta + " min"
-          : "Recoge en la casa";
-        var items = (order.items || []).map(function (line) {
-          return line.qty + " " + line.name + (line.note ? " (" + line.note + ")" : "");
-        }).join(" · ");
-        return (
-          '<article class="order"><h3>' + order.id + "</h3>" +
-          "<p>" + order.guest.name + " · " + order.guest.phone + "</p>" +
-          "<p>" + items + "</p>" +
-          "<p>" + where + " · " + SH.money(order.total) + " · " + order.pay + " · " + order.status + "</p>" +
-          '<div class="actions">' + statusButtons(order) + "</div></article>"
-        );
-      }).join("");
+    var done = rows.filter(function (order) { return live.indexOf(order) < 0; });
+    box.innerHTML = live.length
+      ? live.map(function (order) { return orderCard(order, true); }).join("")
+      : '<p class="empty">Todavía no entra nadie.</p>';
+    if (past) {
+      past.innerHTML = done.length
+        ? done.map(function (order) { return orderCard(order, false); }).join("")
+        : '<p class="empty">Todavía no hay compras cerradas.</p>';
     }
     paintMap(live);
   }
