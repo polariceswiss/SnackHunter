@@ -10,7 +10,7 @@
     city: "Miami, FL 33126",
     phone: "+17862905242",
     phonePretty: "786.290.5242",
-    radiusMi: 5,
+    radiusMi: 3,
     cartMph: 12,
     prepMin: 18,
     googleClientId: "",
@@ -99,13 +99,13 @@
     { id: "malta-pe", group: "bebidas", name: "Malta pequeña", en: "Small malta", cents: 200, shot: "assets/shots/malta-pe.jpg" },
     { id: "agua", group: "bebidas", name: "Agua", en: "Water", cents: 200, shot: "assets/shots/agua.jpg" },
     { id: "soda", group: "bebidas", name: "Soda", en: "Soda", cents: 200, shot: "assets/shots/soda.jpg" },
-    { id: "botella-gr", group: "bebidas", name: "Coke o Sprite grande", en: "Large bottle", cents: 300, shot: "assets/shots/botella-gr.jpg" },
-    { id: "botella-pe", group: "bebidas", name: "Coke o Sprite pequeña", en: "Small bottle", cents: 200, shot: "assets/shots/botella-pe.jpg" },
-    { id: "jarritos", group: "bebidas", name: "Jarritos", en: "Jarritos", cents: 300, shot: "assets/shots/jarritos.jpg" },
-    { id: "gatorade", group: "bebidas", name: "Gatorade", en: "Gatorade", cents: 300, shot: "assets/shots/gatorade.jpg" },
-    { id: "monster", group: "bebidas", name: "Monster", en: "Monster", cents: 300, shot: "assets/shots/monster.jpg" },
-    { id: "redbull", group: "bebidas", name: "Red Bull", en: "Red Bull", cents: 300, shot: "assets/shots/redbull.jpg" },
-    { id: "perrier", group: "bebidas", name: "Perrier", en: "Perrier", cents: 250, shot: "assets/shots/perrier.jpg" }
+    { id: "botella-gr", group: "bebidas", name: "Coke o Sprite grande", en: "Large bottle", cents: 300, label: "Coke · Sprite", shot: "assets/shots/botella-gr.jpg" },
+    { id: "botella-pe", group: "bebidas", name: "Coke o Sprite pequeña", en: "Small bottle", cents: 200, label: "Coke · Sprite", shot: "assets/shots/botella-pe.jpg" },
+    { id: "jarritos", group: "bebidas", name: "Jarritos", en: "Jarritos", cents: 300, label: "Jarritos", shot: "assets/shots/jarritos.jpg" },
+    { id: "gatorade", group: "bebidas", name: "Gatorade", en: "Gatorade", cents: 300, label: "Gatorade", shot: "assets/shots/gatorade.jpg" },
+    { id: "monster", group: "bebidas", name: "Monster", en: "Monster", cents: 300, label: "Monster", shot: "assets/shots/monster.jpg" },
+    { id: "redbull", group: "bebidas", name: "Red Bull", en: "Red Bull", cents: 300, label: "Red Bull", shot: "assets/shots/redbull.jpg" },
+    { id: "perrier", group: "bebidas", name: "Perrier", en: "Perrier", cents: 250, label: "Perrier", shot: "assets/shots/perrier.jpg" }
   ];
 
   var GROUPS = [

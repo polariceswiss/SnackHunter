@@ -80,8 +80,8 @@
   function revealChip(id) {
     if (!window.matchMedia("(max-width: 899px)").matches) return;
     var chip = document.querySelector('.carta-index a[href="#' + id + '"]');
-    if (!chip || !chip.parentElement) return;
-    var parent = chip.parentElement;
+    var parent = chip && chip.closest(".carta-index");
+    if (!chip || !parent) return;
     if (parent.scrollWidth <= parent.clientWidth + 8) return;
     parent.scrollTo({
       left: Math.max(0, chip.offsetLeft - (parent.clientWidth - chip.offsetWidth) / 2),
@@ -138,12 +138,72 @@
     }, { passive: true });
   }
 
+  var themeBtn = document.getElementById("theme-btn");
+
+  function paintTheme() {
+    var light = root.getAttribute("data-theme") === "light";
+    if (!themeBtn || !window.L) return;
+    var sun = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 2.6v2.1M12 19.3v2.1M2.6 12h2.1M19.3 12h2.1M5.1 5.1l1.5 1.5M17.4 17.4l1.5 1.5M18.9 5.1l-1.5 1.5M6.6 17.4l-1.5 1.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+    var moon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3.4a7.6 7.6 0 1 0 4.8 12.4A6.7 6.7 0 0 1 16 3.4z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+    themeBtn.innerHTML = light ? moon : sun;
+    themeBtn.setAttribute("aria-label", light ? L.t("themeDark") : L.t("themeLight"));
+    themeBtn.setAttribute("aria-pressed", light ? "true" : "false");
+    var chrome = document.querySelector('meta[name="theme-color"]');
+    if (chrome) chrome.setAttribute("content", light ? "#f4efe6" : "#000000");
+  }
+
+  if (themeBtn) {
+    themeBtn.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      if (next === "dark") root.removeAttribute("data-theme");
+      else root.setAttribute("data-theme", "light");
+      try { localStorage.setItem("sh.theme", next); } catch (e) {}
+      paintTheme();
+    });
+  }
+
+  document.addEventListener("sh:lang", paintTheme);
+  paintTheme();
+
+  var index = document.querySelector(".carta-index");
+  var indexBtn = document.querySelector(".index-toggle");
+
+  function setIndex(shut) {
+    if (!index || !indexBtn) return;
+    index.classList.toggle("is-shut", shut);
+    root.classList.toggle("index-shut", shut);
+    indexBtn.setAttribute("aria-expanded", shut ? "false" : "true");
+  }
+
+  if (index && indexBtn) {
+    indexBtn.addEventListener("click", function () {
+      var shut = !index.classList.contains("is-shut");
+      setIndex(shut);
+      try { sessionStorage.setItem("sh.index", shut ? "0" : "1"); } catch (e) {}
+    });
+    try {
+      if (sessionStorage.getItem("sh.index") === "0") setIndex(true);
+    } catch (e) {}
+  }
+
+  var lastY = window.scrollY;
+
+  function trackHeader() {
+    var y = window.scrollY;
+    if (y < 48) root.classList.remove("header-away");
+    else if (y > lastY + 8) root.classList.add("header-away");
+    else if (y < lastY - 8) root.classList.remove("header-away");
+    lastY = y;
+  }
+
   setScrolled();
   spy();
   dockSpy();
+  trackHeader();
   window.addEventListener("scroll", function () {
     setScrolled();
     spy();
     dockSpy();
+    trackHeader();
   }, { passive: true });
 })();

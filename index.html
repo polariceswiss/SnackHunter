@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Snack Hunter Café — Miami</title>
-  <meta name="description" content="Cafetería cubana en el 3799 NW 7th Street, Miami. Sándwiches prensados, desayuno, jugos y colada. El carrito de golf entrega en un círculo de cinco millas.">
-  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Cafetería cubana en el 3799 NW 7th Street, Miami. Sándwiches prensados, desayuno, jugos y colada. El carrito de golf entrega en tres millas.">
+  <script>try{if(localStorage.getItem("sh.theme")!=="dark")document.documentElement.setAttribute("data-theme","light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
+  <meta name="theme-color" content="#f4efe6">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="icon" href="assets/favicon.png?v=6" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch.png?v=6">
@@ -13,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=28">
-  <link rel="stylesheet" href="css/order.css?v=14">
+  <link rel="stylesheet" href="css/styles.css?v=36">
+  <link rel="stylesheet" href="css/order.css?v=30">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -40,11 +41,16 @@
 
   <div class="gate" id="gate" role="dialog" data-i18n-aria="gateLabel" aria-label="La cocina está en marcha">
     <div class="gate-stage">
-      <img class="gate-hunter" src="assets/hunter.png?v=11" alt="">
-      <p class="gate-name">Snack Hunter</p>
-      <p class="gate-cafe">Café</p>
-      <p class="gate-phrase" id="gate-phrase">Horneando el pan</p>
-      <div class="gate-bar" aria-hidden="true"><span id="gate-fill"></span></div>
+      <div class="gate-lock">
+        <svg class="gate-arc" viewBox="0 0 560 188" aria-hidden="true">
+          <path id="sh-arc" fill="none" d="M 6,176 Q 280,2 554,176" />
+          <text>
+            <textPath href="#sh-arc" xlink:href="#sh-arc" startOffset="50%" text-anchor="middle">Snack Hunter</textPath>
+          </text>
+        </svg>
+        <video class="gate-film" src="assets/load-hunter.mp4?v=5" poster="assets/hunter.png?v=11" muted playsinline autoplay disablepictureinpicture></video>
+        <p class="gate-cafe">Café</p>
+      </div>
     </div>
     <button class="gate-skip" id="gate-skip" type="button" data-i18n="pass">Entrar</button>
   </div>
@@ -57,33 +63,26 @@
           return;
         }
       } catch (e) {}
-      var wait = 1600;
-      var fill = document.getElementById("gate-fill");
-      if (fill) fill.style.animationDuration = wait + "ms";
-      var phrase = document.getElementById("gate-phrase");
-      var code = "es";
-      try { code = localStorage.getItem("sh.lang") || "es"; } catch (e) {}
-      var lines = code === "fr"
-        ? ["Le pain au four", "Le cubain sous la presse", "L'ananas au mixeur", "Le pastelito qui dore", "Le café qui coule", "La medianoche se monte"]
-        : code === "en"
-        ? ["Baking the bread", "Pressing the Cuban", "Blending the pineapple", "Browning the pastelito", "Pulling the coffee", "Building the midnight"]
-        : ["Horneando el pan", "Prensando el cubano", "Licuando la piña", "Dorando el pastelito", "Colando el café", "Armando la media noche"];
-      if (phrase && code !== "es") phrase.textContent = lines[0];
-      var step = 0;
-      var ticker = setInterval(function () {
-        if (!phrase || !document.getElementById("gate")) { clearInterval(ticker); return; }
-        step = (step + 1) % lines.length;
-        phrase.textContent = lines[step];
-      }, 980);
+      var film = gate ? gate.querySelector(".gate-film") : null;
       function open() {
         if (!gate || gate.classList.contains("is-open")) return;
-        clearInterval(ticker);
+        if (film) film.pause();
         gate.classList.add("is-open");
         try { sessionStorage.setItem("sh.gate", "1"); } catch (e) {}
         setTimeout(function () { if (gate && gate.parentNode) gate.parentNode.removeChild(gate); }, 800);
       }
+      if (film) {
+        film.muted = true;
+        film.addEventListener("timeupdate", function () {
+          if (film.currentTime >= 8.5) gate.classList.add("is-show");
+        });
+        film.addEventListener("ended", function () { setTimeout(open, 500); });
+        var play = film.play();
+        if (play && play.catch) play.catch(function () { gate.classList.add("is-show"); });
+      } else {
+        setTimeout(open, 1600);
+      }
       if (gate) gate.addEventListener("click", open);
-      setTimeout(open, wait);
     })();
   </script>
 
@@ -105,6 +104,7 @@
       <button type="button" data-lang="en">EN</button>
       <button type="button" data-lang="fr">FR</button>
     </div>
+    <button class="theme-btn" id="theme-btn" type="button" aria-pressed="true" aria-label="Oscuro"></button>
     <button class="entrar-btn" id="entrar" type="button" data-account data-i18n="enter">Entrar</button>
     <button class="cesta-btn" id="cesta" type="button"><span data-i18n="basket">Cesta</span> <b data-count>0</b></button>
     <a class="call-pill" href="tel:+17862905242" data-i18n="call">Llamar</a>
@@ -168,7 +168,8 @@
     <section class="carta" id="carta">
       <div class="wrap carta-layout">
         <aside class="carta-index" aria-label="Índice de la carta">
-          <p>La carta</p>
+          <button class="index-toggle" type="button" aria-expanded="true" aria-controls="carta-links" data-i18n="menu">Carta</button>
+          <div class="carta-links" id="carta-links">
           <a data-spy href="#sandwiches" data-i18n="secSandwiches">Sándwiches</a>
           <a data-spy href="#desayuno" data-i18n="secBreakfast">Desayuno</a>
           <a data-spy href="#calientes" data-i18n="secHot">Calientes</a>
@@ -182,12 +183,13 @@
           <a class="jump-more" data-spy href="#medios" data-i18n="media">Media</a>
           <a class="jump-more" data-spy href="#radio" data-i18n="delivery">Entrega</a>
           <a class="jump-more" data-spy href="#visita" data-i18n="visit">Visita</a>
+          </div>
         </aside>
         <div class="carta-body">
           <header class="carta-open" data-reveal>
             <p class="eyebrow" data-i18n="orderHere">Para pedir aquí</p>
-            <h2 data-i18n="fits">Cabe en una mano.</h2>
-            <p class="lede" data-i18n="ledeMenu">Español primero, como se pide en el mostrador. El inglés, justo debajo. Aguacate, tomate, queso o lechuga se suman a $2.50.</p>
+            <h2 data-i18n="fits">La carta.</h2>
+            <p class="lede" data-i18n="ledeMenu">Aguacate, tomate, queso o lechuga, $2.50 más.</p>
           </header>
           <div id="menu-root"></div>
         </div>
@@ -279,21 +281,6 @@
       </div>
     </section>
 
-    <section class="jugos" id="color">
-      <div class="wrap">
-        <p class="eyebrow eyebrow-light" data-i18n="juices">Jugos</p>
-        <h2 data-i18n="fresh">Recién licuados.</h2>
-        <ul class="juice-list">
-          <li style="--fruit:#f3d56a"><img src="assets/fruit-pina.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jPina">Piña</span><span class="en" data-i18n="jPinaEn">Pineapple</span></span></li>
-          <li style="--fruit:#d64545"><img src="assets/fruit-melon.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jMelon">Melón de agua</span><span class="en" data-i18n="jMelonEn">Watermelon</span></span></li>
-          <li style="--fruit:#e0a84a"><img src="assets/fruit-maracuya.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jPassion">Maracuyá</span><span class="en" data-i18n="jPassionEn">Passion fruit</span></span></li>
-          <li style="--fruit:#e87820"><img src="assets/fruit-mango.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jMango">Mango</span><span class="en" data-i18n="jMangoEn">Mango</span></span></li>
-          <li style="--fruit:#f4a259"><img src="assets/fruit-naranja.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jOrange">Naranja</span><span class="en" data-i18n="jOrangeEn">Orange</span></span></li>
-          <li style="--fruit:#c4622d"><img src="assets/fruit-zanahoria.jpg?v=1" alt=""><span class="juice-words"><span data-i18n="jCarrot">Naranja y zanahoria</span><span class="en" data-i18n="jCarrotEn">Orange and carrot</span></span></li>
-        </ul>
-      </div>
-    </section>
-
     <section class="medios" id="medios">
       <div class="wrap">
         <p class="eyebrow eyebrow-light" data-i18n="mediaEyebrow">Media</p>
@@ -302,38 +289,32 @@
         <div class="video-frame">
           <iframe src="https://www.youtube-nocookie.com/embed/byuaRRl6s2Y" title="Snack Hunter Café" data-i18n-aria="videoTitle" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
-        <ul class="media-row">
-          <li><img src="assets/cubano.jpg?v=6" alt="El cubano."></li>
-          <li><img src="assets/jugos.jpg?v=12" alt="Jugo de piña."></li>
-          <li><img src="assets/bistec.jpg?v=7" alt="Pan con bistec."></li>
-          <li><img src="assets/tequenos.jpg?v=10" alt="Tequeños."></li>
-        </ul>
       </div>
     </section>
 
     <section class="radio" id="radio">
       <div class="wrap radio-grid">
         <div>
-          <p class="eyebrow eyebrow-light" data-i18n="milesEyebrow">Cinco millas</p>
-          <h2 data-i18n="cartWalk">El carrito no camina.</h2>
-          <p class="lede" data-i18n="cartLede">Un carrito de golf, un círculo. Dentro, sale de la casa. Fuera, se recoge en el mostrador. El pin manda: si la búsqueda falla, se toca la calle en el mapa.</p>
+          <p class="eyebrow eyebrow-light" data-i18n="milesEyebrow">Tres millas</p>
+          <h2 data-i18n="cartWalk">Entrega en tres millas.</h2>
+          <p class="lede" data-i18n="cartLede">Dentro de las tres millas, el carrito de golf sale de la casa. Más lejos, se recoge en el mostrador. Escribe la calle o toca el mapa.</p>
           <form class="radio-search" id="find-form">
             <input id="find-street" type="search" data-i18n-placeholder="streetPh" data-i18n-aria="streetLabel" placeholder="Tu calle, Miami" autocomplete="off" aria-label="Dirección de entrega">
             <button type="submit" data-i18n="find">Buscar</button>
           </form>
           <ul class="suggest" id="find-list"></ul>
-          <p class="radio-live" id="radio-live" data-i18n="live">El círculo tiene cinco millas. El carrito no sale a pie.</p>
+          <p class="radio-live" id="radio-live" data-i18n="live">El carrito cubre tres millas desde la casa.</p>
         </div>
-        <div class="map-wrap" id="map" role="application" data-i18n-aria="mapLabel" aria-label="Mapa del radio de cinco millas"></div>
+        <div class="map-wrap" id="map" role="application" data-i18n-aria="mapLabel" aria-label="Mapa de las tres millas"></div>
       </div>
     </section>
 
     <section class="visita" id="visita">
       <div class="wrap visita-grid">
         <div data-reveal>
-          <p class="eyebrow eyebrow-light" data-i18n="addressEyebrow">La dirección no se caza</p>
-          <h2 data-i18n="houseHere">La casa está aquí.</h2>
-          <p class="lede" data-i18n="hours">Abre temprano. El horario se mueve con el día, así que se confirma por teléfono antes de manejar.</p>
+          <p class="eyebrow eyebrow-light" data-i18n="addressEyebrow">La dirección</p>
+          <h2 data-i18n="houseHere">Estamos en el 3799.</h2>
+          <p class="lede" data-i18n="hours">El horario cambia. Llámanos antes de venir.</p>
           <div class="matchbook">
             <p class="match-brand">Snack Hunter <em>Café</em></p>
             <p class="match-address">3799 NW 7th Street<br>Miami, Florida 33126</p>
@@ -365,9 +346,25 @@
     <span><span data-i18n="basket">Cesta</span> <span data-count>0</span></span>
     <strong data-bar-total>$0</strong>
   </button>
-  <a class="wa-float" href="https://wa.me/17862905242" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.58 2 2.15 6.4 2.15 11.83c0 1.74.46 3.44 1.34 4.94L2 22l5.39-1.41a10.1 10.1 0 0 0 4.65 1.12h.01c5.46 0 9.89-4.4 9.89-9.83C21.94 6.4 17.5 2 12.04 2zm5.76 14.15c-.24.68-1.4 1.25-1.94 1.33-.5.07-1.12.1-1.81-.11-.41-.13-.95-.31-1.64-.61-2.88-1.25-4.76-4.15-4.9-4.34-.14-.2-1.16-1.54-1.16-2.94s.73-2.08 1-2.37c.24-.27.64-.4 1.02-.4.12 0 .23 0 .33.01.29.01.43.03.62.48.24.57.82 1.98.89 2.12.07.15.12.32.02.51-.09.2-.14.32-.28.49-.14.17-.29.37-.41.5-.14.14-.28.29-.12.56.16.27.71 1.17 1.52 1.89 1.05.93 1.93 1.22 2.2 1.36.27.14.43.12.59-.07.16-.2.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.54.73 1.8.86.27.13.44.2.51.31.06.11.06.64-.18 1.32z"/></svg>
-  </a>
+  <button class="ask-float" id="ask-open" type="button" aria-expanded="false" aria-controls="ask-panel" aria-label="Preguntar a la casa">
+    <img src="assets/hunter.png?v=11" alt="">
+  </button>
+  <section class="ask-panel" id="ask-panel" hidden role="dialog" aria-labelledby="ask-title">
+    <header class="ask-head">
+      <img src="assets/hunter.png?v=11" alt="">
+      <div>
+        <p id="ask-title">La casa</p>
+        <p class="ask-sub" id="ask-sub"></p>
+      </div>
+      <button class="ask-x" id="ask-x" type="button" aria-label="Cerrar">×</button>
+    </header>
+    <div class="ask-log" id="ask-log"></div>
+    <div class="ask-chips" id="ask-chips"></div>
+    <form class="ask-form" id="ask-form">
+      <input id="ask-input" type="text" maxlength="240" autocomplete="off" enterkeyhint="send">
+      <button type="submit" aria-label="Enviar">→</button>
+    </form>
+  </section>
   <p class="mine" id="mine" hidden></p>
   <div class="scrim" id="scrim" hidden></div>
 
@@ -396,7 +393,7 @@
       <div id="view-check" hidden>
         <div class="choice-row">
           <button class="choice is-on" id="opt-recoger" type="button"><b data-i18n="pickup">Recoger</b><small data-i18n="pickupSub">En la casa</small></button>
-          <button class="choice" id="opt-carrito" type="button"><b data-i18n="cart">Carrito</b><small data-i18n="cartSub">Cinco millas</small></button>
+          <button class="choice" id="opt-carrito" type="button"><b data-i18n="cart">Carrito</b><small data-i18n="cartSub">Tres millas</small></button>
         </div>
         <div id="drop-fields" hidden>
           <label class="field"><span data-i18n="street">Calle</span><input id="check-street" type="search" data-i18n-placeholder="streetPh" placeholder="3799 NW 7th St, Miami" autocomplete="off"></label>
@@ -469,9 +466,10 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>window.MAP = window.L;</script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="js/i18n.js?v=8"></script>
-  <script src="js/house.js?v=15"></script>
-  <script src="js/app.js?v=22"></script>
-  <script src="js/main.js?v=9"></script>
+  <script src="js/i18n.js?v=10"></script>
+  <script src="js/house.js?v=17"></script>
+  <script src="js/app.js?v=24"></script>
+  <script src="js/main.js?v=14"></script>
+  <script src="js/ask.js?v=4"></script>
 </body>
 </html>

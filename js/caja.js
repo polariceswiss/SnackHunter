@@ -117,9 +117,9 @@
     var box = document.getElementById("caja-map");
     if (!box || !window.L || map) return;
     map = L.map(box, { zoomControl: false, scrollWheelZoom: false }).setView([HOUSE.lat, HOUSE.lng], 12);
-    L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
-      attribution: "Tiles &copy; Esri",
-      maxZoom: 16
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap",
+      maxZoom: 19
     }).addTo(map);
     L.circle([HOUSE.lat, HOUSE.lng], {
       radius: HOUSE.radiusMi * 1609.344,

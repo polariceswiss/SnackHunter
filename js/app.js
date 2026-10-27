@@ -45,13 +45,13 @@
       var sub = langCode() === "es" ? group.en : group.name;
       return (
         '<section class="menu-block" id="' + group.id + '">' +
-          photo +
           '<div class="menu-block-head"><h3>' + tr(group.name, group.en, group.fr) + '</h3><p lang="' + subLang + '">' + sub + "</p></div>" +
+          photo +
           '<ul class="dishes">' + rows.map(dishHtml).join("") + "</ul>" +
           (rule ? '<div class="rules"><p>' + rule + "</p></div>" : "") +
         "</section>"
       );
-    }).join("") + '<p class="counter-note">' + tr("El carrito de golf cubre cinco millas. Más lejos, se recoge en la casa.", "The golf cart covers five miles. Farther out, you pick it up at the house.", "Le chariot de golf couvre cinq milles. Plus loin, on retire à la maison.") + "</p>";
+    }).join("") + '<p class="counter-note">' + tr("El carrito de golf cubre tres millas. Más lejos, se recoge en la casa.", "The golf cart covers three miles. Farther out, you pick it up at the house.", "Le chariot de golf couvre trois milles. Plus loin, on retire à la maison.") + "</p>";
     root.querySelectorAll(".dish-open").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var dish = btn.closest(".dish");
@@ -75,15 +75,17 @@
     var sub = langCode() === "es" ? item.en : item.name;
     var aboutSub = langCode() === "es" ? item.aboutEn : item.about;
     var shot = item.shot
-      ? '<img class="dish-shot" src="' + item.shot + '?v=2" alt="">'
+      ? '<img class="dish-shot" src="' + item.shot + '?v=4" alt="">'
       : "";
-    var more = (item.about || item.shot)
-      ? '<div class="dish-more" hidden>' + shot + (item.about ? '<p>' + tr(item.about, item.aboutEn, item.aboutFr) + '</p><p class="en" lang="' + subLang + '">' + aboutSub + "</p>" : "") + "</div>"
+    var plate = item.label ? '<p class="brand-plate">' + esc(item.label) + "</p>" : "";
+    var chip = item.label ? '<span class="brand-chip">' + esc(item.label) + "</span>" : "";
+    var more = (item.about || item.shot || item.label)
+      ? '<div class="dish-more" hidden>' + plate + shot + (item.about ? '<p>' + tr(item.about, item.aboutEn, item.aboutFr) + '</p><p class="en" lang="' + subLang + '">' + aboutSub + "</p>" : "") + "</div>"
       : "";
     return (
-      '<li class="dish">' +
+      '<li class="dish' + (item.label ? " dish-brand" : "") + '">' +
         '<button class="dish-open" type="button" aria-expanded="false">' +
-          '<span class="dish-copy"><h4>' + tr(item.name, item.en, item.fr) + '</h4><p class="en" lang="' + subLang + '">' + sub + "</p></span>" +
+          '<span class="dish-copy"><h4>' + tr(item.name, item.en, item.fr) + '</h4><p class="en" lang="' + subLang + '">' + sub + "</p>" + chip + "</span>" +
         "</button>" +
         more +
         '<div class="dish-buy"><span class="price">' + SH.money(item.cents) + "</span>" +
@@ -108,9 +110,6 @@
     box.innerHTML = lines.map(function (line, index) {
       var item = SH.itemById(line.id);
       if (!item) return "";
-      var seat = 1;
-      var i;
-      for (i = 0; i < index; i++) if (lines[i].id === line.id) seat += 1;
       var extras = item.extra
         ? '<div class="extras">' + Object.keys(SH.EXTRAS).map(function (key) {
           var extra = SH.EXTRAS[key];
@@ -119,7 +118,7 @@
         : "";
       return (
         '<article class="cart-line" data-i="' + index + '"><h3>' + tr(item.name, item.en, item.fr) + '</h3><span class="line-price">' + SH.money(SH.lineCents(line)) + "</span>" +
-        '<div class="qty"><button type="button" data-q="-1" aria-label="' + tr("Quitar este", "Remove this one", "Retirer celui-ci") + '">–</button><span>' + seat + '</span><button type="button" data-q="1" aria-label="' + tr("Otro igual, para armarlo aparte", "Another one, built on its own", "Un autre pareil, monté à part") + '">+</button></div>' +
+        '<div class="qty"><button type="button" data-q="-1" aria-label="' + tr("Quitar este", "Remove this one", "Retirer celui-ci") + '">–</button><span>' + line.qty + '</span><button type="button" data-q="1" aria-label="' + tr("Otro igual, para armarlo aparte", "Another one, built on its own", "Un autre pareil, monté à part") + '">+</button></div>' +
         extras +
         '<input class="wish" data-wish type="text" value="' + esc(line.wish) + '" placeholder="' + esc(tr("Sin cebolla, bien tostado…", "No onion, well toasted…", "Sans oignon, bien grillé…")) + '" aria-label="' + tr("Este, a su gusto", "This one, their way", "Celui-ci, à sa façon") + '">' +
         "</article>"
@@ -239,7 +238,7 @@
     if (miles > HOUSE.radiusMi + 0.05) {
       service = "recoger";
       paintService();
-      if (note) note.textContent = tr("Quedas fuera de las cinco millas. Lo preparo para recoger en la casa.", "You're outside the five miles. I'll set it for pickup at the house.", "Tu es hors des cinq milles. Je la prépare à retirer à la maison.");
+      if (note) note.textContent = tr("Quedas fuera de las tres millas. Lo preparo para recoger en la casa.", "You're outside the three miles. I'll set it for pickup at the house.", "Tu es hors des trois milles. Je la prépare à retirer à la maison.");
       return;
     }
     service = "carrito";
@@ -291,7 +290,7 @@
     var live = document.getElementById("radio-live");
     if (!drop) {
       if (node) { node.textContent = tr("Escribe la calle con el número. El GPS la marca, la puerta la pones tú.", "Type the street with the number. The GPS marks it, you add the door.", "Écris la rue avec le numéro. Le GPS la marque, la porte tu l'ajoutes."); node.classList.remove("is-out"); }
-      if (live) live.textContent = tr("El círculo tiene cinco millas. El carrito no sale a pie.", "The circle is five miles. The cart does not go on foot.", "Le cercle fait cinq milles. Le chariot ne sort pas à pied.");
+      if (live) live.textContent = tr("El carrito cubre tres millas desde la casa.", "The cart covers three miles from the house.", "Le chariot couvre trois milles depuis la maison.");
       return;
     }
     var miles = SH.milesBetween(HOUSE.lat, HOUSE.lng, drop.lat, drop.lng);
@@ -373,7 +372,7 @@
       }
       var miles = SH.milesBetween(HOUSE.lat, HOUSE.lng, drop.lat, drop.lng);
       if (miles > HOUSE.radiusMi + 0.05) {
-        document.getElementById("check-error").textContent = tr("Esa calle está fuera de las cinco millas. Pasa a recoger.", "That street is outside the five miles. Switch to pickup.", "Cette rue est hors des cinq milles. Passe au retrait.");
+        document.getElementById("check-error").textContent = tr("Esa calle está fuera de las tres millas. Pasa a recoger.", "That street is outside the three miles. Switch to pickup.", "Cette rue est hors des trois milles. Passe au retrait.");
         service = "recoger";
         paintService();
         return;
@@ -462,24 +461,25 @@
       if (box) box.textContent = tr("El mapa necesita conexión para dibujar el círculo.", "The map needs a connection to draw the circle.", "La carte a besoin d'une connexion pour dessiner le cercle.");
       return;
     }
-    map = Leaflet.map(box, { zoomControl: false, scrollWheelZoom: false }).setView([HOUSE.lat, HOUSE.lng], 15);
-    Leaflet.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}", {
-      attribution: "Tiles &copy; Esri",
-      maxZoom: 16
+    map = Leaflet.map(box, { zoomControl: false, scrollWheelZoom: false }).setView([HOUSE.lat, HOUSE.lng], 13);
+    Leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap",
+      maxZoom: 19
     }).addTo(map);
-    Leaflet.circle([HOUSE.lat, HOUSE.lng], {
+    var circle = Leaflet.circle([HOUSE.lat, HOUSE.lng], {
       radius: HOUSE.radiusMi * 1609.344,
-      color: "#c6a15b",
-      weight: 1.4,
-      fillColor: "#c6a15b",
-      fillOpacity: 0.14
+      color: "#8a5a12",
+      weight: 2,
+      fillColor: "#e0a84a",
+      fillOpacity: 0.18
     }).addTo(map);
+    map.fitBounds(circle.getBounds(), { padding: [28, 28] });
     houseMark = Leaflet.marker([HOUSE.lat, HOUSE.lng], {
       interactive: false,
       icon: Leaflet.divIcon({ className: "", html: '<div class="house-pin"></div>', iconSize: [18, 18] })
     }).addTo(map);
     var dropIcon = Leaflet.divIcon({ className: "", html: '<div class="drop-pin"></div>', iconSize: [16, 16] });
-    pin = L.marker([HOUSE.lat, HOUSE.lng], { draggable: true, opacity: 0, icon: dropIcon }).addTo(map);
+    pin = Leaflet.marker([HOUSE.lat, HOUSE.lng], { draggable: true, opacity: 0, icon: dropIcon }).addTo(map);
     pin.on("dragend", function () {
       var ll = pin.getLatLng();
       setDrop({ label: tr("Pin en el mapa", "Pin on the map", "Point sur la carte"), lat: ll.lat, lng: ll.lng });
@@ -495,7 +495,12 @@
       if (near) map.setView([drop.lat, drop.lng], 16);
       paintDrop();
     }
-    setTimeout(function () { map.invalidateSize(); }, 400);
+    setTimeout(function () {
+      map.invalidateSize();
+      if (!(drop && SH.milesBetween(HOUSE.lat, HOUSE.lng, drop.lat, drop.lng) < 0.8)) {
+        map.fitBounds(circle.getBounds(), { padding: [28, 28] });
+      }
+    }, 450);
   }
 
   function mountGoogle() {
