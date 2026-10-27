@@ -75,16 +75,43 @@
     })
     .filter(Boolean);
 
+  var spyId = "";
+
+  function revealChip(id) {
+    if (!window.matchMedia("(max-width: 899px)").matches) return;
+    var chip = document.querySelector('.carta-index a[href="#' + id + '"]');
+    if (!chip || !chip.parentElement) return;
+    var parent = chip.parentElement;
+    if (parent.scrollWidth <= parent.clientWidth + 8) return;
+    parent.scrollTo({
+      left: Math.max(0, chip.offsetLeft - (parent.clientWidth - chip.offsetWidth) / 2),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+    });
+  }
+
   function spy() {
     var mark = window.scrollY + 140;
-    var current = sections[0];
+    var current = null;
     sections.forEach(function (section) {
+      if (!section.getClientRects().length) return;
       if (section.offsetTop <= mark) current = section;
     });
+    if (!current) {
+      sections.some(function (section) {
+        if (!section.getClientRects().length) return false;
+        current = section;
+        return true;
+      });
+    }
     spyLinks.forEach(function (link) {
       var on = current && link.getAttribute("href") === "#" + current.id;
       link.classList.toggle("is-active", Boolean(on));
     });
+    var id = current ? current.id : "";
+    if (id && id !== spyId) {
+      spyId = id;
+      revealChip(id);
+    }
   }
 
   var dock = document.querySelector(".dock");

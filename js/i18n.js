@@ -1,10 +1,11 @@
-/* Spanish is the house language. English is the full other version. */
+/* Spanish is the house language. English and French are the other two. */
 (function () {
   var PACK = {
     es: {
       skip: "Saltar a la carta",
       gateLabel: "La cocina está en marcha",
       pass: "Entrar",
+      langLabel: "Idioma",
       nav: "Secciones",
       menu: "Carta",
       craft: "Oficio",
@@ -135,6 +136,7 @@
       skip: "Skip to the menu",
       gateLabel: "The kitchen is moving",
       pass: "Enter",
+      langLabel: "Language",
       nav: "Sections",
       menu: "Menu",
       craft: "The press",
@@ -260,12 +262,146 @@
       fMidnightEn: "La media noche",
       fSteak: "Steak sandwich",
       fSteakEn: "Pan con bistec"
+    },
+    fr: {
+      skip: "Aller à la carte",
+      gateLabel: "La cuisine est en marche",
+      pass: "Entrer",
+      langLabel: "Langue",
+      nav: "Sections",
+      menu: "Carte",
+      craft: "Le métier",
+      delivery: "Livraison",
+      visit: "Visite",
+      media: "Media",
+      enter: "Entrer",
+      basket: "Panier",
+      call: "Appeler",
+      heroLabel: "La cuisine",
+      hCuban: "Le cubain.",
+      hCubanEn: "El cubano",
+      hJuice: "Les jus.",
+      hJuiceEn: "Los jugos",
+      hSteak: "Le steak.",
+      hSteakEn: "Pan con bistec",
+      hTeq: "Les tequeños.",
+      hTeqEn: "Los tequeños",
+      order: "Commander",
+      see: "Voir",
+      orderHere: "À commander ici",
+      fits: "Ça tient dans une main.",
+      ledeMenu: "Le français d'abord. L'espagnol reste dessous, comme au comptoir. Avocat, tomate, fromage ou laitue : 2,50 $ de plus.",
+      method: "La méthode",
+      six: "Six couches.<br>Une seule presse.",
+      methodLede: "Le cubain ne s'empile pas. On le presse jusqu'à ce que le pain croustille et que le fromage cède. C'est toujours cet assemblage.",
+      s1: "Pain cubain, beurre, plancha. La chasse commence quand il dore.",
+      s2: "Doux, fin, à sa place. Pas une garniture : une couche.",
+      s3: "Le centre. Sans lui, le cubain est autre chose.",
+      s4: "Suisse, américain ou pepper jack. Il cède à la chaleur.",
+      s5: "Mayonnaise, moutarde et cornichon. La ligne qui réveille le reste.",
+      s6: "On ferme. On presse. On sert chaud, ou on ne sert pas.",
+      bread: "Pain",
+      ham: "Jambon",
+      pork: "Porc",
+      swiss: "Fromage",
+      pickle: "Cornichon",
+      asked: "Ce qu'on demande",
+      three: "Trois signatures.",
+      sig1: "Porc rôti, jambon, fromage, mayonnaise, moutarde et cornichon. Le fromage est suisse, américain ou pepper jack.",
+      sig2: "La même famille, dans un pain brioché. Plus doux. Fait pour plus tard.",
+      sig3: "Oignon, laitue, tomate, frites, ketchup, mayonnaise et moutarde.",
+      midnight: "La medianoche",
+      juices: "Jus",
+      fresh: "Mixés à l'instant.",
+      mediaEyebrow: "Media",
+      mediaTitle: "La maison, à l'image.",
+      mediaLede: "La vidéo de la maison. Les photos et les réseaux arrivent ici.",
+      videoTitle: "Snack Hunter Café",
+      milesEyebrow: "Cinq milles",
+      cartWalk: "Le chariot ne marche pas.",
+      cartLede: "Un chariot de golf, un cercle. Dedans, il sort de la maison. Dehors, on retire au comptoir. Le point décide : si la recherche échoue, on touche la rue sur la carte.",
+      find: "Chercher",
+      streetPh: "Ta rue, Miami",
+      streetLabel: "Adresse de livraison",
+      mapLabel: "Carte du rayon de cinq milles",
+      live: "Le cercle fait cinq milles. Le chariot ne sort pas à pied.",
+      addressEyebrow: "L'adresse ne se cache pas",
+      houseHere: "La maison est ici.",
+      hours: "On ouvre tôt. L'horaire bouge avec la journée, alors on confirme par téléphone avant de prendre la route.",
+      cafeteria: "Café",
+      callVerb: "Appelle",
+      openMap: "Ouvrir la carte",
+      theBox: "La caisse",
+      close: "Fermer",
+      cartEmpty: "Le panier est vide. La carte est ouverte.",
+      eachOne: "Chacun va de son côté. Le voisin peut demander autre chose.",
+      wishPh: "Sans oignon, bien grillé…",
+      subtotal: "Carte",
+      cartFee: "Chariot",
+      pickup: "À emporter",
+      pickupSub: "À la maison",
+      cart: "Chariot",
+      cartSub: "Cinq milles",
+      street: "Rue",
+      door: "Porte",
+      doorPh: "Appt, maison, portail",
+      locate: "Utiliser ma position",
+      dropHint: "Le téléphone marque la rue. Le numéro et la porte, tu les écris.",
+      name: "Nom",
+      phone: "Téléphone",
+      cash: "Espèces",
+      cashSub: "À l'arrivée",
+      card: "Carte",
+      cardSub: "Lecteur à l'arrivée",
+      zelleSub: "La maison confirme",
+      counter: "Comptoir",
+      counterSub: "Au retrait",
+      due: "À payer",
+      back: "Retour",
+      place: "Laisser la commande",
+      accountLead: "Pas encore de nom. Le téléphone suffit.",
+      googleNote: "Google entre quand la maison colle son client id. Aujourd'hui le nom et le téléphone ouvrent le compte, et la commande reste à ton nom.",
+      save: "Enregistrer",
+      dockHome: "Accueil",
+      dockMe: "Moi",
+      dockLabel: "La maison",
+      cartLabel: "Panier",
+      secSandwiches: "Sandwichs",
+      secBreakfast: "Petit-déjeuner",
+      secHot: "Chauds",
+      secStart: "À picorer",
+      secPatties: "Empanadas",
+      secSalads: "Salades",
+      secTacos: "Tacos",
+      secJuices: "Jus",
+      secDrinks: "Boissons",
+      jPina: "Ananas",
+      jPinaEn: "Piña",
+      jMelon: "Pastèque",
+      jMelonEn: "Melón de agua",
+      jPassion: "Fruit de la passion",
+      jPassionEn: "Maracuyá",
+      jMango: "Mangue",
+      jMangoEn: "Mango",
+      jOrange: "Orange",
+      jOrangeEn: "Naranja",
+      jCarrot: "Orange et carotte",
+      jCarrotEn: "Naranja y zanahoria",
+      fCuban: "Le cubain",
+      fCubanEn: "El cubano",
+      fMidnight: "La medianoche",
+      fMidnightEn: "La media noche",
+      fSteak: "Sandwich au steak",
+      fSteakEn: "Pan con bistec"
     }
   };
 
   function lang() {
-    try { return localStorage.getItem("sh.lang") === "en" ? "en" : "es"; }
-    catch (e) { return "es"; }
+    try {
+      var saved = localStorage.getItem("sh.lang");
+      if (saved === "en" || saved === "fr") return saved;
+    } catch (e) {}
+    return "es";
   }
 
   function t(key) {
@@ -293,10 +429,14 @@
       btn.classList.toggle("is-on", on);
       btn.setAttribute("aria-pressed", on ? "true" : "false");
     });
+    document.querySelectorAll(".firma-list .en, .juice-list .en").forEach(function (el) {
+      el.lang = code === "es" ? "en" : "es";
+    });
   }
 
   function setLang(next) {
-    try { localStorage.setItem("sh.lang", next === "en" ? "en" : "es"); } catch (e) {}
+    var code = next === "en" || next === "fr" ? next : "es";
+    try { localStorage.setItem("sh.lang", code); } catch (e) {}
     apply();
     document.dispatchEvent(new CustomEvent("sh:lang"));
   }

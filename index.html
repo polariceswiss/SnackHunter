@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=25">
+  <link rel="stylesheet" href="css/styles.css?v=28">
   <link rel="stylesheet" href="css/order.css?v=14">
   <script type="application/ld+json">
   {
@@ -61,12 +61,14 @@
       var fill = document.getElementById("gate-fill");
       if (fill) fill.style.animationDuration = wait + "ms";
       var phrase = document.getElementById("gate-phrase");
-      var en = false;
-      try { en = localStorage.getItem("sh.lang") === "en"; } catch (e) {}
-      var lines = en
+      var code = "es";
+      try { code = localStorage.getItem("sh.lang") || "es"; } catch (e) {}
+      var lines = code === "fr"
+        ? ["Le pain au four", "Le cubain sous la presse", "L'ananas au mixeur", "Le pastelito qui dore", "Le café qui coule", "La medianoche se monte"]
+        : code === "en"
         ? ["Baking the bread", "Pressing the Cuban", "Blending the pineapple", "Browning the pastelito", "Pulling the coffee", "Building the midnight"]
         : ["Horneando el pan", "Prensando el cubano", "Licuando la piña", "Dorando el pastelito", "Colando el café", "Armando la media noche"];
-      if (phrase && en) phrase.textContent = lines[0];
+      if (phrase && code !== "es") phrase.textContent = lines[0];
       var step = 0;
       var ticker = setInterval(function () {
         if (!phrase || !document.getElementById("gate")) { clearInterval(ticker); return; }
@@ -98,9 +100,10 @@
       <a data-spy href="#radio" data-i18n="delivery">Entrega</a>
       <a data-spy href="#visita" data-i18n="visit">Visita</a>
     </nav>
-    <div class="lang-switch" role="group" aria-label="Idioma">
+    <div class="lang-switch" role="group" data-i18n-aria="langLabel" aria-label="Idioma">
       <button type="button" data-lang="es">ES</button>
       <button type="button" data-lang="en">EN</button>
+      <button type="button" data-lang="fr">FR</button>
     </div>
     <button class="entrar-btn" id="entrar" type="button" data-account data-i18n="enter">Entrar</button>
     <button class="cesta-btn" id="cesta" type="button"><span data-i18n="basket">Cesta</span> <b data-count>0</b></button>
@@ -175,6 +178,10 @@
           <a data-spy href="#tacos" data-i18n="secTacos">Tacos</a>
           <a data-spy href="#jugos" data-i18n="secJuices">Jugos</a>
           <a data-spy href="#bebidas" data-i18n="secDrinks">Bebidas</a>
+          <a class="jump-more" data-spy href="#oficio" data-i18n="craft">Oficio</a>
+          <a class="jump-more" data-spy href="#medios" data-i18n="media">Media</a>
+          <a class="jump-more" data-spy href="#radio" data-i18n="delivery">Entrega</a>
+          <a class="jump-more" data-spy href="#visita" data-i18n="visit">Visita</a>
         </aside>
         <div class="carta-body">
           <header class="carta-open" data-reveal>
@@ -460,10 +467,11 @@
   </nav>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>window.MAP = window.L;</script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="js/i18n.js?v=6"></script>
-  <script src="js/house.js?v=14"></script>
-  <script src="js/app.js?v=19"></script>
-  <script src="js/main.js?v=7"></script>
+  <script src="js/i18n.js?v=8"></script>
+  <script src="js/house.js?v=15"></script>
+  <script src="js/app.js?v=22"></script>
+  <script src="js/main.js?v=9"></script>
 </body>
 </html>
