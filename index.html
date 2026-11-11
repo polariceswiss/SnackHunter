@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=39">
-  <link rel="stylesheet" href="css/order.css?v=33">
+  <link rel="stylesheet" href="css/styles.css?v=40">
+  <link rel="stylesheet" href="css/order.css?v=34">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -390,26 +390,27 @@
 
   <footer class="site-footer">
     <img src="assets/hunter.png?v=11" alt="">
-    <div>
+    <div class="footer-copy">
       <p class="footer-brand">Snack Hunter <em>Café</em></p>
-      <p>Miami · 3799 NW 7th Street</p>
+      <p class="footer-place">Miami · 3799 NW 7th Street</p>
       <p><a class="caja-link" href="caja.html" data-i18n="theBox">La caja</a></p>
     </div>
-    <a href="tel:+17862905242">786.290.5242</a>
+    <a class="footer-phone" href="tel:+17862905242">786.290.5242</a>
   </footer>
 
   <button class="ticket-bar" id="ticket-bar" type="button" hidden>
     <span><span data-i18n="basket">Cesta</span> <span data-count>0</span></span>
     <strong data-bar-total>$0</strong>
   </button>
-  <button class="ask-float" id="ask-open" type="button" aria-expanded="false" aria-controls="ask-panel" aria-label="Preguntar a la casa">
+  <button class="ask-float" id="ask-open" type="button" aria-expanded="false" aria-controls="ask-panel" aria-label="Preguntar a Snack Hunter Café">
     <img src="assets/hunter.png?v=11" alt="">
+    <span class="ask-float-name">Snack Hunter <em>Café</em></span>
   </button>
   <section class="ask-panel" id="ask-panel" hidden role="dialog" aria-labelledby="ask-title">
     <header class="ask-head">
       <img src="assets/hunter.png?v=11" alt="">
       <div>
-        <p id="ask-title">La casa</p>
+        <p id="ask-title">Snack Hunter <em>Café</em></p>
         <p class="ask-sub" id="ask-sub"></p>
       </div>
       <button class="ask-x" id="ask-x" type="button" aria-label="Cerrar">×</button>
@@ -527,6 +528,6 @@
   <script src="js/house.js?v=17"></script>
   <script src="js/app.js?v=26"></script>
   <script src="js/main.js?v=14"></script>
-  <script src="js/ask.js?v=5"></script>
+  <script src="js/ask.js?v=6"></script>
 </body>
 </html>

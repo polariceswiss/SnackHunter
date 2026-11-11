@@ -898,8 +898,15 @@ html.nav-open .ask-panel { display: none; }
   font-family: "Syne", sans-serif;
   font-weight: 800;
   letter-spacing: -0.04em;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   line-height: 1;
+}
+
+#ask-title em {
+  font-family: "Fraunces", "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 500;
+  color: #e0a84a;
 }
 
 .ask-sub {
