@@ -64,9 +64,16 @@
 }
 
 .gate-film::-webkit-media-controls,
+.gate-film::-webkit-media-controls-enclosure,
+.gate-film::-webkit-media-controls-panel,
 .gate-film::-webkit-media-controls-start-playback-button,
-.gate-film::-webkit-media-controls-overlay-play-button {
+.gate-film::-webkit-media-controls-overlay-play-button,
+.gate-film::-webkit-media-controls-play-button {
   display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
   -webkit-appearance: none;
 }
 

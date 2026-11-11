@@ -703,10 +703,10 @@
     var close = document.getElementById("ask-x");
     var box = document.getElementById("ask-chips");
     var title = document.getElementById("ask-title");
-    if (title) title.innerHTML = "Snack Hunter <em>Café</em>";
+    if (title) title.innerHTML = "Snack <em>AI</em>";
     if (sub) sub.textContent = say("De la carta", "From the menu", "De la carte");
     if (input) input.placeholder = say("Un cubano, el carrito, una alergia", "A Cuban, the cart, an allergy", "Un cubain, le chariot, une allergie");
-    if (open) open.setAttribute("aria-label", say("Preguntar a Snack Hunter Café", "Ask Snack Hunter Café", "Demander à Snack Hunter Café"));
+    if (open) open.setAttribute("aria-label", say("Preguntar a Snack AI", "Ask Snack AI", "Demander à Snack AI"));
     if (close) close.setAttribute("aria-label", say("Cerrar", "Close", "Fermer"));
     var wa = document.getElementById("ask-wa");
     if (wa) wa.textContent = say("Escribir por WhatsApp", "Message on WhatsApp", "Écrire sur WhatsApp");

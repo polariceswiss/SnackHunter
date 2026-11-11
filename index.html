@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=40">
-  <link rel="stylesheet" href="css/order.css?v=34">
+  <link rel="stylesheet" href="css/styles.css?v=41">
+  <link rel="stylesheet" href="css/order.css?v=35">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -48,7 +48,7 @@
             <textPath href="#sh-arc" xlink:href="#sh-arc" startOffset="50%" text-anchor="middle">Snack Hunter</textPath>
           </text>
         </svg>
-        <video class="gate-film" src="assets/load-hunter.mp4?v=6" muted playsinline webkit-playsinline autoplay preload="auto" disablepictureinpicture></video>
+        <video class="gate-film" muted playsinline webkit-playsinline autoplay preload="auto" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback"></video>
         <p class="gate-cafe">Café</p>
       </div>
     </div>
@@ -57,83 +57,111 @@
   <script>
     (function () {
       var gate = document.getElementById("gate");
-      try {
-        if (sessionStorage.getItem("sh.gate") === "1") {
-          if (gate && gate.parentNode) gate.parentNode.removeChild(gate);
-          return;
-        }
-      } catch (e) {}
-      var film = gate ? gate.querySelector(".gate-film") : null;
+      if (!gate) return;
+      try { sessionStorage.removeItem("sh.gate"); } catch (e) {}
+      var lock = gate.querySelector(".gate-lock");
+      var old = gate.querySelector(".gate-film");
+      var film = document.createElement("video");
+      film.className = "gate-film";
+      film.muted = true;
+      film.defaultMuted = true;
+      film.autoplay = true;
+      film.playsInline = true;
+      film.preload = "auto";
+      film.setAttribute("muted", "");
+      film.setAttribute("playsinline", "");
+      film.setAttribute("webkit-playsinline", "");
+      film.setAttribute("autoplay", "");
+      film.setAttribute("preload", "auto");
+      film.setAttribute("disablepictureinpicture", "");
+      film.setAttribute("disableremoteplayback", "");
+      film.setAttribute("controlslist", "nodownload nofullscreen noremoteplayback");
+      film.removeAttribute("controls");
+      film.src = "assets/load-hunter.mp4?v=7&t=" + Date.now();
+      if (old && old.parentNode) old.parentNode.replaceChild(film, old);
+      else if (lock) lock.insertBefore(film, lock.querySelector(".gate-cafe"));
       var skip = document.getElementById("gate-skip");
       var tries = 0;
+      var opened = false;
       function showName() {
-        if (gate) gate.classList.add("is-show");
+        gate.classList.add("is-show");
       }
       function open() {
-        if (!gate || gate.classList.contains("is-open")) return;
-        if (film) film.pause();
+        if (opened || gate.classList.contains("is-open")) return;
+        opened = true;
+        try { film.pause(); } catch (e) {}
         gate.classList.add("is-open");
-        try { sessionStorage.setItem("sh.gate", "1"); } catch (e) {}
-        setTimeout(function () { if (gate && gate.parentNode) gate.parentNode.removeChild(gate); }, 800);
+        setTimeout(function () {
+          if (gate && gate.parentNode) gate.parentNode.removeChild(gate);
+        }, 800);
+      }
+      function arm(node) {
+        node.removeAttribute("controls");
+        node.controls = false;
+        node.muted = true;
+        node.defaultMuted = true;
+        node.volume = 0;
+        node.setAttribute("muted", "");
+        node.playsInline = true;
+        node.setAttribute("playsinline", "");
+        node.setAttribute("webkit-playsinline", "");
       }
       function kick() {
-        if (!film) return;
-        film.muted = true;
-        film.defaultMuted = true;
-        film.setAttribute("muted", "");
-        film.playsInline = true;
-        film.setAttribute("playsinline", "");
-        film.setAttribute("webkit-playsinline", "");
-        if (film.readyState < 2) film.load();
+        if (!film || opened) return;
+        arm(film);
         var play = film.play();
         if (play && play.then) {
           play.then(function () {
             gate.classList.add("is-playing");
+            tries = 0;
           }).catch(function () {
             showName();
-            if (tries < 8) {
+            if (tries < 12) {
               tries += 1;
-              setTimeout(kick, 350);
+              setTimeout(kick, 280);
             }
           });
         }
       }
-      if (film) {
+      arm(film);
+      film.addEventListener("playing", function () {
+        gate.classList.add("is-playing");
         film.removeAttribute("controls");
-        film.muted = true;
-        film.defaultMuted = true;
-        film.setAttribute("muted", "");
-        film.playsInline = true;
-        film.setAttribute("playsinline", "");
-        film.setAttribute("webkit-playsinline", "");
-        film.addEventListener("playing", function () {
-          gate.classList.add("is-playing");
-        });
-        film.addEventListener("timeupdate", function () {
-          if (film.currentTime >= 8.5) showName();
-        });
-        film.addEventListener("ended", function () { setTimeout(open, 500); });
-        film.addEventListener("loadeddata", kick);
-        film.addEventListener("canplay", kick);
-        document.addEventListener("visibilitychange", function () {
-          if (!document.hidden) kick();
-        });
-        window.addEventListener("pageshow", function () { kick(); });
-        setTimeout(showName, 2200);
+        film.controls = false;
+      });
+      film.addEventListener("timeupdate", function () {
+        if (film.currentTime >= 8.5) showName();
+      });
+      film.addEventListener("ended", function () { setTimeout(open, 500); });
+      film.addEventListener("loadeddata", kick);
+      film.addEventListener("canplay", kick);
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) kick();
+      });
+      window.addEventListener("pageshow", function () {
+        try { sessionStorage.removeItem("sh.gate"); } catch (e) {}
         kick();
-        setTimeout(kick, 200);
-        setTimeout(kick, 800);
-      } else {
-        showName();
-        setTimeout(open, 1600);
-      }
+      });
+      var watch = setInterval(function () {
+        if (opened || !document.getElementById("gate")) {
+          clearInterval(watch);
+          return;
+        }
+        if (film.paused && !document.hidden) kick();
+      }, 450);
+      setTimeout(showName, 2200);
+      film.load();
+      kick();
+      setTimeout(kick, 120);
+      setTimeout(kick, 400);
+      setTimeout(kick, 900);
       if (skip) skip.addEventListener("click", function (event) {
         event.stopPropagation();
         open();
       });
-      if (gate) gate.addEventListener("click", function () {
-        if (film && film.paused) kick();
-        else if (film && film.currentTime > 0.2) open();
+      gate.addEventListener("click", function () {
+        if (film.paused) kick();
+        else if (film.currentTime > 1) open();
       });
     })();
   </script>
@@ -402,15 +430,15 @@
     <span><span data-i18n="basket">Cesta</span> <span data-count>0</span></span>
     <strong data-bar-total>$0</strong>
   </button>
-  <button class="ask-float" id="ask-open" type="button" aria-expanded="false" aria-controls="ask-panel" aria-label="Preguntar a Snack Hunter Café">
+  <button class="ask-float" id="ask-open" type="button" aria-expanded="false" aria-controls="ask-panel" aria-label="Preguntar a Snack AI">
     <img src="assets/hunter.png?v=11" alt="">
-    <span class="ask-float-name">Snack Hunter <em>Café</em></span>
+    <span class="ask-float-name">Snack <em>AI</em></span>
   </button>
   <section class="ask-panel" id="ask-panel" hidden role="dialog" aria-labelledby="ask-title">
     <header class="ask-head">
       <img src="assets/hunter.png?v=11" alt="">
       <div>
-        <p id="ask-title">Snack Hunter <em>Café</em></p>
+        <p id="ask-title">Snack <em>AI</em></p>
         <p class="ask-sub" id="ask-sub"></p>
       </div>
       <button class="ask-x" id="ask-x" type="button" aria-label="Cerrar">×</button>
@@ -528,6 +556,6 @@
   <script src="js/house.js?v=17"></script>
   <script src="js/app.js?v=26"></script>
   <script src="js/main.js?v=14"></script>
-  <script src="js/ask.js?v=6"></script>
+  <script src="js/ask.js?v=7"></script>
 </body>
 </html>
