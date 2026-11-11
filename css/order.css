@@ -60,6 +60,14 @@
   object-fit: contain;
   background: #000;
   display: block;
+  pointer-events: none;
+}
+
+.gate-film::-webkit-media-controls,
+.gate-film::-webkit-media-controls-start-playback-button,
+.gate-film::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
 }
 
 .gate-hunter {
@@ -143,26 +151,28 @@ html:has(#gate) { overflow: hidden; }
   animation-fill-mode: forwards;
 }
 
-.gate { cursor: pointer; }
-
 .gate-skip {
   position: absolute;
   left: 50%;
-  bottom: calc(1.6rem + env(safe-area-inset-bottom));
+  bottom: calc(1.1rem + env(safe-area-inset-bottom));
   transform: translateX(-50%);
-  min-width: 11rem;
-  min-height: 3.2rem;
-  padding: 0 1.6rem;
+  padding: 0.35rem 0.4rem;
   border: 0;
-  border-radius: 999px;
-  background: #f3eee6;
-  color: #14110e;
+  background: transparent;
+  color: rgba(243, 238, 230, 0.62);
   font-family: "Outfit", sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  font-size: 0.92rem;
+  font-size: 0.72rem;
   cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gate.is-playing .gate-skip {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 @keyframes gate-fill { to { width: 100%; } }
@@ -843,13 +853,16 @@ html.nav-open .ask-panel { display: none; }
 .ask-panel {
   position: fixed;
   z-index: 47;
-  right: 0.9rem;
-  bottom: calc(9.2rem + env(safe-area-inset-bottom));
+  left: 0.7rem;
+  right: 0.7rem;
+  top: calc(var(--header) + 0.45rem);
+  bottom: calc(5.2rem + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  width: min(24rem, calc(100vw - 1.4rem));
-  top: calc(var(--header) + 0.45rem);
+  width: auto;
+  max-width: none;
   height: auto;
+  max-height: none;
   background: #000;
   color: #f4efe6;
   border: 1px solid rgba(224, 168, 74, 0.45);
@@ -861,7 +874,7 @@ html.nav-open .ask-panel { display: none; }
 .ask-panel[hidden] { display: none; }
 
 .ticket-bar:not([hidden]) ~ .ask-panel {
-  bottom: calc(13.3rem + env(safe-area-inset-bottom));
+  bottom: calc(9.4rem + env(safe-area-inset-bottom));
 }
 
 .ask-head {
@@ -994,10 +1007,28 @@ html.nav-open .ask-panel { display: none; }
   cursor: pointer;
 }
 
+.ask-wa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.7rem 0.7rem;
+  min-height: 2.55rem;
+  border-radius: 999px;
+  background: #1c6b43;
+  color: #f4efe6;
+  font-weight: 650;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
 @media (min-width: 900px) {
   .ask-panel,
   .ticket-bar:not([hidden]) ~ .ask-panel {
+    left: auto;
     right: 1.4rem;
+    top: calc(var(--header) + 0.55rem);
     bottom: 5.5rem;
+    width: min(24rem, calc(100vw - 2.8rem));
   }
 }

@@ -706,6 +706,8 @@
     if (input) input.placeholder = say("Un cubano, el carrito, una alergia", "A Cuban, the cart, an allergy", "Un cubain, le chariot, une allergie");
     if (open) open.setAttribute("aria-label", say("Preguntar a la casa", "Ask the house", "Demander à la maison"));
     if (close) close.setAttribute("aria-label", say("Cerrar", "Close", "Fermer"));
+    var wa = document.getElementById("ask-wa");
+    if (wa) wa.textContent = say("Escribir por WhatsApp", "Message on WhatsApp", "Écrire sur WhatsApp");
     if (!box) return;
     box.innerHTML = "";
     chips().forEach(function (label) {

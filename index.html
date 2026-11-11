@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=36">
-  <link rel="stylesheet" href="css/order.css?v=30">
+  <link rel="stylesheet" href="css/styles.css?v=39">
+  <link rel="stylesheet" href="css/order.css?v=33">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -48,11 +48,11 @@
             <textPath href="#sh-arc" xlink:href="#sh-arc" startOffset="50%" text-anchor="middle">Snack Hunter</textPath>
           </text>
         </svg>
-        <video class="gate-film" src="assets/load-hunter.mp4?v=5" poster="assets/hunter.png?v=11" muted playsinline autoplay disablepictureinpicture></video>
+        <video class="gate-film" src="assets/load-hunter.mp4?v=6" muted playsinline webkit-playsinline autoplay preload="auto" disablepictureinpicture></video>
         <p class="gate-cafe">Café</p>
       </div>
     </div>
-    <button class="gate-skip" id="gate-skip" type="button" data-i18n="pass">Entrar</button>
+    <button class="gate-skip" id="gate-skip" type="button">Saltar</button>
   </div>
   <script>
     (function () {
@@ -64,6 +64,11 @@
         }
       } catch (e) {}
       var film = gate ? gate.querySelector(".gate-film") : null;
+      var skip = document.getElementById("gate-skip");
+      var tries = 0;
+      function showName() {
+        if (gate) gate.classList.add("is-show");
+      }
       function open() {
         if (!gate || gate.classList.contains("is-open")) return;
         if (film) film.pause();
@@ -71,18 +76,65 @@
         try { sessionStorage.setItem("sh.gate", "1"); } catch (e) {}
         setTimeout(function () { if (gate && gate.parentNode) gate.parentNode.removeChild(gate); }, 800);
       }
-      if (film) {
+      function kick() {
+        if (!film) return;
         film.muted = true;
+        film.defaultMuted = true;
+        film.setAttribute("muted", "");
+        film.playsInline = true;
+        film.setAttribute("playsinline", "");
+        film.setAttribute("webkit-playsinline", "");
+        if (film.readyState < 2) film.load();
+        var play = film.play();
+        if (play && play.then) {
+          play.then(function () {
+            gate.classList.add("is-playing");
+          }).catch(function () {
+            showName();
+            if (tries < 8) {
+              tries += 1;
+              setTimeout(kick, 350);
+            }
+          });
+        }
+      }
+      if (film) {
+        film.removeAttribute("controls");
+        film.muted = true;
+        film.defaultMuted = true;
+        film.setAttribute("muted", "");
+        film.playsInline = true;
+        film.setAttribute("playsinline", "");
+        film.setAttribute("webkit-playsinline", "");
+        film.addEventListener("playing", function () {
+          gate.classList.add("is-playing");
+        });
         film.addEventListener("timeupdate", function () {
-          if (film.currentTime >= 8.5) gate.classList.add("is-show");
+          if (film.currentTime >= 8.5) showName();
         });
         film.addEventListener("ended", function () { setTimeout(open, 500); });
-        var play = film.play();
-        if (play && play.catch) play.catch(function () { gate.classList.add("is-show"); });
+        film.addEventListener("loadeddata", kick);
+        film.addEventListener("canplay", kick);
+        document.addEventListener("visibilitychange", function () {
+          if (!document.hidden) kick();
+        });
+        window.addEventListener("pageshow", function () { kick(); });
+        setTimeout(showName, 2200);
+        kick();
+        setTimeout(kick, 200);
+        setTimeout(kick, 800);
       } else {
+        showName();
         setTimeout(open, 1600);
       }
-      if (gate) gate.addEventListener("click", open);
+      if (skip) skip.addEventListener("click", function (event) {
+        event.stopPropagation();
+        open();
+      });
+      if (gate) gate.addEventListener("click", function () {
+        if (film && film.paused) kick();
+        else if (film && film.currentTime > 0.2) open();
+      });
     })();
   </script>
 
@@ -130,8 +182,9 @@
     <section class="hero" data-i18n-aria="heroLabel" aria-label="La comida">
       <div class="hero-reel">
         <article class="hero-slide">
-          <img src="assets/cubano.jpg?v=6" alt="Cubano prensado, con jamón, lechón, queso, pepinillo y mostaza.">
+          <img src="assets/cubano.jpg?v=7" alt="Cubano prensado, con jamón, lechón, queso, pepinillo y mostaza.">
           <div class="hero-copy">
+            <p class="hero-brand">Snack Hunter <em>Café</em></p>
             <h1 data-i18n="hCuban">El cubano.</h1>
             <p class="hero-en" data-i18n="hCubanEn">Cuban sandwich</p>
             <a class="btn btn-solid" href="#carta" data-i18n="order">Pedir</a>
@@ -140,14 +193,16 @@
         <article class="hero-slide">
           <img src="assets/jugos.jpg?v=12" alt="La licuadora vertiendo el jugo de piña en el vaso.">
           <div class="hero-copy">
+            <p class="hero-brand">Snack Hunter <em>Café</em></p>
             <h1 data-i18n="hJuice">Los jugos.</h1>
             <p class="hero-en" data-i18n="hJuiceEn">Fresh juices</p>
             <a class="btn btn-solid" href="#jugos" data-i18n="see">Ver</a>
           </div>
         </article>
         <article class="hero-slide">
-          <img src="assets/bistec.jpg?v=7" alt="Pan con bistec, steak a la plancha con cebolla.">
+          <img src="assets/bistec.jpg?v=8" alt="Pan con bistec, steak a la plancha con cebolla.">
           <div class="hero-copy">
+            <p class="hero-brand">Snack Hunter <em>Café</em></p>
             <h1 data-i18n="hSteak">El bistec.</h1>
             <p class="hero-en" data-i18n="hSteakEn">Steak sandwich</p>
             <a class="btn btn-solid" href="#carta" data-i18n="order">Pedir</a>
@@ -156,6 +211,7 @@
         <article class="hero-slide">
           <img src="assets/tequenos.jpg?v=10" alt="Tequeños recién fritos, con el queso derritiéndose.">
           <div class="hero-copy">
+            <p class="hero-brand">Snack Hunter <em>Café</em></p>
             <h1 data-i18n="hTeq">Los tequeños.</h1>
             <p class="hero-en" data-i18n="hTeqEn">Cheese sticks</p>
             <a class="btn btn-solid" href="#picar" data-i18n="order">Pedir</a>
@@ -257,21 +313,21 @@
         </div>
         <ol class="firma-list">
           <li data-reveal>
-            <img src="assets/shots/cubano.jpg?v=2" alt="El cubano prensado.">
+            <img src="assets/shots/cubano.jpg?v=3" alt="El cubano prensado.">
             <span>01</span>
             <h3 data-i18n="fCuban">El cubano</h3>
             <p class="en" lang="en" data-i18n="fCubanEn">Cuban sandwich</p>
             <p data-i18n="sig1">Lechón, jamón, queso, mayonesa, mostaza y pepinillo. El queso es suizo, americano o pepper jack.</p>
           </li>
           <li data-reveal>
-            <img src="assets/shots/medianoche.jpg?v=2" alt="La media noche.">
+            <img src="assets/shots/medianoche.jpg?v=3" alt="La media noche.">
             <span>02</span>
             <h3 data-i18n="fMidnight">La media noche</h3>
             <p class="en" lang="en" data-i18n="fMidnightEn">Midnight</p>
             <p data-i18n="sig2">La misma familia, en pan de huevo. Más suave. Hecha para más tarde.</p>
           </li>
           <li data-reveal>
-            <img src="assets/shots/bistec.jpg?v=2" alt="Pan con bistec.">
+            <img src="assets/shots/bistec.jpg?v=3" alt="Pan con bistec.">
             <span>03</span>
             <h3 data-i18n="fSteak">Pan con bistec</h3>
             <p class="en" lang="en" data-i18n="fSteakEn">Steak sandwich</p>
@@ -364,6 +420,7 @@
       <input id="ask-input" type="text" maxlength="240" autocomplete="off" enterkeyhint="send">
       <button type="submit" aria-label="Enviar">→</button>
     </form>
+    <a class="ask-wa" id="ask-wa" href="https://wa.me/17862905242" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
   </section>
   <p class="mine" id="mine" hidden></p>
   <div class="scrim" id="scrim" hidden></div>
@@ -468,8 +525,8 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="js/i18n.js?v=10"></script>
   <script src="js/house.js?v=17"></script>
-  <script src="js/app.js?v=24"></script>
+  <script src="js/app.js?v=26"></script>
   <script src="js/main.js?v=14"></script>
-  <script src="js/ask.js?v=4"></script>
+  <script src="js/ask.js?v=5"></script>
 </body>
 </html>
