@@ -39,7 +39,7 @@
     root.innerHTML = SH.GROUPS.map(function (group) {
       var rows = items.filter(function (item) { return item.group === group.id; });
       var photo = group.image
-        ? '<figure class="section-photo"><img src="' + group.image + '?v=5" alt="' + tr(group.alt, group.altEn, group.altFr) + '"></figure>'
+        ? '<figure class="section-photo"><img src="' + group.image + '?v=6" alt="' + tr(group.alt, group.altEn, group.altFr) + '"></figure>'
         : "";
       var rule = tr(group.rule, group.ruleEn, group.ruleFr);
       var sub = langCode() === "es" ? group.en : group.name;
@@ -75,7 +75,7 @@
     var sub = langCode() === "es" ? item.en : item.name;
     var aboutSub = langCode() === "es" ? item.aboutEn : item.about;
     var shot = item.shot
-      ? '<img class="dish-shot" src="' + item.shot + '?v=7" alt="">'
+      ? '<img class="dish-shot" src="' + item.shot + '?v=8" alt="">'
       : "";
     var plate = item.label ? '<p class="brand-plate">' + esc(item.label) + "</p>" : "";
     var chip = item.label ? '<span class="brand-chip">' + esc(item.label) + "</span>" : "";
