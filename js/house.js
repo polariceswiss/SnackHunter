@@ -1,9 +1,9 @@
-/* Snack Hunter Café — the house book.
+/* Snack Hunter Cafeteria — the house book.
    Prices, the five-mile cart, and the order ledger live here.
    Change the Google client id when the café connects its account. */
 (function () {
   var HOUSE = {
-    name: "Snack Hunter Café",
+    name: "Snack Hunter Cafeteria",
     lat: 25.7808,
     lng: -80.2586,
     address: "3799 NW 7th Street",

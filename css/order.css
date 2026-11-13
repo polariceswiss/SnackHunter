@@ -107,7 +107,7 @@ html:has(#gate) { overflow: hidden; }
   font-family: "Fraunces", "Times New Roman", serif;
   font-style: italic;
   font-weight: 560;
-  font-size: clamp(2rem, 6vw, 3.1rem);
+  font-size: clamp(1.55rem, 5.2vw, 2.55rem);
   color: #e0a84a;
   line-height: 1;
   opacity: 0;
@@ -896,7 +896,7 @@ html.nav-open .ask-panel { display: none; }
   width: 2.6rem;
   height: 2.6rem;
   object-fit: contain;
-  background: #000;
+  background: transparent;
 }
 
 .ask-head p { margin: 0; }

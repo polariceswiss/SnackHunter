@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Snack Hunter Café — Miami</title>
+  <title>Snack Hunter Cafeteria — Miami</title>
   <meta name="description" content="Cafetería cubana en el 3799 NW 7th Street, Miami. Sándwiches prensados, desayuno, jugos y colada. El carrito de golf entrega en tres millas.">
   <script>try{if(localStorage.getItem("sh.theme")!=="dark")document.documentElement.setAttribute("data-theme","light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
   <meta name="theme-color" content="#f4efe6">
@@ -14,13 +14,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=41">
-  <link rel="stylesheet" href="css/order.css?v=35">
+  <link rel="stylesheet" href="css/styles.css?v=42">
+  <link rel="stylesheet" href="css/order.css?v=36">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Restaurant",
-    "name": "Snack Hunter Café",
+    "name": "Snack Hunter Cafeteria",
     "servesCuisine": "Cuban",
     "telephone": "+1-786-290-5242",
     "address": {
@@ -49,7 +49,7 @@
           </text>
         </svg>
         <video class="gate-film" muted playsinline webkit-playsinline autoplay preload="auto" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback"></video>
-        <p class="gate-cafe">Café</p>
+        <p class="gate-cafe">Cafeteria</p>
       </div>
     </div>
     <button class="gate-skip" id="gate-skip" type="button">Saltar</button>
@@ -168,9 +168,12 @@
 
   <header class="site-header">
     <a class="brand" href="#top">
-      <img src="assets/hunter.png?v=11" alt="">
+      <span class="logo-swap" aria-hidden="true">
+        <img class="logo-light" src="assets/logo-bw-light.png?v=1" alt="">
+        <img class="logo-dark" src="assets/logo-bw-dark.png?v=1" alt="">
+      </span>
       <span>Snack Hunter</span>
-      <em>Café</em>
+      <em>Cafeteria</em>
     </a>
     <nav class="nav-desktop" data-i18n-aria="nav" aria-label="Secciones">
       <a data-spy href="#carta" data-i18n="menu">Carta</a>
@@ -210,9 +213,9 @@
     <section class="hero" data-i18n-aria="heroLabel" aria-label="La comida">
       <div class="hero-reel">
         <article class="hero-slide">
-          <img src="assets/cubano.jpg?v=7" alt="Cubano prensado, con jamón, lechón, queso, pepinillo y mostaza.">
+          <img src="assets/cubano.jpg?v=9" alt="Cubano prensado, con jamón, lechón, queso, pepinillo y mostaza.">
           <div class="hero-copy">
-            <p class="hero-brand">Snack Hunter <em>Café</em></p>
+            <p class="hero-brand">Snack Hunter <em>Cafeteria</em></p>
             <h1 data-i18n="hCuban">El cubano.</h1>
             <p class="hero-en" data-i18n="hCubanEn">Cuban sandwich</p>
             <a class="btn btn-solid" href="#carta" data-i18n="order">Pedir</a>
@@ -221,16 +224,16 @@
         <article class="hero-slide">
           <img src="assets/jugos.jpg?v=12" alt="La licuadora vertiendo el jugo de piña en el vaso.">
           <div class="hero-copy">
-            <p class="hero-brand">Snack Hunter <em>Café</em></p>
+            <p class="hero-brand">Snack Hunter <em>Cafeteria</em></p>
             <h1 data-i18n="hJuice">Los jugos.</h1>
             <p class="hero-en" data-i18n="hJuiceEn">Fresh juices</p>
             <a class="btn btn-solid" href="#jugos" data-i18n="see">Ver</a>
           </div>
         </article>
         <article class="hero-slide">
-          <img src="assets/bistec.jpg?v=8" alt="Pan con bistec, steak a la plancha con cebolla.">
+          <img src="assets/bistec.jpg?v=9" alt="Pan con bistec, steak a la plancha con cebolla.">
           <div class="hero-copy">
-            <p class="hero-brand">Snack Hunter <em>Café</em></p>
+            <p class="hero-brand">Snack Hunter <em>Cafeteria</em></p>
             <h1 data-i18n="hSteak">El bistec.</h1>
             <p class="hero-en" data-i18n="hSteakEn">Steak sandwich</p>
             <a class="btn btn-solid" href="#carta" data-i18n="order">Pedir</a>
@@ -239,7 +242,7 @@
         <article class="hero-slide">
           <img src="assets/tequenos.jpg?v=10" alt="Tequeños recién fritos, con el queso derritiéndose.">
           <div class="hero-copy">
-            <p class="hero-brand">Snack Hunter <em>Café</em></p>
+            <p class="hero-brand">Snack Hunter <em>Cafeteria</em></p>
             <h1 data-i18n="hTeq">Los tequeños.</h1>
             <p class="hero-en" data-i18n="hTeqEn">Cheese sticks</p>
             <a class="btn btn-solid" href="#picar" data-i18n="order">Pedir</a>
@@ -341,7 +344,7 @@
         </div>
         <ol class="firma-list">
           <li data-reveal>
-            <img src="assets/shots/cubano.jpg?v=3" alt="El cubano prensado.">
+            <img src="assets/shots/cubano.jpg?v=4" alt="El cubano prensado.">
             <span>01</span>
             <h3 data-i18n="fCuban">El cubano</h3>
             <p class="en" lang="en" data-i18n="fCubanEn">Cuban sandwich</p>
@@ -355,7 +358,7 @@
             <p data-i18n="sig2">La misma familia, en pan de huevo. Más suave. Hecha para más tarde.</p>
           </li>
           <li data-reveal>
-            <img src="assets/shots/bistec.jpg?v=3" alt="Pan con bistec.">
+            <img src="assets/shots/bistec.jpg?v=4" alt="Pan con bistec.">
             <span>03</span>
             <h3 data-i18n="fSteak">Pan con bistec</h3>
             <p class="en" lang="en" data-i18n="fSteakEn">Steak sandwich</p>
@@ -371,7 +374,7 @@
         <h2 data-i18n="mediaTitle">La casa, en cámara.</h2>
         <p class="lede" data-i18n="mediaLede">El video de la casa. Las fotos y las redes se suman aquí.</p>
         <div class="video-frame">
-          <iframe src="https://www.youtube-nocookie.com/embed/byuaRRl6s2Y" title="Snack Hunter Café" data-i18n-aria="videoTitle" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+          <iframe src="https://www.youtube-nocookie.com/embed/byuaRRl6s2Y" title="Snack Hunter Cafeteria" data-i18n-aria="videoTitle" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
       </div>
     </section>
@@ -400,11 +403,15 @@
           <h2 data-i18n="houseHere">Estamos en el 3799.</h2>
           <p class="lede" data-i18n="hours">El horario cambia. Llámanos antes de venir.</p>
           <div class="matchbook">
-            <p class="match-brand">Snack Hunter <em>Café</em></p>
+            <p class="match-brand">Snack Hunter <em>Cafeteria</em></p>
             <p class="match-address">3799 NW 7th Street<br>Miami, Florida 33126</p>
             <p class="match-strike" data-i18n="cafeteria">Cafetería</p>
           </div>
         </div>
+        <figure class="felix-adorn" data-reveal>
+          <img src="assets/felix-guzman.png?v=1" alt="Felix Guzman, dueño de Snack Hunter Cafeteria.">
+          <figcaption>Felix Guzman</figcaption>
+        </figure>
         <div class="visita-call" data-reveal>
           <a href="tel:+17862905242">
             <span data-i18n="callVerb">Llama</span>
@@ -417,9 +424,9 @@
   </main>
 
   <footer class="site-footer">
-    <img src="assets/hunter.png?v=11" alt="">
+    <img src="assets/logo-bw-dark.png?v=1" alt="">
     <div class="footer-copy">
-      <p class="footer-brand">Snack Hunter <em>Café</em></p>
+      <p class="footer-brand">Snack Hunter <em>Cafeteria</em></p>
       <p class="footer-place">Miami · 3799 NW 7th Street</p>
       <p><a class="caja-link" href="caja.html" data-i18n="theBox">La caja</a></p>
     </div>
@@ -431,12 +438,12 @@
     <strong data-bar-total>$0</strong>
   </button>
   <button class="ask-float" id="ask-open" type="button" aria-expanded="false" aria-controls="ask-panel" aria-label="Preguntar a Snack AI">
-    <img src="assets/hunter.png?v=11" alt="">
+    <img src="assets/logo-bw-dark.png?v=1" alt="">
     <span class="ask-float-name">Snack <em>AI</em></span>
   </button>
   <section class="ask-panel" id="ask-panel" hidden role="dialog" aria-labelledby="ask-title">
     <header class="ask-head">
-      <img src="assets/hunter.png?v=11" alt="">
+      <img src="assets/logo-bw-dark.png?v=1" alt="">
       <div>
         <p id="ask-title">Snack <em>AI</em></p>
         <p class="ask-sub" id="ask-sub"></p>
@@ -552,9 +559,9 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>window.MAP = window.L;</script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="js/i18n.js?v=10"></script>
-  <script src="js/house.js?v=17"></script>
-  <script src="js/app.js?v=26"></script>
+  <script src="js/i18n.js?v=11"></script>
+  <script src="js/house.js?v=18"></script>
+  <script src="js/app.js?v=27"></script>
   <script src="js/main.js?v=14"></script>
   <script src="js/ask.js?v=7"></script>
 </body>
