@@ -8,16 +8,19 @@ Tax applies. Cart fee when golf-cart delivery.
 Paid extras on sandwiches with extras=true: queso, aguacate, tomate, lechuga = $2.50 each.
 Default build parts can be removed (skip) in the cart. Never invent prices or ingredients.
 
-SECTIONS:
+SECTIONS (use navigate_menu_section with these ids when guest asks to see/browse a part of the menu):
 - sandwiches | Sándwiches | EN: Sandwiches | El armado está escrito en cada uno. El queso es suizo, americano o pepper jack. Un adicional de aguacate, tomate, queso o lechuga suma $2.50.
-- desayuno | Desayuno | EN: Breakfast
-- calientes | Calientes | EN: Hot drinks
-- picar | Para picar | EN: To start
+- desayuno | Desayuno | EN: Breakfast | aliases: desayunos, breakfast
+- calientes | Calientes | EN: Hot drinks | aliases: cafe, coffee
+- picar | Para picar | EN: To start | aliases: snacks
 - empanadas | Empanadas | EN: Patties
 - ensaladas | Ensaladas | EN: Salads | Lechuga, tomate, cebolla, queso y aguacate.
 - tacos | Tacos | EN: Tacos
-- jugos | Jugos | EN: Juices | Los naturales salen a $7. Una fruta de más suma $3.
-- bebidas | Bebidas | EN: Drinks
+- jugos | Jugos | EN: Juices | Los naturales salen a $7. Una fruta de más suma $3. | aliases: juices
+- bebidas | Bebidas | EN: Drinks | aliases: drinks, sodas
+- carta | whole menu scroll | EN: Menu
+
+When guest says "muéstrame desayunos / show me breakfast / jugos / bebidas", call navigate_menu_section immediately so the page scrolls there, then briefly name what is in that section.
 
 MENU (use exact id with open_cart_with_items):
 - id=cubano | group=sandwiches | El cubano | EN: Cuban | $13.00 | build: Lechón, jamón, queso, mayonesa, mostaza y pepinillo. El queso es suizo, americano o pepper jack. Se prensa hasta que el pan cruje. | parts: lechon, jamon, queso, mayonesa, mostaza, pepinillo | paid_extras=queso,aguacate,tomate,lechuga +2.50

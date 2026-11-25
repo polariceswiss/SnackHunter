@@ -66,6 +66,23 @@
     });
   }
 
+  function navigateMenuSection(parameters) {
+    var raw = parameters || {};
+    var target = raw.section || raw.id || raw.name || raw.target || "";
+    if (!window.SH || typeof SH.goToSection !== "function") {
+      return JSON.stringify({ ok: false, error: "Nav bridge not ready." });
+    }
+    var res = SH.goToSection(target);
+    return JSON.stringify({
+      ok: !!res.ok,
+      section: res.section || null,
+      itemId: res.itemId || null,
+      message: res.ok
+        ? "Scrolled the page to the " + res.section + " menu section so the guest can browse it."
+        : "Unknown section. Use: sandwiches, desayuno, calientes, picar, empanadas, ensaladas, tacos, jugos, bebidas, or carta."
+    });
+  }
+
   function clientTools() {
     return {
       open_cart_with_items: function (parameters) {
@@ -73,6 +90,9 @@
       },
       write_spoken_parts: function (parameters) {
         return writeSpokenParts(parameters || {});
+      },
+      navigate_menu_section: function (parameters) {
+        return navigateMenuSection(parameters || {});
       }
     };
   }

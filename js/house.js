@@ -685,6 +685,80 @@
     return { added: added, flash: flash };
   }
 
+  var SECTION_ALIASES = {
+    sandwich: "sandwiches",
+    sandwiches: "sandwiches",
+    sandwicheria: "sandwiches",
+    cubano: "sandwiches",
+    cubanos: "sandwiches",
+    desayuno: "desayuno",
+    desayunos: "desayuno",
+    breakfast: "desayuno",
+    calientes: "calientes",
+    cafe: "calientes",
+    coffee: "calientes",
+    "hot drinks": "calientes",
+    "hot-drinks": "calientes",
+    picar: "picar",
+    snacks: "picar",
+    starters: "picar",
+    "para picar": "picar",
+    empanadas: "empanadas",
+    patties: "picar",
+    ensaladas: "ensaladas",
+    salads: "ensaladas",
+    salad: "ensaladas",
+    tacos: "tacos",
+    taco: "tacos",
+    jugos: "jugos",
+    jugo: "jugos",
+    juices: "jugos",
+    juice: "jugos",
+    bebidas: "bebidas",
+    bebida: "bebidas",
+    drinks: "bebidas",
+    drink: "bebidas",
+    sodas: "bebidas",
+    carta: "carta",
+    menu: "carta",
+    menú: "carta"
+  };
+
+  function resolveSection(raw) {
+    var key = String(raw || "").trim().toLowerCase();
+    if (!key) return null;
+    if (SECTION_ALIASES[key]) return SECTION_ALIASES[key];
+    if (GROUPS.some(function (g) { return g.id === key; })) return key;
+    var item = itemById(key);
+    if (item && item.group) return item.group;
+    var hit = null;
+    GROUPS.some(function (g) {
+      if (
+        g.name.toLowerCase() === key ||
+        (g.en && g.en.toLowerCase() === key) ||
+        (g.fr && g.fr.toLowerCase() === key)
+      ) {
+        hit = g;
+        return true;
+      }
+      return false;
+    });
+    return hit ? hit.id : null;
+  }
+
+  /** Scroll the page to a menu section (or item's group). Never pays. */
+  function goToSection(raw) {
+    var section = resolveSection(raw);
+    if (!section) return { ok: false, error: "unknown_section", section: null };
+    var itemId = null;
+    var maybeItem = itemById(String(raw || "").trim().toLowerCase());
+    if (maybeItem) itemId = maybeItem.id;
+    document.dispatchEvent(new CustomEvent("sh:go-section", {
+      detail: { section: section, itemId: itemId }
+    }));
+    return { ok: true, section: section, itemId: itemId };
+  }
+
   /**
    * Write what the guest is saying into the open cart:
    * update last matching line, or add one. Never pays.
@@ -882,6 +956,8 @@
     addLine: addLine,
     stageItems: stageItems,
     syncSpoken: syncSpoken,
+    goToSection: goToSection,
+    resolveSection: resolveSection,
     updateLine: updateLine,
     clearCart: clearCart,
     totals: totals,

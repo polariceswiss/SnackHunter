@@ -83,7 +83,7 @@
       ? '<div class="dish-more" hidden>' + plate + shot + (item.about ? '<p>' + tr(item.about, item.aboutEn, item.aboutFr) + '</p><p class="en" lang="' + subLang + '">' + aboutSub + "</p>" : "") + "</div>"
       : "";
     return (
-      '<li class="dish' + (item.label ? " dish-brand" : "") + '">' +
+      '<li class="dish' + (item.label ? " dish-brand" : "") + '" id="dish-' + item.id + '" data-dish="' + item.id + '">' +
         '<button class="dish-open" type="button" aria-expanded="false">' +
           '<span class="dish-copy"><h4>' + tr(item.name, item.en, item.fr) + '</h4><p class="en" lang="' + subLang + '">' + sub + "</p>" + chip + "</span>" +
         "</button>" +
@@ -650,6 +650,48 @@
     document.addEventListener("sh:cart", renderCart);
     document.addEventListener("sh:open-cart", function () {
       openDrawer("cart");
+    });
+    document.addEventListener("sh:go-section", function (event) {
+      var detail = event.detail || {};
+      var section = detail.section;
+      var itemId = detail.itemId;
+      if (!section) return;
+      var panel = document.getElementById("nav-panel");
+      var toggle = document.querySelector(".nav-toggle");
+      if (panel) panel.setAttribute("hidden", "");
+      if (toggle) toggle.setAttribute("aria-expanded", "false");
+      document.documentElement.classList.remove("nav-open");
+      document.body.classList.remove("nav-open");
+      closeDrawer();
+      var target =
+        (itemId && document.getElementById("dish-" + itemId)) ||
+        document.getElementById(section);
+      if (!target) return;
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      var chip = document.querySelector('.carta-index a[href="#' + section + '"]');
+      if (chip) {
+        document.querySelectorAll(".carta-index a.is-active").forEach(function (a) {
+          a.classList.remove("is-active");
+        });
+        chip.classList.add("is-active");
+        var parent = chip.closest(".carta-index");
+        if (parent && parent.scrollWidth > parent.clientWidth + 8) {
+          parent.scrollTo({
+            left: Math.max(0, chip.offsetLeft - (parent.clientWidth - chip.offsetWidth) / 2),
+            behavior: reduce ? "auto" : "smooth"
+          });
+        }
+      }
+      var flashNode = itemId && document.getElementById("dish-" + itemId)
+        ? document.getElementById("dish-" + itemId)
+        : document.getElementById(section);
+      if (flashNode) {
+        flashNode.classList.add("is-nav-flash");
+        setTimeout(function () {
+          flashNode.classList.remove("is-nav-flash");
+        }, 2200);
+      }
     });
     document.addEventListener("sh:cart-flash", function (event) {
       var detail = event.detail || {};
