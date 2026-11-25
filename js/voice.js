@@ -27,7 +27,8 @@
       });
     }
     var result = SH.stageItems(items);
-    var added = typeof result === "number" ? result : result.added;
+    var added = typeof result === "number" ? result : (result.added || 0);
+    var updated = result && result.updated ? result.updated : 0;
     var flash = result && result.flash ? result.flash : [];
     setTimeout(function () {
       document.dispatchEvent(new CustomEvent("sh:open-cart"));
@@ -40,12 +41,14 @@
     return JSON.stringify({
       ok: true,
       added: added,
+      updated: updated,
       cart_count: SH.cart().length,
       written: flash,
       paid: false,
       placed: false,
-      message:
-        "Items staged and written into the guest cart (skips/extras/notes). Drawer opened. Guest reviews and pays themselves. Do not claim paid or sent."
+      message: updated && !added
+        ? "Cart already had those items — updated them, did NOT duplicate. Drawer opened. Do not add again when repeating the order."
+        : "Items staged into the guest cart. Drawer opened. Guest reviews and pays themselves. Do not claim paid or sent. Do not call this again just to repeat the ticket."
     });
   }
 

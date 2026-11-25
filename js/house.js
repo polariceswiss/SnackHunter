@@ -682,16 +682,40 @@
     return flash;
   }
 
-  /** Stage menu lines from voice agent — never places or pays the order. */
+  /**
+   * Stage menu lines from voice — never pays.
+   * If the same item id is already in the cart, UPDATE that line instead of
+   * duplicating (reciting/confirming the order must not add again).
+   * Pass another/force_new true only when the guest wants a second separate line.
+   */
   function stageItems(list) {
     var lines = cart();
     var added = 0;
+    var updated = 0;
     var flash = [];
+    var lastId = null;
     (list || []).forEach(function (raw) {
       var id = raw && (raw.id || raw.item_id || raw.sku);
       if (!id || !itemById(id)) return;
-      var qty = Math.max(1, Math.min(20, Number(raw.qty) || 1));
+      lastId = id;
+      var forceNew = !!(raw && (raw.another === true || raw.another === "true" || raw.force_new === true || raw.force_new === "true"));
+      var index = -1;
       var i;
+      if (!forceNew) {
+        for (i = lines.length - 1; i >= 0; i--) {
+          if (lines[i].id === id) { index = i; break; }
+        }
+      }
+      if (index >= 0) {
+        var nextQty = Number(raw.qty);
+        if (isFinite(nextQty) && nextQty >= 1) {
+          lines[index].qty = Math.max(1, Math.min(20, nextQty));
+        }
+        flash = flash.concat(applySpokenMods(lines[index], raw || {}));
+        updated += 1;
+        return;
+      }
+      var qty = Math.max(1, Math.min(20, Number(raw.qty) || 1));
       for (i = 0; i < qty; i++) {
         var row = blankLine(id);
         flash = flash.concat(applySpokenMods(row, raw || {}));
@@ -699,13 +723,11 @@
         added += 1;
       }
     });
-    if (added) {
+    if (added || updated) {
       saveCart(lines);
-      var last = list && list.length ? list[list.length - 1] : null;
-      var lastId = last && (last.id || last.item_id || last.sku);
       if (lastId) goToSection(lastId, { expand: true });
     }
-    return { added: added, flash: flash };
+    return { added: added, updated: updated, flash: flash };
   }
 
   var SECTION_ALIASES = {
