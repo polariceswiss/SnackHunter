@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Snack Hunter Cafeteria — Miami</title>
   <meta name="description" content="Cafetería cubana en el 3799 NW 7th Street, Miami. Sándwiches prensados, desayuno, jugos y colada. El carrito de golf entrega en tres millas.">
-  <script>try{if(localStorage.getItem("sh.theme")!=="dark")document.documentElement.setAttribute("data-theme","light")}catch(e){document.documentElement.setAttribute("data-theme","light")}</script>
-  <meta name="theme-color" content="#f4efe6">
+  <script>try{var t=localStorage.getItem("sh.theme");if(t==="light")document.documentElement.setAttribute("data-theme","light");else{document.documentElement.removeAttribute("data-theme");if(t!=="dark")localStorage.setItem("sh.theme","dark")}}catch(e){}</script>
+  <meta name="theme-color" content="#000000">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="icon" href="assets/favicon.png?v=6" type="image/png">
   <link rel="apple-touch-icon" href="assets/apple-touch.png?v=6">
@@ -14,8 +14,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=44">
-  <link rel="stylesheet" href="css/order.css?v=38">
+  <link rel="stylesheet" href="css/styles.css?v=45">
+  <link rel="stylesheet" href="css/order.css?v=39">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -50,8 +50,7 @@
         </svg>
         <div class="gate-film-wrap">
           <img class="gate-poster" src="assets/gate-poster.jpg?v=1" alt="" aria-hidden="true">
-          <video class="gate-film" muted playsinline webkit-playsinline autoplay preload="auto" poster="assets/gate-poster.jpg?v=1" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback"></video>
-          <button class="gate-go" id="gate-go" type="button" hidden>▶</button>
+          <video class="gate-film" src="assets/load-hunter.mp4?v=11" muted autoplay playsinline webkit-playsinline preload="auto" poster="assets/gate-poster.jpg?v=1" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback"></video>
         </div>
         <p class="gate-cafe">Cafeteria</p>
       </div>
@@ -66,48 +65,29 @@
         sessionStorage.removeItem("sh.gate");
         localStorage.removeItem("sh.gate");
       } catch (e) {}
-      var wrap = gate.querySelector(".gate-film-wrap");
-      var old = gate.querySelector(".gate-film");
-      var go = document.getElementById("gate-go");
-      var film = document.createElement("video");
-      var srcUrl = "assets/load-hunter.mp4?v=10";
+      var film = gate.querySelector(".gate-film");
+      var skip = document.getElementById("gate-skip");
+      var srcUrl = "assets/load-hunter.mp4?v=11";
       var blobUrl = "";
       var kicking = false;
       var started = false;
       var opened = false;
       var named = false;
-      var tries = 0;
-      film.className = "gate-film";
-      film.setAttribute("playsinline", "");
-      film.setAttribute("webkit-playsinline", "");
-      film.setAttribute("autoplay", "");
-      film.setAttribute("muted", "");
-      film.setAttribute("preload", "auto");
-      film.setAttribute("poster", "assets/gate-poster.jpg?v=1");
-      film.setAttribute("disablepictureinpicture", "");
-      film.setAttribute("disableremoteplayback", "");
-      film.setAttribute("controlslist", "nodownload nofullscreen noremoteplayback");
+      if (!film) return;
       film.muted = true;
       film.defaultMuted = true;
       film.autoplay = true;
       film.playsInline = true;
-      film.preload = "auto";
       film.controls = false;
       film.volume = 0;
-      if (old && old.parentNode) old.parentNode.replaceChild(film, old);
-      else if (wrap) wrap.appendChild(film);
-      var skip = document.getElementById("gate-skip");
+      film.setAttribute("muted", "");
+      film.setAttribute("autoplay", "");
+      film.setAttribute("playsinline", "");
+      film.setAttribute("webkit-playsinline", "");
       function markPlaying() {
         started = true;
         gate.classList.add("is-playing");
         gate.classList.remove("is-blocked");
-        if (go) go.hidden = true;
-      }
-      function showGo() {
-        if (opened || started) return;
-        gate.classList.add("is-blocked");
-        if (go) go.hidden = false;
-        showName();
       }
       function showName() {
         if (named) return;
@@ -126,20 +106,6 @@
           }
         }, 800);
       }
-      function arm() {
-        film.controls = false;
-        film.removeAttribute("controls");
-        film.muted = true;
-        film.defaultMuted = true;
-        film.volume = 0;
-        film.autoplay = true;
-        film.playsInline = true;
-        film.setAttribute("muted", "");
-        film.setAttribute("autoplay", "");
-        film.setAttribute("playsinline", "");
-        film.setAttribute("webkit-playsinline", "");
-        try { film.setAttribute("webkit-playsinline", "true"); } catch (e) {}
-      }
       function kick() {
         if (!film || opened || kicking) return;
         if (!film.paused && !film.ended && film.currentTime > 0) {
@@ -147,26 +113,24 @@
           return;
         }
         kicking = true;
-        arm();
+        film.muted = true;
+        film.defaultMuted = true;
+        film.volume = 0;
+        film.autoplay = true;
+        film.playsInline = true;
         var req;
         try {
           req = film.play();
         } catch (err) {
           kicking = false;
-          tries += 1;
-          if (tries >= 8) showGo();
           return;
         }
         if (req && typeof req.then === "function") {
           req.then(function () {
             kicking = false;
             markPlaying();
-            tries = 0;
           }).catch(function () {
             kicking = false;
-            tries += 1;
-            if (tries >= 8) showGo();
-            else setTimeout(kick, 180);
           });
         } else {
           kicking = false;
@@ -174,7 +138,7 @@
         }
       }
       function bindSource(url) {
-        film.src = url;
+        if (film.getAttribute("src") !== url) film.src = url;
         try { film.load(); } catch (e) {}
         kick();
       }
@@ -190,37 +154,26 @@
       document.addEventListener("visibilitychange", function () {
         if (!document.hidden) kick();
       });
-      window.addEventListener("pageshow", function (event) {
+      window.addEventListener("pageshow", function () {
         try {
           sessionStorage.removeItem("sh.gate");
           localStorage.removeItem("sh.gate");
         } catch (e) {}
-        if (event.persisted) bindSource(blobUrl || srcUrl);
-        else kick();
+        kick();
       });
       window.addEventListener("focus", kick);
-      function unlock() {
-        kick();
-      }
-      ["pointerdown", "touchstart", "touchend", "click", "keydown"].forEach(function (evt) {
-        document.addEventListener(evt, unlock, true);
+      ["pointerdown", "touchstart", "keydown"].forEach(function (evt) {
+        document.addEventListener(evt, kick, true);
       });
-      if (go) {
-        go.addEventListener("click", function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          kick();
-        });
-      }
       var watch = setInterval(function () {
         if (opened || !document.getElementById("gate")) {
           clearInterval(watch);
           return;
         }
         if (film.paused && !document.hidden) kick();
-      }, 350);
+      }, 400);
       setTimeout(showName, 9000);
-      setTimeout(function () { if (!started) showGo(); }, 1600);
+      setTimeout(function () { if (!started && !opened) showName(); }, 2500);
       if (skip) skip.addEventListener("click", function (event) {
         event.stopPropagation();
         open();
@@ -229,7 +182,7 @@
         if (!started || film.paused) kick();
         else if (film.currentTime > 1.2) open();
       });
-      arm();
+      kick();
       if (window.fetch) {
         fetch(srcUrl, { cache: "force-cache" }).then(function (res) {
           if (!res.ok) throw new Error("gate video missing");
@@ -238,14 +191,12 @@
           blobUrl = URL.createObjectURL(blob);
           bindSource(blobUrl);
         }).catch(function () {
-          bindSource(srcUrl);
+          kick();
         });
-      } else {
-        bindSource(srcUrl);
       }
-      setTimeout(kick, 100);
-      setTimeout(kick, 400);
-      setTimeout(kick, 900);
+      setTimeout(kick, 120);
+      setTimeout(kick, 500);
+      setTimeout(kick, 1200);
     })();
   </script>
 
@@ -626,6 +577,6 @@
   <script src="js/app.js?v=32"></script>
   <script src="js/main.js?v=14"></script>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
-  <script src="js/voice.js?v=4"></script>
+  <script src="js/voice.js?v=5"></script>
 </body>
 </html>

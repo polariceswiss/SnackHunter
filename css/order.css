@@ -99,27 +99,7 @@
   opacity: 0;
 }
 
-.gate-go {
-  position: absolute;
-  z-index: 3;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 4.2rem;
-  height: 4.2rem;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(224, 168, 74, 0.92);
-  color: #111;
-  font-size: 1.35rem;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
-}
-
-.gate-go[hidden] { display: none !important; }
-
-.gate.is-blocked .gate-go { display: grid; place-items: center; }
+.gate-go { display: none !important; }
 
 .gate-film::-webkit-media-controls,
 .gate-film::-webkit-media-controls-enclosure,
