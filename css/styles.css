@@ -1365,6 +1365,11 @@ elevenlabs-convai {
   z-index: 44 !important;
 }
 
+/* Soften PC speaker bleed while the agent talks */
+html.sh-voice-speaking elevenlabs-convai {
+  filter: brightness(1.02);
+}
+
 @media (max-width: 899px) {
   elevenlabs-convai {
     bottom: calc(5.2rem + env(safe-area-inset-bottom)) !important;
