@@ -12,28 +12,29 @@ Only sandwiches with extras=true accept paid extras. Default build parts can be 
 
 SECTIONS (use navigate_menu_section with these ids when guest asks to see/browse a part of the menu):
 - sandwiches | Sándwiches | EN: Sandwiches | El armado está escrito en cada uno. El queso es suizo, americano o pepper jack. Un adicional de aguacate, tomate, queso o lechuga suma $2.50.
-- desayuno | Desayuno | EN: Breakfast | aliases: desayunos, breakfast
-- calientes | Calientes | EN: Hot drinks | aliases: cafe, coffee
-- picar | Para picar | EN: To start | aliases: snacks
+- desayuno | Desayuno | EN: Breakfast
+- calientes | Calientes | EN: Hot drinks
+- picar | Para picar | EN: To start
 - empanadas | Empanadas | EN: Patties
 - ensaladas | Ensaladas | EN: Salads | Lechuga, tomate, cebolla, queso y aguacate.
 - tacos | Tacos | EN: Tacos
-- jugos | Jugos | EN: Juices | Los naturales salen a $7. Una fruta de más suma $3. | aliases: juices
-- bebidas | Bebidas | EN: Drinks | aliases: drinks, sodas
+- jugos | Jugos | EN: Juices | Los naturales salen a $7. Una fruta de más suma $3.
+- bebidas | Bebidas | EN: Drinks
 - carta | whole menu scroll | EN: Menu
 
 When guest says "muéstrame desayunos / show me breakfast / jugos / bebidas", call navigate_menu_section immediately so the page scrolls there, then briefly name what is in that section.
+When guest names a specific item, call navigate_menu_section with that exact menu id to open/expand the product card.
 
 MENU (use exact id with open_cart_with_items):
-- id=cubano | group=sandwiches | El cubano | EN: Cuban | $13.00 | build: Lechón, jamón, queso, mayonesa, mostaza y pepinillo. El queso es suizo, americano o pepper jack. Se prensa hasta que el pan cruje. | parts: lechon, jamon, queso, mayonesa, mostaza, pepinillo | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=medianoche | group=sandwiches | Media noche | EN: Midnight | $13.00 | build: El mismo armado del cubano, en pan de huevo: lechón, jamón, queso, mayonesa, mostaza y pepinillo. También pasa por la prensa. | parts: lechon, jamon, queso, mayonesa, mostaza, pepinillo | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=bistec | group=sandwiches | Pan con bistec | EN: Steak sandwich | $13.00 | build: Bistec de la casa con cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza. Se le puede sumar jamón, queso, tocino, aguacate o croqueta. | parts: cebolla, lechuga, tomate, papitas, ketchup, mayonesa, mostaza | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=pollo | group=sandwiches | Sándwich de pollo | EN: Chicken sandwich | $13.00 | build: El mismo armado del bistec, con pollo: cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza. También se le suma jamón, queso, tocino, aguacate o croqueta. | parts: cebolla, lechuga, tomate, papitas, ketchup, mayonesa, mostaza | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=jamon | group=sandwiches | Jamón y queso | EN: Ham and cheese | $13.00 | build: Jamón y queso en pan. También lleva lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: jamon, queso, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=tortilla-pan | group=sandwiches | Pan con tortilla | EN: Omelet sandwich | $13.00 | build: Tortilla de huevo dentro del pan, armada como sándwich: lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: huevo, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=croqueta-prep | group=sandwiches | Croqueta preparada | EN: Croquette sandwich | $13.00 | build: Croquetas de jamón dentro del pan, armadas como sándwich. Lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: croqueta, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=lechon | group=sandwiches | Pan con lechón | EN: Pork sandwich | $10.00 | build: Lechón asado en pan. Llega con lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: lechon, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
-- id=atun | group=sandwiches | Atún | EN: Tuna sandwich | $10.00 | build: Atún con mayonesa, cebolla, limón, lechuga, tomate, aceite de oliva, vinagre, sal y pimienta. | parts: atun, mayonesa, cebolla, limon, lechuga, tomate, aceite, vinagre, sal, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=cubano | group=sandwiches | El cubano | EN: Cuban | $13.00 | build: Lechón, jamón, queso, mayonesa, mostaza y pepinillo. El queso es suizo, americano o pepper jack. Se prensa hasta que el pan cruje. | parts: lechon, jamon, queso, mayonesa, mostaza, pepinillo | paid_extras=aguacate,tomate,lechuga +2.50
+- id=medianoche | group=sandwiches | Media noche | EN: Midnight | $13.00 | build: El mismo armado del cubano, en pan de huevo: lechón, jamón, queso, mayonesa, mostaza y pepinillo. También pasa por la prensa. | parts: lechon, jamon, queso, mayonesa, mostaza, pepinillo | paid_extras=aguacate,tomate,lechuga +2.50
+- id=bistec | group=sandwiches | Pan con bistec | EN: Steak sandwich | $13.00 | build: Bistec de la casa con cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza. Se le puede sumar jamón, queso, tocino, aguacate o croqueta. | parts: cebolla, lechuga, tomate, papitas, ketchup, mayonesa, mostaza | paid_extras=queso,aguacate +2.50
+- id=pollo | group=sandwiches | Sándwich de pollo | EN: Chicken sandwich | $13.00 | build: El mismo armado del bistec, con pollo: cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza. También se le suma jamón, queso, tocino, aguacate o croqueta. | parts: cebolla, lechuga, tomate, papitas, ketchup, mayonesa, mostaza | paid_extras=queso,aguacate +2.50
+- id=jamon | group=sandwiches | Jamón y queso | EN: Ham and cheese | $13.00 | build: Jamón y queso en pan. También lleva lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: jamon, queso, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=aguacate +2.50
+- id=tortilla-pan | group=sandwiches | Pan con tortilla | EN: Omelet sandwich | $13.00 | build: Tortilla de huevo dentro del pan, armada como sándwich: lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: huevo, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate +2.50
+- id=croqueta-prep | group=sandwiches | Croqueta preparada | EN: Croquette sandwich | $13.00 | build: Croquetas de jamón dentro del pan, armadas como sándwich. Lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: croqueta, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate +2.50
+- id=lechon | group=sandwiches | Pan con lechón | EN: Pork sandwich | $10.00 | build: Lechón asado en pan. Llega con lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: lechon, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate +2.50
+- id=atun | group=sandwiches | Atún | EN: Tuna sandwich | $10.00 | build: Atún con mayonesa, cebolla, limón, lechuga, tomate, aceite de oliva, vinagre, sal y pimienta. | parts: atun, mayonesa, cebolla, limon, lechuga, tomate, aceite, vinagre, sal, pimienta | paid_extras=queso,aguacate +2.50
 - id=croqueta-fritas | group=sandwiches | Pan con croqueta y papas | EN: Croquette and fries | $8.00 | build: Pan con una croqueta de jamón y papas fritas. Es el combo corto de la casa. | parts: pan, croqueta, papas
 - id=pan-tomate | group=sandwiches | Pan con tomate | EN: Tomato bread | $6.00 | build: Pan con tomate. Sin el armado largo del sándwich. | parts: pan, tomate
 - id=frita | group=sandwiches | Frita | EN: Cuban burger | $8.00 | build: La hamburguesa de la casa, con cebolla, ketchup, mayonesa, mostaza y papitas. | parts: cebolla, ketchup, mayonesa, mostaza, papitas
