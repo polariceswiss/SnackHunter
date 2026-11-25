@@ -495,6 +495,27 @@
     saveCart(lines);
   }
 
+  /** Stage menu lines from voice agent — never places or pays the order. */
+  function stageItems(list) {
+    var lines = cart();
+    var added = 0;
+    (list || []).forEach(function (raw) {
+      var id = raw && (raw.id || raw.item_id || raw.sku);
+      if (!id || !itemById(id)) return;
+      var qty = Math.max(1, Math.min(20, Number(raw.qty) || 1));
+      var wish = raw.wish ? String(raw.wish).slice(0, 120) : "";
+      var i;
+      for (i = 0; i < qty; i++) {
+        var row = blankLine(id);
+        if (wish) row.wish = wish;
+        lines.push(row);
+        added += 1;
+      }
+    });
+    if (added) saveCart(lines);
+    return added;
+  }
+
   function updateLine(index, patch, quiet) {
     var lines = cart();
     if (!lines[index]) return;
@@ -657,6 +678,7 @@
     lineCents: lineCents,
     cart: cart,
     addLine: addLine,
+    stageItems: stageItems,
     updateLine: updateLine,
     clearCart: clearCart,
     totals: totals,

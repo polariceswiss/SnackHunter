@@ -1349,52 +1349,16 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
   scroll-snap-align: start;
 }
 
-.ask-float {
-  position: fixed;
-  z-index: 44;
-  right: 0.7rem;
-  bottom: calc(5.35rem + env(safe-area-inset-bottom));
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  width: auto;
-  max-width: calc(100vw - 1.4rem);
-  height: 3.35rem;
-  padding: 0.2rem 0.85rem 0.2rem 0.2rem;
-  border: 1px solid rgba(224, 168, 74, 0.75);
-  border-radius: 999px;
-  background: #000;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
-  color: #f4efe6;
-  cursor: pointer;
+/* ElevenLabs Snack AI orb — above mobile dock; widget hosts its own shadow UI */
+elevenlabs-convai.sh-voice-orb,
+elevenlabs-convai {
+  z-index: 44 !important;
 }
 
-.ask-float img {
-  width: 2.85rem;
-  height: 2.85rem;
-  object-fit: contain;
-  pointer-events: none;
-  flex: none;
-}
-
-.ask-float-name {
-  font-family: var(--display);
-  font-weight: 800;
-  font-size: 0.78rem;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.ask-float-name em {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 500;
-  color: #e0a84a;
-}
-
-.ticket-bar:not([hidden]) ~ .ask-float {
-  bottom: calc(9.5rem + env(safe-area-inset-bottom));
+@media (max-width: 899px) {
+  elevenlabs-convai {
+    bottom: calc(5.2rem + env(safe-area-inset-bottom)) !important;
+  }
 }
 
 /* Reveal */
@@ -1448,9 +1412,6 @@ section[id],
   .nav-desktop { display: flex; gap: 0.7rem; }
   .nav-desktop a { letter-spacing: 0.08em; }
   .nav-toggle { display: none; }
-
-  .ask-float { right: 1.4rem; bottom: 1.4rem; }
-  .ticket-bar:not([hidden]) ~ .ask-float { bottom: 1.4rem; }
 
   .hero { height: 75vh; }
   .hero-reel {

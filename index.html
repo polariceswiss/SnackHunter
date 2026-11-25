@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=42">
+  <link rel="stylesheet" href="css/styles.css?v=43">
   <link rel="stylesheet" href="css/order.css?v=36">
   <script type="application/ld+json">
   {
@@ -437,27 +437,6 @@
     <span><span data-i18n="basket">Cesta</span> <span data-count>0</span></span>
     <strong data-bar-total>$0</strong>
   </button>
-  <button class="ask-float" id="ask-open" type="button" aria-expanded="false" aria-controls="ask-panel" aria-label="Preguntar a Snack AI">
-    <img src="assets/logo-bw-dark.png?v=1" alt="">
-    <span class="ask-float-name">Snack <em>AI</em></span>
-  </button>
-  <section class="ask-panel" id="ask-panel" hidden role="dialog" aria-labelledby="ask-title">
-    <header class="ask-head">
-      <img src="assets/logo-bw-dark.png?v=1" alt="">
-      <div>
-        <p id="ask-title">Snack <em>AI</em></p>
-        <p class="ask-sub" id="ask-sub"></p>
-      </div>
-      <button class="ask-x" id="ask-x" type="button" aria-label="Cerrar">×</button>
-    </header>
-    <div class="ask-log" id="ask-log"></div>
-    <div class="ask-chips" id="ask-chips"></div>
-    <form class="ask-form" id="ask-form">
-      <input id="ask-input" type="text" maxlength="240" autocomplete="off" enterkeyhint="send">
-      <button type="submit" aria-label="Enviar">→</button>
-    </form>
-    <a class="ask-wa" id="ask-wa" href="https://wa.me/17862905242" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
-  </section>
   <p class="mine" id="mine" hidden></p>
   <div class="scrim" id="scrim" hidden></div>
 
@@ -560,9 +539,10 @@
   <script>window.MAP = window.L;</script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="js/i18n.js?v=11"></script>
-  <script src="js/house.js?v=18"></script>
-  <script src="js/app.js?v=29"></script>
+  <script src="js/house.js?v=19"></script>
+  <script src="js/app.js?v=30"></script>
   <script src="js/main.js?v=14"></script>
-  <script src="js/ask.js?v=7"></script>
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+  <script src="js/voice.js?v=1"></script>
 </body>
 </html>

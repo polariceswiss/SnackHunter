@@ -626,6 +626,9 @@
     bindSuggest(document.getElementById("find-street"), document.getElementById("find-list"));
     bindSuggest(document.getElementById("check-street"), document.getElementById("check-list"));
     document.addEventListener("sh:cart", renderCart);
+    document.addEventListener("sh:open-cart", function () {
+      openDrawer("cart");
+    });
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") closeDrawer();
     });
