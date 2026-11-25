@@ -64,7 +64,10 @@
   box-shadow: 0 0 0 1px rgba(243, 238, 230, 0.08);
 }
 
+.gate-poster,
 .gate-film {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -74,14 +77,49 @@
   object-position: center center;
   background: #000;
   display: block;
+}
+
+.gate-poster {
+  z-index: 1;
+  pointer-events: none;
+}
+
+.gate-film {
+  z-index: 2;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.18s ease;
 }
 
 .gate.is-playing .gate-film {
   opacity: 1;
 }
+
+.gate.is-playing .gate-poster {
+  opacity: 0;
+}
+
+.gate-go {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4.2rem;
+  height: 4.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(224, 168, 74, 0.92);
+  color: #111;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.gate-go[hidden] { display: none !important; }
+
+.gate.is-blocked .gate-go { display: grid; place-items: center; }
 
 .gate-film::-webkit-media-controls,
 .gate-film::-webkit-media-controls-enclosure,
