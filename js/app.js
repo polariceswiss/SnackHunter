@@ -110,17 +110,30 @@
     box.innerHTML = lines.map(function (line, index) {
       var item = SH.itemById(line.id);
       if (!item) return "";
+      var lang = (window.I18N && I18N.lang) || "es";
+      var build = SH.buildOf(line.id);
+      var skip = line.skip || {};
+      var buildRow = build.length
+        ? '<p class="build-label">' + tr("Armado — toca para quitar", "Build — tap to remove", "Composition — touchez pour retirer") + "</p>" +
+          '<div class="build">' + build.map(function (key) {
+            var on = !skip[key];
+            return '<button type="button" data-skip="' + key + '" class="' + (on ? "is-on" : "is-off") + '" aria-pressed="' + (on ? "true" : "false") + '">' +
+              esc(SH.partLabel(key, lang)) + "</button>";
+          }).join("") + "</div>"
+        : "";
       var extras = item.extra
-        ? '<div class="extras">' + Object.keys(SH.EXTRAS).map(function (key) {
-          var extra = SH.EXTRAS[key];
-          return '<button type="button" data-x="' + key + '" class="' + (line[key] ? "is-on" : "") + '">' + tr(extra.name, extra.en, extra.fr) + " " + SH.money(extra.cents) + "</button>";
-        }).join("") + "</div>"
+        ? '<p class="build-label">' + tr("Extras +$2.50", "Extras +$2.50", "Extras +2,50 $") + "</p>" +
+          '<div class="extras">' + Object.keys(SH.EXTRAS).map(function (key) {
+            var extra = SH.EXTRAS[key];
+            return '<button type="button" data-x="' + key + '" class="' + (line[key] ? "is-on" : "") + '">' + tr(extra.name, extra.en, extra.fr) + " " + SH.money(extra.cents) + "</button>";
+          }).join("") + "</div>"
         : "";
       return (
         '<article class="cart-line" data-i="' + index + '"><h3>' + tr(item.name, item.en, item.fr) + '</h3><span class="line-price">' + SH.money(SH.lineCents(line)) + "</span>" +
         '<div class="qty"><button type="button" data-q="-1" aria-label="' + tr("Quitar este", "Remove this one", "Retirer celui-ci") + '">–</button><span>' + line.qty + '</span><button type="button" data-q="1" aria-label="' + tr("Otro igual, para armarlo aparte", "Another one, built on its own", "Un autre pareil, monté à part") + '">+</button></div>' +
+        buildRow +
         extras +
-        '<input class="wish" data-wish type="text" value="' + esc(line.wish) + '" placeholder="' + esc(tr("Sin cebolla, bien tostado…", "No onion, well toasted…", "Sans oignon, bien grillé…")) + '" aria-label="' + tr("Este, a su gusto", "This one, their way", "Celui-ci, à sa façon") + '">' +
+        '<input class="wish" data-wish type="text" value="' + esc(line.wish) + '" placeholder="' + esc(tr("Nota: bien tostado…", "Note: well toasted…", "Note : bien grillé…")) + '" aria-label="' + tr("Este, a su gusto", "This one, their way", "Celui-ci, à sa façon") + '">' +
         "</article>"
       );
     }).join("");
@@ -384,8 +397,9 @@
       var item = SH.itemById(line.id);
       var bits = [];
       Object.keys(SH.EXTRAS).forEach(function (key) {
-        if (line[key]) bits.push(SH.EXTRAS[key].name.toLowerCase());
+        if (line[key]) bits.push("+" + SH.EXTRAS[key].name.toLowerCase());
       });
+      SH.skipNote(line).forEach(function (bit) { bits.push(bit); });
       if (line.wish && line.wish.trim()) bits.push(line.wish.trim());
       return { id: line.id, name: item.name, qty: 1, note: bits.join(", "), cents: SH.lineCents(line) };
     });
@@ -602,6 +616,14 @@
         patch[key] = !current[key];
         SH.updateLine(index, patch);
       }
+      if (event.target.hasAttribute("data-skip")) {
+        var part = event.target.getAttribute("data-skip");
+        var cur = SH.cart()[index];
+        var skip = Object.assign({}, cur.skip || {});
+        if (skip[part]) delete skip[part];
+        else skip[part] = true;
+        SH.updateLine(index, { skip: skip });
+      }
     });
     document.querySelectorAll("[data-account]").forEach(function (btn) {
       btn.addEventListener("click", function () {
@@ -628,6 +650,32 @@
     document.addEventListener("sh:cart", renderCart);
     document.addEventListener("sh:open-cart", function () {
       openDrawer("cart");
+    });
+    document.addEventListener("sh:cart-flash", function (event) {
+      var detail = event.detail || {};
+      openDrawer("cart");
+      requestAnimationFrame(function () {
+        var row = document.querySelector('.cart-line[data-i="' + detail.index + '"]');
+        if (!row) return;
+        row.classList.add("is-spoken");
+        (detail.flash || []).forEach(function (token) {
+          var parts = String(token).split(":");
+          var kind = parts[0];
+          var key = parts[1];
+          var node = kind === "extra"
+            ? row.querySelector('[data-x="' + key + '"]')
+            : row.querySelector('[data-skip="' + key + '"]');
+          if (node) node.classList.add("is-flash");
+        });
+        var wish = row.querySelector("[data-wish]");
+        if (wish && wish.value) wish.classList.add("is-flash");
+        setTimeout(function () {
+          row.classList.remove("is-spoken");
+          row.querySelectorAll(".is-flash").forEach(function (node) {
+            node.classList.remove("is-flash");
+          });
+        }, 2200);
+      });
     });
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") closeDrawer();

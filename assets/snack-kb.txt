@@ -1,1 +1,107 @@
-Snack Hunter Cafeteria\nAddress: 3799 NW 7th St, Miami FL 33126\nPhone: 786-290-5242\nGolf cart delivery within 3 miles; farther = pickup at counter.\nHours: call first; hours change.\nPayments: cash, card reader on arrival, Zelle (house confirms), counter.\nTax applies. Cart fee when delivery.\nExtras on some sandwiches: avocado/tomato/cheese/lettuce +.50.\nDo not invent prices, hours, allergens not written, or social media.\n\nMENU (use exact id when adding to cart):\n- id=cubano | El cubano | EN: Cuban | $13.00 | Lechón, jamón, queso, mayonesa, mostaza y pepinillo. | extras available .50\n- id=medianoche | Media noche | EN: Midnight | $13.00 | El mismo armado, en pan de huevo. | extras available .50\n- id=bistec | Pan con bistec | EN: Steak sandwich | $13.00 | Cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza. | extras available .50\n- id=pollo | Sándwich de pollo | EN: Chicken sandwich | $13.00 | El mismo armado del bistec, con pollo. | extras available .50\n- id=jamon | Jamón y queso | EN: Ham and cheese | $13.00 | extras available .50\n- id=tortilla-pan | Pan con tortilla | EN: Omelet sandwich | $13.00 | extras available .50\n- id=croqueta-prep | Croqueta preparada | EN: Croquette sandwich | $13.00 | extras available .50\n- id=lechon | Pan con lechón | EN: Pork sandwich | $10.00 | extras available .50\n- id=atun | Atún | EN: Tuna sandwich | $10.00 | Mayonesa, cebolla, limón, lechuga, tomate, aceite, vinagre, sal y pimienta. | extras available .50\n- id=croqueta-fritas | Pan con croqueta y papas | EN: Croquette and fries | $8.00\n- id=pan-tomate | Pan con tomate | EN: Tomato bread | $6.00\n- id=frita | Frita | EN: Cuban burger | $8.00 | Cebolla, ketchup, mayonesa, mostaza y papitas.\n- id=hotdog | Hot dog | EN: Hot dog | $7.00\n- id=croissant | Croissant | EN: Croissant | $7.00\n- id=revueltos | Huevos revueltos | EN: Scrambled eggs | $8.00\n- id=tortilla | Tortilla de huevo | EN: Omelet | $8.00\n- id=fritos | Huevos fritos | EN: Fried eggs | $8.00\n- id=tostada | Tostada con mantequilla | EN: Toast with butter | $2.00\n- id=tostada-crema | Tostada con queso crema | EN: Cream cheese toast | $3.50\n- id=papas | Papas fritas | EN: Fries | $3.50\n- id=tocino | Tocino | EN: Bacon | $3.50\n- id=sopa | Sopa | EN: Soup | $8.00\n- id=cafecito | Cafecito | EN: Small coffee | $1.00 | El pequeño.\n- id=media-colada | Media colada | EN: Half colada | $2.00\n- id=colada | Colada | EN: Cuban espresso | $3.00 | Corta, dulce, para pasar.\n- id=cortadito | Cortadito | EN: Cortadito | $2.00\n- id=cortadito-ev | Cortadito con evaporada | EN: Cortadito, evaporated milk | $3.00\n- id=conleche | Café con leche | EN: Café con leche | $3.50 | Regular.\n- id=conleche-ev | Café con leche con evaporada | EN: Café con leche, evaporated milk | $5.00 | Regular.\n- id=conleche-gr | Café con leche grande | EN: Large café con leche | $7.00\n- id=conleche-gr-ev | Café con leche grande con evaporada | EN: Large, evaporated milk | $9.00\n- id=cappuccino | Cappuccino | EN: Cappuccino | $3.50 | Pequeño.\n- id=cappuccino-gr | Cappuccino grande | EN: Large cappuccino | $7.00\n- id=chocolate | Chocolate caliente | EN: Hot chocolate | $3.50 | Pequeño.\n- id=chocolate-gr | Chocolate grande | EN: Large hot chocolate | $7.00\n- id=manzanilla | Té de manzanilla | EN: Chamomile tea | $3.00\n- id=te-verde | Té verde | EN: Green tea | $3.00\n- id=pas-guayaba | Pastelito de guayaba | EN: Guava pastry | $1.50\n- id=pas-queso | Pastelito de queso | EN: Cheese pastry | $1.50\n- id=pas-mixto | Pastelito de guayaba y queso | EN: Guava and cheese | $1.50\n- id=pas-coco | Pastelito de coco | EN: Coconut pastry | $1.50\n- id=teq-jq | Tequeño de jamón y queso | EN: Ham and cheese finger | $3.50\n- id=teq-q | Tequeño de queso | EN: Cheese finger | $3.00\n- id=teq-g | Tequeño de guayaba y queso | EN: Guava and cheese finger | $3.00\n- id=croqueta | Croqueta de jamón | EN: Ham croquette | $1.00 | La unidad.\n- id=papa | Papa rellena | EN: Stuffed potato | $2.50\n- id=churros | Churros | EN: Churros | $5.00 | Cuatro unidades.\n- id=bono | Pan de bono | EN: Pan de bono | $2.50\n- id=emp-pollo | Empanada de pollo | EN: Chicken patty | $3.50\n- id=emp-carne | Empanada de carne | EN: Beef patty | $3.50\n- id=emp-queso | Empanada de queso | EN: Cheese patty | $3.50\n- id=emp-espinaca | Empanada de espinaca | EN: Spinach patty | $3.50\n- id=ens-pollo | Ensalada de pollo | EN: Chicken salad | $13.00\n- id=ens-carne | Ensalada de carne | EN: Steak salad | $13.00\n- id=ens-atun | Ensalada de atún | EN: Tuna salad | $13.00\n- id=ens-veg | Ensalada de vegetales | EN: Vegetable salad | $13.00\n- id=taco-pollo | Taco de pollo | EN: Chicken taco | $7.00\n- id=taco-carne | Taco de carne | EN: Steak taco | $7.00\n- id=taco-puerco | Taco de puerco | EN: Pork taco | $7.00\n- id=jugo-pina | Jugo de piña | EN: Pineapple | $7.00\n- id=jugo-sandia | Jugo de melón de agua | EN: Watermelon | $7.00\n- id=jugo-maracuya | Jugo de maracuyá | EN: Passion fruit | $7.00\n- id=jugo-mango | Jugo de mango | EN: Mango | $7.00\n- id=jugo-naranja | Jugo de naranja | EN: Orange | $7.00\n- id=jugo-nz | Naranja y zanahoria | EN: Orange and carrot | $7.00\n- id=bot-manzana | Manzana | EN: Apple | $2.50\n- id=bot-guayaba | Guayaba | EN: Guava | $2.50\n- id=bot-cranberry | Cranberry | EN: Cranberry | $2.50\n- id=coco | Agua de coco | EN: Coconut water | $2.50\n- id=malta-gr | Malta grande | EN: Large malta | $3.00\n- id=malta-pe | Malta pequeña | EN: Small malta | $2.00\n- id=agua | Agua | EN: Water | $2.00\n- id=soda | Soda | EN: Soda | $2.00\n- id=botella-gr | Coke o Sprite grande | EN: Large bottle | $3.00\n- id=botella-pe | Coke o Sprite pequeña | EN: Small bottle | $2.00\n- id=jarritos | Jarritos | EN: Jarritos | $3.00\n- id=gatorade | Gatorade | EN: Gatorade | $3.00\n- id=monster | Monster | EN: Monster | $3.00\n- id=redbull | Red Bull | EN: Red Bull | $3.00\n- id=perrier | Perrier | EN: Perrier | $2.50\n
+Snack Hunter Cafeteria
+Address: 3799 NW 7th St, Miami FL 33126
+Phone: 786-290-5242
+Golf cart delivery within 3 miles; farther = pickup at counter.
+Hours: call first; hours change. Never invent hours.
+Payments: cash, card reader on arrival, Zelle (house confirms), counter.
+Tax applies. Cart fee when golf-cart delivery.
+Paid extras on sandwiches with extras=true: queso, aguacate, tomate, lechuga = $2.50 each.
+Default build parts can be removed (skip) in the cart. Never invent prices or ingredients.
+
+SECTIONS:
+- sandwiches | Sándwiches | EN: Sandwiches | El armado está escrito en cada uno. El queso es suizo, americano o pepper jack. Un adicional de aguacate, tomate, queso o lechuga suma $2.50.
+- desayuno | Desayuno | EN: Breakfast
+- calientes | Calientes | EN: Hot drinks
+- picar | Para picar | EN: To start
+- empanadas | Empanadas | EN: Patties
+- ensaladas | Ensaladas | EN: Salads | Lechuga, tomate, cebolla, queso y aguacate.
+- tacos | Tacos | EN: Tacos
+- jugos | Jugos | EN: Juices | Los naturales salen a $7. Una fruta de más suma $3.
+- bebidas | Bebidas | EN: Drinks
+
+MENU (use exact id with open_cart_with_items):
+- id=cubano | group=sandwiches | El cubano | EN: Cuban | $13.00 | build: Lechón, jamón, queso, mayonesa, mostaza y pepinillo. El queso es suizo, americano o pepper jack. Se prensa hasta que el pan cruje. | parts: lechon, jamon, queso, mayonesa, mostaza, pepinillo | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=medianoche | group=sandwiches | Media noche | EN: Midnight | $13.00 | build: El mismo armado del cubano, en pan de huevo: lechón, jamón, queso, mayonesa, mostaza y pepinillo. También pasa por la prensa. | parts: lechon, jamon, queso, mayonesa, mostaza, pepinillo | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=bistec | group=sandwiches | Pan con bistec | EN: Steak sandwich | $13.00 | build: Bistec de la casa con cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza. Se le puede sumar jamón, queso, tocino, aguacate o croqueta. | parts: cebolla, lechuga, tomate, papitas, ketchup, mayonesa, mostaza | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=pollo | group=sandwiches | Sándwich de pollo | EN: Chicken sandwich | $13.00 | build: El mismo armado del bistec, con pollo: cebolla, lechuga, tomate, papitas, ketchup, mayonesa y mostaza. También se le suma jamón, queso, tocino, aguacate o croqueta. | parts: cebolla, lechuga, tomate, papitas, ketchup, mayonesa, mostaza | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=jamon | group=sandwiches | Jamón y queso | EN: Ham and cheese | $13.00 | build: Jamón y queso en pan. También lleva lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: jamon, queso, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=tortilla-pan | group=sandwiches | Pan con tortilla | EN: Omelet sandwich | $13.00 | build: Tortilla de huevo dentro del pan, armada como sándwich: lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: huevo, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=croqueta-prep | group=sandwiches | Croqueta preparada | EN: Croquette sandwich | $13.00 | build: Croquetas de jamón dentro del pan, armadas como sándwich. Lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: croqueta, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=lechon | group=sandwiches | Pan con lechón | EN: Pork sandwich | $10.00 | build: Lechón asado en pan. Llega con lechuga, tomate, vinagre, sal, cebolla y pimienta. | parts: lechon, lechuga, tomate, vinagre, sal, cebolla, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=atun | group=sandwiches | Atún | EN: Tuna sandwich | $10.00 | build: Atún con mayonesa, cebolla, limón, lechuga, tomate, aceite de oliva, vinagre, sal y pimienta. | parts: atun, mayonesa, cebolla, limon, lechuga, tomate, aceite, vinagre, sal, pimienta | paid_extras=queso,aguacate,tomate,lechuga +2.50
+- id=croqueta-fritas | group=sandwiches | Pan con croqueta y papas | EN: Croquette and fries | $8.00 | build: Pan con una croqueta de jamón y papas fritas. Es el combo corto de la casa. | parts: pan, croqueta, papas
+- id=pan-tomate | group=sandwiches | Pan con tomate | EN: Tomato bread | $6.00 | build: Pan con tomate. Sin el armado largo del sándwich. | parts: pan, tomate
+- id=frita | group=sandwiches | Frita | EN: Cuban burger | $8.00 | build: La hamburguesa de la casa, con cebolla, ketchup, mayonesa, mostaza y papitas. | parts: cebolla, ketchup, mayonesa, mostaza, papitas
+- id=hotdog | group=sandwiches | Hot dog | EN: Hot dog | $7.00 | build: Salchicha en pan. | parts: salchicha, pan
+- id=croissant | group=sandwiches | Croissant | EN: Croissant | $7.00 | build: El croissant de la casa, solo. | parts: pan
+- id=revueltos | group=desayuno | Huevos revueltos | EN: Scrambled eggs | $8.00 | build: Huevos revueltos en la plancha. Es el desayuno de la casa. | parts: huevo
+- id=tortilla | group=desayuno | Tortilla de huevo | EN: Omelet | $8.00 | build: Tortilla de huevo, doblada en la plancha. | parts: huevo
+- id=fritos | group=desayuno | Huevos fritos | EN: Fried eggs | $8.00 | build: Huevos fritos, con la yema a la vista. | parts: huevo
+- id=tostada | group=desayuno | Tostada con mantequilla | EN: Toast with butter | $2.00 | build: Pan tostado con mantequilla. | parts: pan, mantequilla
+- id=tostada-crema | group=desayuno | Tostada con queso crema | EN: Cream cheese toast | $3.50 | build: Pan tostado con queso crema. | parts: pan, queso-crema
+- id=papas | group=desayuno | Papas fritas | EN: Fries | $3.50 | build: Papas fritas, aparte. También se piden de extra con el desayuno. | parts: papas
+- id=tocino | group=desayuno | Tocino | EN: Bacon | $3.50 | build: Tocino, para sumar al desayuno. | parts: tocino
+- id=sopa | group=desayuno | Sopa | EN: Soup | $8.00 | build: La sopa de la casa. El sabor se confirma en el mostrador.
+- id=cafecito | group=calientes | Cafecito | EN: Small coffee | $1.00 | build: Un café cubano pequeño, corto y dulce. | parts: cafe
+- id=media-colada | group=calientes | Media colada | EN: Half colada | $2.00 | build: La mitad de una colada. El mismo café dulce, en menos. | parts: cafe
+- id=colada | group=calientes | Colada | EN: Cuban espresso | $3.00 | build: Café cubano dulce, para compartir. Se toma corto. | parts: cafe
+- id=cortadito | group=calientes | Cortadito | EN: Cortadito | $2.00 | build: Espresso cortado con un golpe de leche. | parts: cafe, leche
+- id=cortadito-ev | group=calientes | Cortadito con evaporada | EN: Cortadito, evaporated milk | $3.00 | build: El mismo cortadito, hecho con leche evaporada. | parts: cafe, evaporada
+- id=conleche | group=calientes | Café con leche | EN: Café con leche | $3.50 | build: Café cubano con leche, tamaño regular. | parts: cafe, leche
+- id=conleche-ev | group=calientes | Café con leche con evaporada | EN: Café con leche, evaporated milk | $5.00 | build: El café con leche regular, con leche evaporada. | parts: cafe, evaporada
+- id=conleche-gr | group=calientes | Café con leche grande | EN: Large café con leche | $7.00 | build: Café con leche en vaso grande. | parts: cafe, leche
+- id=conleche-gr-ev | group=calientes | Café con leche grande con evaporada | EN: Large, evaporated milk | $9.00 | build: El café con leche grande, con leche evaporada. | parts: cafe, evaporada
+- id=cappuccino | group=calientes | Cappuccino | EN: Cappuccino | $3.50 | build: Cappuccino pequeño, con espuma. | parts: cafe, espuma
+- id=cappuccino-gr | group=calientes | Cappuccino grande | EN: Large cappuccino | $7.00 | build: El mismo cappuccino, en grande. | parts: cafe, espuma
+- id=chocolate | group=calientes | Chocolate caliente | EN: Hot chocolate | $3.50 | build: Chocolate caliente, tamaño pequeño. | parts: chocolate
+- id=chocolate-gr | group=calientes | Chocolate grande | EN: Large hot chocolate | $7.00 | build: Chocolate caliente grande. | parts: chocolate
+- id=manzanilla | group=calientes | Té de manzanilla | EN: Chamomile tea | $3.00 | build: Infusión de manzanilla. | parts: te
+- id=te-verde | group=calientes | Té verde | EN: Green tea | $3.00 | build: Té verde, caliente. | parts: te
+- id=pas-guayaba | group=picar | Pastelito de guayaba | EN: Guava pastry | $1.50 | build: Hojaldre horneado, relleno de guayaba. | parts: guayaba
+- id=pas-queso | group=picar | Pastelito de queso | EN: Cheese pastry | $1.50 | build: Hojaldre horneado, relleno de queso. | parts: queso
+- id=pas-mixto | group=picar | Pastelito de guayaba y queso | EN: Guava and cheese | $1.50 | build: Hojaldre horneado, con guayaba y queso juntos. | parts: guayaba, queso
+- id=pas-coco | group=picar | Pastelito de coco | EN: Coconut pastry | $1.50 | build: Hojaldre horneado, relleno de coco. | parts: coco
+- id=teq-jq | group=picar | Tequeño de jamón y queso | EN: Ham and cheese finger | $3.50 | build: Masa frita con jamón y queso adentro. El queso se estira al partirlo. | parts: jamon, queso
+- id=teq-q | group=picar | Tequeño de queso | EN: Cheese finger | $3.00 | build: Tequeño frito, solo de queso. | parts: queso
+- id=teq-g | group=picar | Tequeño de guayaba y queso | EN: Guava and cheese finger | $3.00 | build: Tequeño frito de guayaba y queso. | parts: guayaba, queso
+- id=croqueta | group=picar | Croqueta de jamón | EN: Ham croquette | $1.00 | build: Una croqueta de jamón, frita. Se pide por unidad. | parts: croqueta
+- id=papa | group=picar | Papa rellena | EN: Stuffed potato | $2.50 | build: Papa rellena, frita. El relleno es el de la casa. | parts: papa
+- id=churros | group=picar | Churros | EN: Churros | $5.00 | build: Cuatro churros fritos, en una sola orden. | parts: churros
+- id=bono | group=picar | Pan de bono | EN: Pan de bono | $2.50 | build: Pan de bono, el panecillo de queso. | parts: queso
+- id=emp-pollo | group=empanadas | Empanada de pollo | EN: Chicken patty | $3.50 | build: Empanada frita, rellena de pollo. | parts: pollo
+- id=emp-carne | group=empanadas | Empanada de carne | EN: Beef patty | $3.50 | build: Empanada frita, rellena de carne. | parts: carne
+- id=emp-queso | group=empanadas | Empanada de queso | EN: Cheese patty | $3.50 | build: Empanada frita, rellena de queso. | parts: queso
+- id=emp-espinaca | group=empanadas | Empanada de espinaca | EN: Spinach patty | $3.50 | build: Empanada frita, rellena de espinaca. | parts: espinaca
+- id=ens-pollo | group=ensaladas | Ensalada de pollo | EN: Chicken salad | $13.00 | build: Lechuga, tomate, cebolla, queso y aguacate, con pollo de la casa. | parts: lechuga, tomate, cebolla, queso, aguacate, pollo
+- id=ens-carne | group=ensaladas | Ensalada de carne | EN: Steak salad | $13.00 | build: La misma base, con carne de la casa. | parts: lechuga, tomate, cebolla, queso, aguacate, carne
+- id=ens-atun | group=ensaladas | Ensalada de atún | EN: Tuna salad | $13.00 | build: La misma base, con atún. | parts: lechuga, tomate, cebolla, queso, aguacate, atun
+- id=ens-veg | group=ensaladas | Ensalada de vegetales | EN: Vegetable salad | $13.00 | build: Lechuga, tomate, cebolla, queso y aguacate. Sin carne. | parts: lechuga, tomate, cebolla, queso, aguacate
+- id=taco-pollo | group=tacos | Taco de pollo | EN: Chicken taco | $7.00 | build: Tortilla con pollo de la casa. | parts: tortilla, pollo, lechuga, queso
+- id=taco-carne | group=tacos | Taco de carne | EN: Steak taco | $7.00 | build: Tortilla con carne de la casa. | parts: tortilla, carne, lechuga, queso
+- id=taco-puerco | group=tacos | Taco de puerco | EN: Pork taco | $7.00 | build: Tortilla con puerco de la casa. | parts: tortilla, puerco, lechuga, queso
+- id=jugo-pina | group=jugos | Jugo de piña | EN: Pineapple | $7.00 | build: Piña licuada al momento. Una fruta de más suma $3.
+- id=jugo-sandia | group=jugos | Jugo de melón de agua | EN: Watermelon | $7.00 | build: Melón de agua licuado al momento. Una fruta de más suma $3.
+- id=jugo-maracuya | group=jugos | Jugo de maracuyá | EN: Passion fruit | $7.00 | build: Maracuyá licuado al momento. Una fruta de más suma $3.
+- id=jugo-mango | group=jugos | Jugo de mango | EN: Mango | $7.00 | build: Mango licuado al momento. Una fruta de más suma $3.
+- id=jugo-naranja | group=jugos | Jugo de naranja | EN: Orange | $7.00 | build: Naranja licuada al momento. Una fruta de más suma $3.
+- id=jugo-nz | group=jugos | Naranja y zanahoria | EN: Orange and carrot | $7.00 | build: Naranja y zanahoria, licuadas juntas. Una fruta de más suma $3.
+- id=bot-manzana | group=bebidas | Manzana | EN: Apple | $2.50 | build: Jugo de manzana, de botella.
+- id=bot-guayaba | group=bebidas | Guayaba | EN: Guava | $2.50 | build: Jugo de guayaba, de botella.
+- id=bot-cranberry | group=bebidas | Cranberry | EN: Cranberry | $2.50 | build: Jugo de cranberry, de botella.
+- id=coco | group=bebidas | Agua de coco | EN: Coconut water | $2.50 | build: Agua de coco, fría.
+- id=malta-gr | group=bebidas | Malta grande | EN: Large malta | $3.00 | build: Malta, botella grande.
+- id=malta-pe | group=bebidas | Malta pequeña | EN: Small malta | $2.00 | build: Malta, botella pequeña.
+- id=agua | group=bebidas | Agua | EN: Water | $2.00 | build: Agua, fría.
+- id=soda | group=bebidas | Soda | EN: Soda | $2.00 | build: Soda, fría.
+- id=botella-gr | group=bebidas | Coke o Sprite grande | EN: Large bottle | $3.00 | build: Botella grande de Coke o Sprite.
+- id=botella-pe | group=bebidas | Coke o Sprite pequeña | EN: Small bottle | $2.00 | build: Botella pequeña de Coke o Sprite.
+- id=jarritos | group=bebidas | Jarritos | EN: Jarritos | $3.00 | build: Jarritos, frío.
+- id=gatorade | group=bebidas | Gatorade | EN: Gatorade | $3.00 | build: Gatorade, frío.
+- id=monster | group=bebidas | Monster | EN: Monster | $3.00 | build: Monster, frío.
+- id=redbull | group=bebidas | Red Bull | EN: Red Bull | $3.00 | build: Red Bull, frío.
+- id=perrier | group=bebidas | Perrier | EN: Perrier | $2.50 | build: Perrier, con gas.
+
+JUGOS (fresh juices, group=jugos): all $7.00. Extra fruit +$3.
+Ids: jugo-pina, jugo-sandia, jugo-maracuya, jugo-mango, jugo-naranja, jugo-nz.
+BEBIDAS (bottled drinks, group=bebidas): bot-manzana, bot-guayaba, bot-cranberry, coco, malta-gr, malta-pe, agua, soda, botella-gr, botella-pe, jarritos, gatorade, monster, redbull, perrier.
+If asked about jugos or bebidas, answer from this list. Do not say you do not know when the item is listed.

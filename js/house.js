@@ -210,6 +210,133 @@
     lechuga: { id: "lechuga", name: "Lechuga", en: "Lettuce", fr: "Laitue", cents: 250 }
   };
 
+  /* Default build parts — guest can turn off (skip) in the cart. From house ABOUT only. */
+  var PARTS = {
+    lechon: { name: "Lechón", en: "Pork", fr: "Porc" },
+    jamon: { name: "Jamón", en: "Ham", fr: "Jambon" },
+    queso: { name: "Queso", en: "Cheese", fr: "Fromage" },
+    mayonesa: { name: "Mayonesa", en: "Mayo", fr: "Mayo" },
+    mostaza: { name: "Mostaza", en: "Mustard", fr: "Moutarde" },
+    pepinillo: { name: "Pepinillo", en: "Pickle", fr: "Cornichon" },
+    cebolla: { name: "Cebolla", en: "Onion", fr: "Oignon" },
+    lechuga: { name: "Lechuga", en: "Lettuce", fr: "Laitue" },
+    tomate: { name: "Tomate", en: "Tomato", fr: "Tomate" },
+    papitas: { name: "Papitas", en: "Potato sticks", fr: "Paillassons" },
+    ketchup: { name: "Ketchup", en: "Ketchup", fr: "Ketchup" },
+    vinagre: { name: "Vinagre", en: "Vinegar", fr: "Vinaigre" },
+    sal: { name: "Sal", en: "Salt", fr: "Sel" },
+    pimienta: { name: "Pimienta", en: "Pepper", fr: "Poivre" },
+    limon: { name: "Limón", en: "Lime", fr: "Citron vert" },
+    aceite: { name: "Aceite", en: "Oil", fr: "Huile" },
+    mantequilla: { name: "Mantequilla", en: "Butter", fr: "Beurre" },
+    "queso-crema": { name: "Queso crema", en: "Cream cheese", fr: "Cream cheese" },
+    aguacate: { name: "Aguacate", en: "Avocado", fr: "Avocat" },
+    pollo: { name: "Pollo", en: "Chicken", fr: "Poulet" },
+    carne: { name: "Carne", en: "Steak", fr: "Viande" },
+    atun: { name: "Atún", en: "Tuna", fr: "Thon" },
+    croqueta: { name: "Croqueta", en: "Croquette", fr: "Croquette" },
+    papas: { name: "Papas", en: "Fries", fr: "Frites" },
+    pan: { name: "Pan", en: "Bread", fr: "Pain" },
+    salchicha: { name: "Salchicha", en: "Sausage", fr: "Saucisse" },
+    huevo: { name: "Huevo", en: "Egg", fr: "Œuf" },
+    leche: { name: "Leche", en: "Milk", fr: "Lait" },
+    evaporada: { name: "Evaporada", en: "Evaporated milk", fr: "Lait évaporé" },
+    espuma: { name: "Espuma", en: "Foam", fr: "Mousse" },
+    guayaba: { name: "Guayaba", en: "Guava", fr: "Goyave" },
+    coco: { name: "Coco", en: "Coconut", fr: "Coco" },
+    espinaca: { name: "Espinaca", en: "Spinach", fr: "Épinard" },
+    tortilla: { name: "Tortilla", en: "Tortilla", fr: "Tortilla" },
+    puerco: { name: "Puerco", en: "Pork", fr: "Porc" }
+  };
+
+  var BUILDS = {
+    cubano: ["lechon", "jamon", "queso", "mayonesa", "mostaza", "pepinillo"],
+    medianoche: ["lechon", "jamon", "queso", "mayonesa", "mostaza", "pepinillo"],
+    bistec: ["cebolla", "lechuga", "tomate", "papitas", "ketchup", "mayonesa", "mostaza"],
+    pollo: ["cebolla", "lechuga", "tomate", "papitas", "ketchup", "mayonesa", "mostaza"],
+    jamon: ["jamon", "queso", "lechuga", "tomate", "vinagre", "sal", "cebolla", "pimienta"],
+    "tortilla-pan": ["huevo", "lechuga", "tomate", "vinagre", "sal", "cebolla", "pimienta"],
+    "croqueta-prep": ["croqueta", "lechuga", "tomate", "vinagre", "sal", "cebolla", "pimienta"],
+    lechon: ["lechon", "lechuga", "tomate", "vinagre", "sal", "cebolla", "pimienta"],
+    atun: ["atun", "mayonesa", "cebolla", "limon", "lechuga", "tomate", "aceite", "vinagre", "sal", "pimienta"],
+    "croqueta-fritas": ["pan", "croqueta", "papas"],
+    "pan-tomate": ["pan", "tomate"],
+    frita: ["cebolla", "ketchup", "mayonesa", "mostaza", "papitas"],
+    hotdog: ["salchicha", "pan"],
+    croissant: ["pan"],
+    revueltos: ["huevo"],
+    tortilla: ["huevo"],
+    fritos: ["huevo"],
+    tostada: ["pan", "mantequilla"],
+    "tostada-crema": ["pan", "queso-crema"],
+    papas: ["papas"],
+    tocino: ["tocino"],
+    cafecito: ["cafe"],
+    "media-colada": ["cafe"],
+    colada: ["cafe"],
+    cortadito: ["cafe", "leche"],
+    "cortadito-ev": ["cafe", "evaporada"],
+    conleche: ["cafe", "leche"],
+    "conleche-ev": ["cafe", "evaporada"],
+    "conleche-gr": ["cafe", "leche"],
+    "conleche-gr-ev": ["cafe", "evaporada"],
+    cappuccino: ["cafe", "espuma"],
+    "cappuccino-gr": ["cafe", "espuma"],
+    chocolate: ["chocolate"],
+    "chocolate-gr": ["chocolate"],
+    manzanilla: ["te"],
+    "te-verde": ["te"],
+    "pas-guayaba": ["guayaba"],
+    "pas-queso": ["queso"],
+    "pas-mixto": ["guayaba", "queso"],
+    "pas-coco": ["coco"],
+    "teq-jq": ["jamon", "queso"],
+    "teq-q": ["queso"],
+    "teq-g": ["guayaba", "queso"],
+    croqueta: ["croqueta"],
+    papa: ["papa"],
+    churros: ["churros"],
+    bono: ["queso"],
+    "emp-pollo": ["pollo"],
+    "emp-carne": ["carne"],
+    "emp-queso": ["queso"],
+    "emp-espinaca": ["espinaca"],
+    "ens-pollo": ["lechuga", "tomate", "cebolla", "queso", "aguacate", "pollo"],
+    "ens-carne": ["lechuga", "tomate", "cebolla", "queso", "aguacate", "carne"],
+    "ens-atun": ["lechuga", "tomate", "cebolla", "queso", "aguacate", "atun"],
+    "ens-veg": ["lechuga", "tomate", "cebolla", "queso", "aguacate"],
+    "taco-pollo": ["tortilla", "pollo", "lechuga", "queso"],
+    "taco-carne": ["tortilla", "carne", "lechuga", "queso"],
+    "taco-puerco": ["tortilla", "puerco", "lechuga", "queso"]
+  };
+
+  // Extra PARTS used only in builds above
+  PARTS.tocino = { name: "Tocino", en: "Bacon", fr: "Bacon" };
+  PARTS.cafe = { name: "Café", en: "Coffee", fr: "Café" };
+  PARTS.te = { name: "Té", en: "Tea", fr: "Thé" };
+  PARTS.chocolate = { name: "Chocolate", en: "Chocolate", fr: "Chocolat" };
+  PARTS.papa = { name: "Papa rellena", en: "Stuffed potato", fr: "Pomme farcie" };
+  PARTS.churros = { name: "Churros", en: "Churros", fr: "Churros" };
+
+  function buildOf(id) {
+    return BUILDS[id] || [];
+  }
+
+  function partLabel(key, lang) {
+    var part = PARTS[key];
+    if (!part) return key;
+    if (lang === "en") return part.en;
+    if (lang === "fr") return part.fr;
+    return part.name;
+  }
+
+  function skipNote(line) {
+    var skip = line.skip || {};
+    return buildOf(line.id).filter(function (key) { return !!skip[key]; }).map(function (key) {
+      return "sin " + (PARTS[key] ? PARTS[key].name.toLowerCase() : key);
+    });
+  }
+
   var FR_NAME = {
     cubano: "Le cubain",
     medianoche: "Medianoche",
@@ -458,7 +585,7 @@
   }
 
   function blankLine(id) {
-    var row = { id: id, qty: 1, wish: "" };
+    var row = { id: id, qty: 1, wish: "", skip: {} };
     Object.keys(EXTRAS).forEach(function (key) { row[key] = false; });
     return row;
   }
@@ -471,6 +598,7 @@
       for (i = 0; i < n; i++) {
         var row = blankLine(line.id);
         row.wish = line.wish || "";
+        row.skip = Object.assign({}, line.skip || {});
         Object.keys(EXTRAS).forEach(function (key) { row[key] = !!line[key]; });
         out.push(row);
       }
@@ -495,25 +623,94 @@
     saveCart(lines);
   }
 
+  function parseKeyList(raw) {
+    if (!raw) return [];
+    if (Array.isArray(raw)) return raw;
+    if (typeof raw === "string") {
+      try {
+        var parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      } catch (err) {}
+      return String(raw).split(/[,|]/).map(function (s) { return s.trim(); }).filter(Boolean);
+    }
+    return [];
+  }
+
+  function applySpokenMods(row, raw) {
+    var flash = [];
+    var wish = raw.wish ? String(raw.wish).slice(0, 120) : "";
+    if (wish) row.wish = wish;
+    parseKeyList(raw.skip || raw.remove || raw.sin).forEach(function (key) {
+      var k = String(key || "").trim().toLowerCase();
+      if (!k) return;
+      if (PARTS[k] || buildOf(row.id).indexOf(k) >= 0) {
+        row.skip[k] = true;
+        flash.push("skip:" + k);
+      }
+    });
+    Object.keys(EXTRAS).forEach(function (key) {
+      if (raw[key] === true || raw[key] === "true" || raw[key] === 1) {
+        row[key] = true;
+        flash.push("extra:" + key);
+      }
+    });
+    parseKeyList(raw.extras).forEach(function (key) {
+      var k = String(key || "").trim().toLowerCase();
+      if (EXTRAS[k]) {
+        row[k] = true;
+        flash.push("extra:" + k);
+      }
+    });
+    return flash;
+  }
+
   /** Stage menu lines from voice agent — never places or pays the order. */
   function stageItems(list) {
     var lines = cart();
     var added = 0;
+    var flash = [];
     (list || []).forEach(function (raw) {
       var id = raw && (raw.id || raw.item_id || raw.sku);
       if (!id || !itemById(id)) return;
       var qty = Math.max(1, Math.min(20, Number(raw.qty) || 1));
-      var wish = raw.wish ? String(raw.wish).slice(0, 120) : "";
       var i;
       for (i = 0; i < qty; i++) {
         var row = blankLine(id);
-        if (wish) row.wish = wish;
+        flash = flash.concat(applySpokenMods(row, raw || {}));
         lines.push(row);
         added += 1;
       }
     });
     if (added) saveCart(lines);
-    return added;
+    return { added: added, flash: flash };
+  }
+
+  /**
+   * Write what the guest is saying into the open cart:
+   * update last matching line, or add one. Never pays.
+   */
+  function syncSpoken(raw) {
+    var id = raw && (raw.id || raw.item_id || raw.sku);
+    if (!id || !itemById(id)) return { ok: false, error: "unknown_id", flash: [] };
+    var lines = cart();
+    var index = -1;
+    var i;
+    for (i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].id === id) { index = i; break; }
+    }
+    var flash = [];
+    if (index < 0) {
+      var row = blankLine(id);
+      flash = applySpokenMods(row, raw || {});
+      lines.push(row);
+      index = lines.length - 1;
+    } else {
+      if (!lines[index].skip) lines[index].skip = {};
+      flash = applySpokenMods(lines[index], raw || {});
+    }
+    saveCart(lines);
+    document.dispatchEvent(new CustomEvent("sh:cart-flash", { detail: { index: index, flash: flash } }));
+    return { ok: true, index: index, flash: flash, cart_count: lines.length };
   }
 
   function updateLine(index, patch, quiet) {
@@ -668,6 +865,11 @@
     HOUSE: HOUSE,
     GROUPS: GROUPS,
     EXTRAS: EXTRAS,
+    PARTS: PARTS,
+    BUILDS: BUILDS,
+    buildOf: buildOf,
+    partLabel: partLabel,
+    skipNote: skipNote,
     settings: settings,
     saveSettings: saveSettings,
     menu: menu,
@@ -679,6 +881,7 @@
     cart: cart,
     addLine: addLine,
     stageItems: stageItems,
+    syncSpoken: syncSpoken,
     updateLine: updateLine,
     clearCart: clearCart,
     totals: totals,
