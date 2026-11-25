@@ -2,33 +2,6 @@
   "use strict";
 
   var AGENT_ID = "agent_0201m882mk8xf57sqc05ee2k7mz9";
-  var DESKTOP = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent || "");
-
-  // PC speakers leak into the mic → force browser AEC/NS/AGC on every mic grab.
-  if (DESKTOP && navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === "function") {
-    var origGum = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-    navigator.mediaDevices.getUserMedia = function (constraints) {
-      var next = constraints ? Object.assign({}, constraints) : { audio: true, video: false };
-      if (next.audio === false) return origGum(next);
-      var audio =
-        typeof next.audio === "object" && next.audio
-          ? Object.assign({}, next.audio)
-          : {};
-      if (audio.echoCancellation !== false) audio.echoCancellation = true;
-      if (audio.noiseSuppression !== false) audio.noiseSuppression = true;
-      if (audio.autoGainControl !== false) audio.autoGainControl = true;
-      // Prefer the default / communications profile when available (Windows).
-      if (!audio.deviceId && !audio.groupId) {
-        try {
-          audio.googEchoCancellation = true;
-          audio.googNoiseSuppression = true;
-          audio.googAutoGainControl = true;
-        } catch (e) {}
-      }
-      next.audio = audio;
-      return origGum(next);
-    };
-  }
 
   function parseItems(raw) {
     if (!raw) return [];
@@ -144,49 +117,9 @@
     var detail = event.detail || {};
     var config = detail.config || (detail.config = {});
     config.clientTools = Object.assign({}, config.clientTools, clientTools());
-    // Soften turn / mic on desktop so speaker bleed is less likely to trip VAD.
-    if (DESKTOP) {
-      var overrides = config.overrides || (config.overrides = {});
-      var conv = overrides.conversationConfigOverride || (overrides.conversationConfigOverride = {});
-      var turn = conv.turn || (conv.turn = {});
-      turn.turnEagerness = "patient";
-      var vad = conv.vad || (conv.vad = {});
-      vad.backgroundVoiceDetection = true;
-    }
   }
 
   window.addEventListener("elevenlabs-convai:call", wireCall);
-
-  function duckAudioNodes(root) {
-    if (!root || !root.querySelectorAll) return;
-    root.querySelectorAll("audio").forEach(function (a) {
-      try {
-        if (a.volume > 0.55) a.volume = 0.55;
-      } catch (e) {}
-    });
-  }
-
-  function softDuckOrb(el) {
-    if (!DESKTOP || !el) return;
-    // Cap agent playback so laptop speakers bleed less into the mic.
-    var timer = setInterval(function () {
-      if (!document.body.contains(el)) {
-        clearInterval(timer);
-        return;
-      }
-      duckAudioNodes(document);
-      if (el.shadowRoot) duckAudioNodes(el.shadowRoot);
-    }, 350);
-    el.addEventListener("elevenlabs-convai:mode", function (ev) {
-      var mode = (ev.detail && (ev.detail.mode || ev.detail)) || "";
-      document.documentElement.classList.toggle(
-        "sh-voice-speaking",
-        String(mode).toLowerCase().indexOf("speak") !== -1
-      );
-      duckAudioNodes(document);
-      if (el.shadowRoot) duckAudioNodes(el.shadowRoot);
-    });
-  }
 
   function mountWidget() {
     if (document.querySelector("elevenlabs-convai")) return;
@@ -197,7 +130,6 @@
     el.setAttribute("avatar-image-url", "assets/logo-circle-512.png");
     el.className = "sh-voice-orb";
     el.addEventListener("elevenlabs-convai:call", wireCall);
-    softDuckOrb(el);
     document.body.appendChild(el);
   }
 
