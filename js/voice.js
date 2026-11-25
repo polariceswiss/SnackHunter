@@ -157,16 +157,34 @@
 
   window.addEventListener("elevenlabs-convai:call", wireCall);
 
+  function duckAudioNodes(root) {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll("audio").forEach(function (a) {
+      try {
+        if (a.volume > 0.55) a.volume = 0.55;
+      } catch (e) {}
+    });
+  }
+
   function softDuckOrb(el) {
     if (!DESKTOP || !el) return;
-    // Lower widget gain a bit so PC speakers don't scream into the mic.
-    try {
-      el.style.setProperty("--el-volume", "0.72");
-    } catch (e) {}
+    // Cap agent playback so laptop speakers bleed less into the mic.
+    var timer = setInterval(function () {
+      if (!document.body.contains(el)) {
+        clearInterval(timer);
+        return;
+      }
+      duckAudioNodes(document);
+      if (el.shadowRoot) duckAudioNodes(el.shadowRoot);
+    }, 350);
     el.addEventListener("elevenlabs-convai:mode", function (ev) {
       var mode = (ev.detail && (ev.detail.mode || ev.detail)) || "";
-      var speaking = String(mode).toLowerCase().indexOf("speak") !== -1;
-      document.documentElement.classList.toggle("sh-voice-speaking", speaking);
+      document.documentElement.classList.toggle(
+        "sh-voice-speaking",
+        String(mode).toLowerCase().indexOf("speak") !== -1
+      );
+      duckAudioNodes(document);
+      if (el.shadowRoot) duckAudioNodes(el.shadowRoot);
     });
   }
 
