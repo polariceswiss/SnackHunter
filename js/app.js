@@ -121,9 +121,12 @@
               esc(SH.partLabel(key, lang)) + "</button>";
           }).join("") + "</div>"
         : "";
-      var extras = item.extra
-        ? '<p class="build-label">' + tr("Extras +$2.50", "Extras +$2.50", "Extras +2,50 $") + "</p>" +
-          '<div class="extras">' + Object.keys(SH.EXTRAS).map(function (key) {
+      var paidKeys = typeof SH.paidExtrasFor === "function"
+        ? SH.paidExtrasFor(line.id)
+        : Object.keys(SH.EXTRAS).filter(function (key) { return build.indexOf(key) < 0; });
+      var extras = item.extra && paidKeys.length
+        ? '<p class="build-label">' + tr("Extras +$2.50 (solo lo que no trae)", "Extras +$2.50 (only what’s not included)", "Extras +2,50 $ (seulement le surplus)") + "</p>" +
+          '<div class="extras">' + paidKeys.map(function (key) {
             var extra = SH.EXTRAS[key];
             return '<button type="button" data-x="' + key + '" class="' + (line[key] ? "is-on" : "") + '">' + tr(extra.name, extra.en, extra.fr) + " " + SH.money(extra.cents) + "</button>";
           }).join("") + "</div>"
@@ -655,6 +658,7 @@
       var detail = event.detail || {};
       var section = detail.section;
       var itemId = detail.itemId;
+      var expand = detail.expand !== false;
       if (!section) return;
       var panel = document.getElementById("nav-panel");
       var toggle = document.querySelector(".nav-toggle");
@@ -663,12 +667,30 @@
       document.documentElement.classList.remove("nav-open");
       document.body.classList.remove("nav-open");
       closeDrawer();
-      var target =
-        (itemId && document.getElementById("dish-" + itemId)) ||
-        document.getElementById(section);
+      if (expand) {
+        document.querySelectorAll(".dish.is-open").forEach(function (dish) {
+          if (itemId && dish.id === "dish-" + itemId) return;
+          dish.classList.remove("is-open");
+          var btn = dish.querySelector(".dish-open");
+          var more = dish.querySelector(".dish-more");
+          if (btn) btn.setAttribute("aria-expanded", "false");
+          if (more) more.hidden = true;
+        });
+      }
+      var dishNode = itemId ? document.getElementById("dish-" + itemId) : null;
+      if (dishNode && expand) {
+        dishNode.classList.add("is-open");
+        var openBtn = dishNode.querySelector(".dish-open");
+        var moreBox = dishNode.querySelector(".dish-more");
+        if (openBtn) openBtn.setAttribute("aria-expanded", "true");
+        if (moreBox) moreBox.hidden = false;
+      }
+      var target = dishNode || document.getElementById(section);
       if (!target) return;
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      requestAnimationFrame(function () {
+        target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      });
       var chip = document.querySelector('.carta-index a[href="#' + section + '"]');
       if (chip) {
         document.querySelectorAll(".carta-index a.is-active").forEach(function (a) {
@@ -683,9 +705,7 @@
           });
         }
       }
-      var flashNode = itemId && document.getElementById("dish-" + itemId)
-        ? document.getElementById("dish-" + itemId)
-        : document.getElementById(section);
+      var flashNode = dishNode || document.getElementById(section);
       if (flashNode) {
         flashNode.classList.add("is-nav-flash");
         setTimeout(function () {

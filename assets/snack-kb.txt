@@ -5,8 +5,10 @@ Golf cart delivery within 3 miles; farther = pickup at counter.
 Hours: call first; hours change. Never invent hours.
 Payments: cash, card reader on arrival, Zelle (house confirms), counter.
 Tax applies. Cart fee when golf-cart delivery.
-Paid extras on sandwiches with extras=true: queso, aguacate, tomate, lechuga = $2.50 each.
-Default build parts can be removed (skip) in the cart. Never invent prices or ingredients.
+Paid extras (+$2.50) ONLY when the ingredient is NOT already in that item's default build (parts list).
+If lechuga/tomate/queso is already listed in parts for that sandwich, it is INCLUDED — never charge $2.50 for it, never put it in extras.
+Example: bistec/pollo already include lechuga+tomate → those are free/included. Cubano has queso in parts → queso included; lechuga/tomate/aguacate can be paid extras on cubano.
+Only sandwiches with extras=true accept paid extras. Default build parts can be removed (skip). Never invent prices.
 
 SECTIONS (use navigate_menu_section with these ids when guest asks to see/browse a part of the menu):
 - sandwiches | Sándwiches | EN: Sandwiches | El armado está escrito en cada uno. El queso es suizo, americano o pepper jack. Un adicional de aguacate, tomate, queso o lechuga suma $2.50.

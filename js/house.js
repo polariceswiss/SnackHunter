@@ -577,9 +577,10 @@
   function lineCents(line) {
     var item = itemById(line.id);
     if (!item) return 0;
+    var build = buildOf(line.id);
     var extra = 0;
     Object.keys(EXTRAS).forEach(function (key) {
-      if (line[key]) extra += EXTRAS[key].cents;
+      if (line[key] && build.indexOf(key) < 0) extra += EXTRAS[key].cents;
     });
     return (item.cents + extra) * line.qty;
   }
@@ -636,6 +637,28 @@
     return [];
   }
 
+  /** Paid extras the guest can still add — never charge for parts already in the default build. */
+  function paidExtrasFor(id) {
+    var build = buildOf(id);
+    return Object.keys(EXTRAS).filter(function (key) {
+      return build.indexOf(key) < 0;
+    });
+  }
+
+  function applyPaidExtra(row, key, flash) {
+    var k = String(key || "").trim().toLowerCase();
+    if (!EXTRAS[k]) return;
+    if (buildOf(row.id).indexOf(k) >= 0) {
+      flash.push("included:" + k);
+      return;
+    }
+    var item = itemById(row.id);
+    if (item && item.extra === false) return;
+    if (item && !item.extra) return;
+    row[k] = true;
+    flash.push("extra:" + k);
+  }
+
   function applySpokenMods(row, raw) {
     var flash = [];
     var wish = raw.wish ? String(raw.wish).slice(0, 120) : "";
@@ -650,16 +673,11 @@
     });
     Object.keys(EXTRAS).forEach(function (key) {
       if (raw[key] === true || raw[key] === "true" || raw[key] === 1) {
-        row[key] = true;
-        flash.push("extra:" + key);
+        applyPaidExtra(row, key, flash);
       }
     });
     parseKeyList(raw.extras).forEach(function (key) {
-      var k = String(key || "").trim().toLowerCase();
-      if (EXTRAS[k]) {
-        row[k] = true;
-        flash.push("extra:" + k);
-      }
+      applyPaidExtra(row, key, flash);
     });
     return flash;
   }
@@ -681,7 +699,12 @@
         added += 1;
       }
     });
-    if (added) saveCart(lines);
+    if (added) {
+      saveCart(lines);
+      var last = list && list.length ? list[list.length - 1] : null;
+      var lastId = last && (last.id || last.item_id || last.sku);
+      if (lastId) goToSection(lastId, { expand: true });
+    }
     return { added: added, flash: flash };
   }
 
@@ -746,17 +769,23 @@
     return hit ? hit.id : null;
   }
 
-  /** Scroll the page to a menu section (or item's group). Never pays. */
-  function goToSection(raw) {
+  /** Scroll the page to a menu section or item, and expand that dish. Never pays. */
+  function goToSection(raw, opts) {
+    var options = opts || {};
+    var key = String(raw || "").trim().toLowerCase();
+    var maybeItem = itemById(key);
     var section = resolveSection(raw);
-    if (!section) return { ok: false, error: "unknown_section", section: null };
-    var itemId = null;
-    var maybeItem = itemById(String(raw || "").trim().toLowerCase());
-    if (maybeItem) itemId = maybeItem.id;
+    if (!section && !maybeItem) return { ok: false, error: "unknown_section", section: null };
+    if (!section && maybeItem) section = maybeItem.group;
+    var itemId = maybeItem ? maybeItem.id : (options.itemId || null);
     document.dispatchEvent(new CustomEvent("sh:go-section", {
-      detail: { section: section, itemId: itemId }
+      detail: {
+        section: section,
+        itemId: itemId,
+        expand: options.expand !== false
+      }
     }));
-    return { ok: true, section: section, itemId: itemId };
+    return { ok: true, section: section, itemId: itemId, expanded: !!itemId };
   }
 
   /**
@@ -783,6 +812,7 @@
       flash = applySpokenMods(lines[index], raw || {});
     }
     saveCart(lines);
+    goToSection(id, { expand: true });
     document.dispatchEvent(new CustomEvent("sh:cart-flash", { detail: { index: index, flash: flash } }));
     return { ok: true, index: index, flash: flash, cart_count: lines.length };
   }
@@ -942,6 +972,7 @@
     PARTS: PARTS,
     BUILDS: BUILDS,
     buildOf: buildOf,
+    paidExtrasFor: paidExtrasFor,
     partLabel: partLabel,
     skipNote: skipNote,
     settings: settings,

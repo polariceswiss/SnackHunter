@@ -72,14 +72,17 @@
     if (!window.SH || typeof SH.goToSection !== "function") {
       return JSON.stringify({ ok: false, error: "Nav bridge not ready." });
     }
-    var res = SH.goToSection(target);
+    var res = SH.goToSection(target, { expand: true });
     return JSON.stringify({
       ok: !!res.ok,
       section: res.section || null,
       itemId: res.itemId || null,
+      expanded: !!res.expanded,
       message: res.ok
-        ? "Scrolled the page to the " + res.section + " menu section so the guest can browse it."
-        : "Unknown section. Use: sandwiches, desayuno, calientes, picar, empanadas, ensaladas, tacos, jugos, bebidas, or carta."
+        ? (res.itemId
+          ? "Opened and expanded " + res.itemId + " on the page in section " + res.section + "."
+          : "Scrolled the page to the " + res.section + " menu section so the guest can browse it.")
+        : "Unknown section or item. Use section ids (desayuno, jugos…) or exact menu item ids (bistec, jugo-pina…)."
     });
   }
 
