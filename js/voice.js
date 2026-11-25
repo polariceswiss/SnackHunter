@@ -66,9 +66,7 @@
     if (document.querySelector("elevenlabs-convai")) return;
     var el = document.createElement("elevenlabs-convai");
     el.setAttribute("agent-id", AGENT_ID);
-    el.setAttribute("variant", "tiny");
-    el.setAttribute("avatar-orb-color-1", "#e0a84a");
-    el.setAttribute("avatar-orb-color-2", "#2c4034");
+    el.setAttribute("variant", "compact");
     el.className = "sh-voice-orb";
     el.addEventListener("elevenlabs-convai:call", wireCall);
     document.body.appendChild(el);

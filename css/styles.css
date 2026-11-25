@@ -202,11 +202,12 @@ html.header-away .site-header { transform: translateY(-105%); }
 .brand img,
 .logo-swap img {
   width: auto;
-  height: 2.65rem;
+  height: 2.85rem;
   object-fit: contain;
   object-position: left center;
   flex: none;
   background: transparent;
+  border-radius: 50%;
 }
 
 .logo-swap {
