@@ -752,7 +752,7 @@
     if (!key) return null;
     if (SECTION_ALIASES[key]) return SECTION_ALIASES[key];
     if (GROUPS.some(function (g) { return g.id === key; })) return key;
-    var item = itemById(key);
+    var item = itemById(key) || findItemFuzzy(key);
     if (item && item.group) return item.group;
     var hit = null;
     GROUPS.some(function (g) {
@@ -769,11 +769,34 @@
     return hit ? hit.id : null;
   }
 
+  function findItemFuzzy(raw) {
+    var key = String(raw || "").trim().toLowerCase()
+      .replace(/á/g, "a").replace(/é/g, "e").replace(/í/g, "i")
+      .replace(/ó/g, "o").replace(/ú/g, "u").replace(/ñ/g, "n");
+    if (!key) return null;
+    var exact = itemById(key);
+    if (exact) return exact;
+    var found = null;
+    MENU.some(function (item) {
+      var names = [item.id, item.name, item.en, item.label].filter(Boolean).map(function (s) {
+        return String(s).toLowerCase()
+          .replace(/á/g, "a").replace(/é/g, "e").replace(/í/g, "i")
+          .replace(/ó/g, "o").replace(/ú/g, "u").replace(/ñ/g, "n");
+      });
+      if (names.indexOf(key) >= 0 || names.some(function (n) { return n.indexOf(key) >= 0 || key.indexOf(n) >= 0; })) {
+        found = item;
+        return true;
+      }
+      return false;
+    });
+    return found;
+  }
+
   /** Scroll the page to a menu section or item, and expand that dish. Never pays. */
   function goToSection(raw, opts) {
     var options = opts || {};
     var key = String(raw || "").trim().toLowerCase();
-    var maybeItem = itemById(key);
+    var maybeItem = itemById(key) || findItemFuzzy(key);
     var section = resolveSection(raw);
     if (!section && !maybeItem) return { ok: false, error: "unknown_section", section: null };
     if (!section && maybeItem) section = maybeItem.group;
@@ -785,7 +808,7 @@
         expand: options.expand !== false
       }
     }));
-    return { ok: true, section: section, itemId: itemId, expanded: !!itemId };
+    return { ok: true, section: section, itemId: itemId, expanded: options.expand !== false };
   }
 
   /**

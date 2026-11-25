@@ -55,10 +55,7 @@
     root.querySelectorAll(".dish-open").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var dish = btn.closest(".dish");
-        var more = dish.querySelector(".dish-more");
-        var open = dish.classList.toggle("is-open");
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-        more.hidden = !open;
+        setDishOpen(dish, !dish.classList.contains("is-open"));
       });
     });
     root.querySelectorAll("[data-add]").forEach(function (btn) {
@@ -70,6 +67,18 @@
     });
   }
 
+  function setDishOpen(dish, open) {
+    if (!dish) return;
+    var btn = dish.querySelector(".dish-open");
+    var more = dish.querySelector(".dish-more");
+    dish.classList.toggle("is-open", !!open);
+    if (btn) btn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (more) {
+      if (open) more.removeAttribute("hidden");
+      else more.setAttribute("hidden", "");
+    }
+  }
+
   function dishHtml(item) {
     var subLang = langCode() === "es" ? "en" : "es";
     var sub = langCode() === "es" ? item.en : item.name;
@@ -79,9 +88,10 @@
       : "";
     var plate = item.label ? '<p class="brand-plate">' + esc(item.label) + "</p>" : "";
     var chip = item.label ? '<span class="brand-chip">' + esc(item.label) + "</span>" : "";
-    var more = (item.about || item.shot || item.label)
-      ? '<div class="dish-more" hidden>' + plate + shot + (item.about ? '<p>' + tr(item.about, item.aboutEn, item.aboutFr) + '</p><p class="en" lang="' + subLang + '">' + aboutSub + "</p>" : "") + "</div>"
-      : "";
+    var aboutHtml = item.about
+      ? '<p>' + tr(item.about, item.aboutEn, item.aboutFr) + '</p><p class="en" lang="' + subLang + '">' + aboutSub + "</p>"
+      : '<p>' + tr(item.name, item.en, item.fr) + "</p>";
+    var more = '<div class="dish-more" hidden>' + plate + shot + aboutHtml + "</div>";
     return (
       '<li class="dish' + (item.label ? " dish-brand" : "") + '" id="dish-' + item.id + '" data-dish="' + item.id + '">' +
         '<button class="dish-open" type="button" aria-expanded="false">' +
@@ -667,29 +677,30 @@
       document.documentElement.classList.remove("nav-open");
       document.body.classList.remove("nav-open");
       closeDrawer();
-      if (expand) {
-        document.querySelectorAll(".dish.is-open").forEach(function (dish) {
-          if (itemId && dish.id === "dish-" + itemId) return;
-          dish.classList.remove("is-open");
-          var btn = dish.querySelector(".dish-open");
-          var more = dish.querySelector(".dish-more");
-          if (btn) btn.setAttribute("aria-expanded", "false");
-          if (more) more.hidden = true;
-        });
-      }
+
+      var sectionNode = document.getElementById(section);
       var dishNode = itemId ? document.getElementById("dish-" + itemId) : null;
-      if (dishNode && expand) {
-        dishNode.classList.add("is-open");
-        var openBtn = dishNode.querySelector(".dish-open");
-        var moreBox = dishNode.querySelector(".dish-more");
-        if (openBtn) openBtn.setAttribute("aria-expanded", "true");
-        if (moreBox) moreBox.hidden = false;
+      if (!dishNode && expand && sectionNode) {
+        dishNode = sectionNode.querySelector(".dish");
+        if (dishNode) itemId = dishNode.getAttribute("data-dish") || itemId;
       }
-      var target = dishNode || document.getElementById(section);
+
+      document.querySelectorAll(".dish.is-open").forEach(function (dish) {
+        if (dishNode && dish === dishNode) return;
+        setDishOpen(dish, false);
+      });
+
+      if (dishNode && expand) setDishOpen(dishNode, true);
+
+      var target = dishNode || sectionNode;
       if (!target) return;
       var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      requestAnimationFrame(function () {
+      function reveal() {
         target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+        if (dishNode && expand) setDishOpen(dishNode, true);
+      }
+      requestAnimationFrame(function () {
+        requestAnimationFrame(reveal);
       });
       var chip = document.querySelector('.carta-index a[href="#' + section + '"]');
       if (chip) {
@@ -705,7 +716,7 @@
           });
         }
       }
-      var flashNode = dishNode || document.getElementById(section);
+      var flashNode = dishNode || sectionNode;
       if (flashNode) {
         flashNode.classList.add("is-nav-flash");
         setTimeout(function () {

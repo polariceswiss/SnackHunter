@@ -979,7 +979,16 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
   align-self: center;
 }
 
-.dish-more { grid-column: 1 / -1; }
+.dish-more {
+  grid-column: 1 / -1;
+  display: none;
+}
+
+.dish.is-open .dish-more {
+  display: block;
+}
+
+.dish-more[hidden] { display: none !important; }
 
 .dish-shot {
   display: block;

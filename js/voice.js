@@ -29,12 +29,14 @@
     var result = SH.stageItems(items);
     var added = typeof result === "number" ? result : result.added;
     var flash = result && result.flash ? result.flash : [];
-    document.dispatchEvent(new CustomEvent("sh:open-cart"));
-    if (flash.length) {
-      document.dispatchEvent(new CustomEvent("sh:cart-flash", {
-        detail: { index: Math.max(0, SH.cart().length - 1), flash: flash }
-      }));
-    }
+    setTimeout(function () {
+      document.dispatchEvent(new CustomEvent("sh:open-cart"));
+      if (flash.length) {
+        document.dispatchEvent(new CustomEvent("sh:cart-flash", {
+          detail: { index: Math.max(0, SH.cart().length - 1), flash: flash }
+        }));
+      }
+    }, 850);
     return JSON.stringify({
       ok: true,
       added: added,
@@ -53,7 +55,9 @@
       return JSON.stringify({ ok: false, error: "Cart bridge not ready." });
     }
     var res = SH.syncSpoken(raw);
-    document.dispatchEvent(new CustomEvent("sh:open-cart"));
+    setTimeout(function () {
+      document.dispatchEvent(new CustomEvent("sh:open-cart"));
+    }, 850);
     return JSON.stringify({
       ok: !!res.ok,
       index: res.index,
@@ -62,7 +66,7 @@
       paid: false,
       placed: false,
       message:
-        "Wrote the spoken parts into the cart line and highlighted them. Guest can still edit. Do not claim payment done."
+        "Opened the product on the menu, wrote the spoken parts into the cart. Guest can still edit. Do not claim payment done."
     });
   }
 
