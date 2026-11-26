@@ -82,18 +82,14 @@
 .gate-poster {
   z-index: 1;
   pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 .gate-film {
   z-index: 2;
   pointer-events: none;
   opacity: 1;
-}
-
-.gate-poster {
-  z-index: 1;
-  opacity: 1;
-  transition: opacity 0.2s ease;
 }
 
 .gate.is-playing .gate-poster {
