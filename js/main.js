@@ -131,11 +131,72 @@
 
   var reel = document.querySelector(".hero-reel");
   var dots = document.querySelectorAll(".hero-dots span");
-  if (reel && dots.length) {
-    reel.addEventListener("scroll", function () {
-      var index = Math.round(reel.scrollLeft / Math.max(reel.clientWidth, 1));
+  var slides = reel ? reel.querySelectorAll(".hero-slide") : [];
+  if (reel && slides.length) {
+    var heroIndex = 0;
+    var heroTimer = null;
+    var heroPaused = false;
+
+    function heroWidth() {
+      return Math.max(reel.clientWidth, 1);
+    }
+
+    function paintDots(index) {
       dots.forEach(function (dot, i) { dot.classList.toggle("is-on", i === index); });
-    }, { passive: true });
+    }
+
+    function goHero(index, smooth) {
+      heroIndex = ((index % slides.length) + slides.length) % slides.length;
+      reel.scrollTo({ left: heroIndex * heroWidth(), behavior: smooth ? "smooth" : "auto" });
+      paintDots(heroIndex);
+    }
+
+    function syncHeroFromScroll() {
+      heroIndex = Math.round(reel.scrollLeft / heroWidth());
+      paintDots(heroIndex);
+    }
+
+    function stopHero() {
+      if (heroTimer) {
+        clearInterval(heroTimer);
+        heroTimer = null;
+      }
+    }
+
+    function startHero() {
+      stopHero();
+      if (heroPaused || slides.length < 2) return;
+      heroTimer = setInterval(function () {
+        if (document.hidden || heroPaused) return;
+        goHero(heroIndex + 1, true);
+      }, 4500);
+    }
+
+    function bumpHero() {
+      heroPaused = true;
+      stopHero();
+      clearTimeout(bumpHero._t);
+      bumpHero._t = setTimeout(function () {
+        heroPaused = false;
+        syncHeroFromScroll();
+        startHero();
+      }, 7000);
+    }
+
+    reel.addEventListener("scroll", syncHeroFromScroll, { passive: true });
+    ["pointerdown", "touchstart", "wheel"].forEach(function (evt) {
+      reel.addEventListener(evt, bumpHero, { passive: true });
+    });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) stopHero();
+      else if (!heroPaused) startHero();
+    });
+    window.addEventListener("resize", function () {
+      goHero(heroIndex, false);
+    });
+
+    goHero(0, false);
+    startHero();
   }
 
   var themeBtn = document.getElementById("theme-btn");
