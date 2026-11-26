@@ -15,9 +15,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <link rel="preload" href="assets/load-hunter.mp4?v=12" as="video" type="video/mp4">
+  <link rel="preload" href="assets/load-hunter.mp4?v=13" as="video" type="video/mp4">
   <link rel="stylesheet" href="css/styles.css?v=47">
-  <link rel="stylesheet" href="css/order.css?v=40">
+  <link rel="stylesheet" href="css/order.css?v=41">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -52,7 +52,22 @@
         </svg>
         <div class="gate-film-wrap">
           <img class="gate-poster" src="assets/gate-poster.jpg?v=2" alt="" aria-hidden="true">
-          <video class="gate-film" id="gate-film" src="assets/load-hunter.mp4?v=12" muted defaultMuted autoplay playsinline webkit-playsinline preload="auto" poster="assets/gate-poster.jpg?v=2" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback"></video>
+          <!-- Embedded muted autoplay: no sound track, faststart mp4 — browsers allow this without a tap -->
+          <video
+            class="gate-film"
+            id="gate-film"
+            autoplay
+            muted
+            playsinline
+            webkit-playsinline
+            preload="auto"
+            poster="assets/gate-poster.jpg?v=2"
+            disablepictureinpicture
+            disableremoteplayback
+            controlslist="nodownload nofullscreen noremoteplayback"
+          >
+            <source src="assets/load-hunter.mp4?v=13" type="video/mp4">
+          </video>
         </div>
         <p class="gate-cafe">Cafeteria</p>
       </div>
@@ -65,27 +80,29 @@
       var film = document.getElementById("gate-film");
       var skip = document.getElementById("gate-skip");
       if (!gate || !film) return;
-      var started = false;
       var opened = false;
       var named = false;
-      // Keep the original HTML src. Replacing with a blob kills muted autoplay on many browsers.
-      film.muted = true;
+
+      // Lock muted before the browser evaluates autoplay policy.
       film.defaultMuted = true;
+      film.muted = true;
       film.volume = 0;
-      film.autoplay = true;
+      film.setAttribute("muted", "");
+      film.setAttribute("playsinline", "");
+      film.setAttribute("webkit-playsinline", "");
       film.playsInline = true;
-      film.controls = false;
-      film.removeAttribute("controls");
+      film.autoplay = true;
+
       function markPlaying() {
-        if (started) return;
-        started = true;
         gate.classList.add("is-playing");
       }
+
       function showName() {
         if (named) return;
         named = true;
         gate.classList.add("is-show");
       }
+
       function open() {
         if (opened) return;
         opened = true;
@@ -95,48 +112,41 @@
           if (gate.parentNode) gate.parentNode.removeChild(gate);
         }, 800);
       }
+
       function kick() {
         if (opened) return;
-        if (!film.paused && film.currentTime > 0.02) {
-          markPlaying();
-          return;
-        }
         film.muted = true;
-        film.defaultMuted = true;
         film.volume = 0;
-        var req = film.play();
-        if (req && typeof req.then === "function") {
-          req.then(markPlaying).catch(function () {});
-        }
+        var p = film.play();
+        if (p && typeof p.then === "function") p.then(markPlaying).catch(function () {});
+        else if (!film.paused) markPlaying();
       }
+
       film.addEventListener("playing", markPlaying);
+      film.addEventListener("loadedmetadata", kick);
       film.addEventListener("loadeddata", kick);
       film.addEventListener("canplay", kick);
       film.addEventListener("timeupdate", function () {
-        if (!film.paused && film.currentTime > 0.02) markPlaying();
+        if (!film.paused && film.currentTime > 0) markPlaying();
         if (!opened && film.duration && film.currentTime >= Math.max(0, film.duration - 6.2)) showName();
       });
-      film.addEventListener("ended", function () { setTimeout(open, 350); });
+      film.addEventListener("ended", function () { setTimeout(open, 300); });
+
       if (skip) skip.addEventListener("click", function (e) {
         e.stopPropagation();
         open();
       });
-      // Never trap the guest behind a play button — if autoplay is blocked, open the site.
-      setTimeout(function () {
-        if (!started && !opened) open();
-      }, 1600);
-      setTimeout(showName, 8500);
+
+      // Native autoplay first; keep re-calling play() without waiting for a tap.
       kick();
-      setTimeout(kick, 80);
-      setTimeout(kick, 280);
-      setTimeout(kick, 700);
-      var watch = setInterval(function () {
-        if (opened || !document.getElementById("gate")) {
-          clearInterval(watch);
-          return;
-        }
-        if (film.paused) kick();
-      }, 500);
+      [50, 150, 400, 900, 1800, 3000].forEach(function (ms) {
+        setTimeout(kick, ms);
+      });
+      setTimeout(showName, 8500);
+      // Safety only — give the muted file time to buffer and play itself.
+      setTimeout(function () {
+        if (!opened) open();
+      }, 17000);
     })();
   </script>
 
