@@ -14,8 +14,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Outfit:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-  <link rel="stylesheet" href="css/styles.css?v=46">
-  <link rel="stylesheet" href="css/order.css?v=39">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <link rel="preload" href="assets/load-hunter.mp4?v=12" as="video" type="video/mp4">
+  <link rel="stylesheet" href="css/styles.css?v=47">
+  <link rel="stylesheet" href="css/order.css?v=40">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -49,8 +51,8 @@
           </text>
         </svg>
         <div class="gate-film-wrap">
-          <img class="gate-poster" src="assets/gate-poster.jpg?v=1" alt="" aria-hidden="true">
-          <video class="gate-film" src="assets/load-hunter.mp4?v=11" muted autoplay playsinline webkit-playsinline preload="auto" poster="assets/gate-poster.jpg?v=1" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback"></video>
+          <img class="gate-poster" src="assets/gate-poster.jpg?v=2" alt="" aria-hidden="true">
+          <video class="gate-film" id="gate-film" src="assets/load-hunter.mp4?v=12" muted defaultMuted autoplay playsinline webkit-playsinline preload="auto" poster="assets/gate-poster.jpg?v=2" disablepictureinpicture disableremoteplayback controlslist="nodownload nofullscreen noremoteplayback"></video>
         </div>
         <p class="gate-cafe">Cafeteria</p>
       </div>
@@ -60,34 +62,24 @@
   <script>
     (function () {
       var gate = document.getElementById("gate");
-      if (!gate) return;
-      try {
-        sessionStorage.removeItem("sh.gate");
-        localStorage.removeItem("sh.gate");
-      } catch (e) {}
-      var film = gate.querySelector(".gate-film");
+      var film = document.getElementById("gate-film");
       var skip = document.getElementById("gate-skip");
-      var srcUrl = "assets/load-hunter.mp4?v=11";
-      var blobUrl = "";
-      var kicking = false;
+      if (!gate || !film) return;
       var started = false;
       var opened = false;
       var named = false;
-      if (!film) return;
+      // Keep the original HTML src. Replacing with a blob kills muted autoplay on many browsers.
       film.muted = true;
       film.defaultMuted = true;
+      film.volume = 0;
       film.autoplay = true;
       film.playsInline = true;
       film.controls = false;
-      film.volume = 0;
-      film.setAttribute("muted", "");
-      film.setAttribute("autoplay", "");
-      film.setAttribute("playsinline", "");
-      film.setAttribute("webkit-playsinline", "");
+      film.removeAttribute("controls");
       function markPlaying() {
+        if (started) return;
         started = true;
         gate.classList.add("is-playing");
-        gate.classList.remove("is-blocked");
       }
       function showName() {
         if (named) return;
@@ -95,108 +87,56 @@
         gate.classList.add("is-show");
       }
       function open() {
-        if (opened || !gate || gate.classList.contains("is-open")) return;
+        if (opened) return;
         opened = true;
         try { film.pause(); } catch (e) {}
         gate.classList.add("is-open");
         setTimeout(function () {
-          if (gate && gate.parentNode) gate.parentNode.removeChild(gate);
-          if (blobUrl) {
-            try { URL.revokeObjectURL(blobUrl); } catch (e) {}
-          }
+          if (gate.parentNode) gate.parentNode.removeChild(gate);
         }, 800);
       }
       function kick() {
-        if (!film || opened || kicking) return;
-        if (!film.paused && !film.ended && film.currentTime > 0) {
+        if (opened) return;
+        if (!film.paused && film.currentTime > 0.02) {
           markPlaying();
           return;
         }
-        kicking = true;
         film.muted = true;
         film.defaultMuted = true;
         film.volume = 0;
-        film.autoplay = true;
-        film.playsInline = true;
-        var req;
-        try {
-          req = film.play();
-        } catch (err) {
-          kicking = false;
-          return;
-        }
+        var req = film.play();
         if (req && typeof req.then === "function") {
-          req.then(function () {
-            kicking = false;
-            markPlaying();
-          }).catch(function () {
-            kicking = false;
-          });
-        } else {
-          kicking = false;
-          markPlaying();
+          req.then(markPlaying).catch(function () {});
         }
-      }
-      function bindSource(url) {
-        if (film.getAttribute("src") !== url) film.src = url;
-        try { film.load(); } catch (e) {}
-        kick();
       }
       film.addEventListener("playing", markPlaying);
-      film.addEventListener("timeupdate", function () {
-        if (!film.paused && film.currentTime > 0.05) markPlaying();
-        if (!opened && film.duration && film.currentTime >= Math.max(0, film.duration - 6.2)) showName();
-      });
-      film.addEventListener("ended", function () { setTimeout(open, 450); });
       film.addEventListener("loadeddata", kick);
       film.addEventListener("canplay", kick);
-      film.addEventListener("canplaythrough", kick);
-      document.addEventListener("visibilitychange", function () {
-        if (!document.hidden) kick();
+      film.addEventListener("timeupdate", function () {
+        if (!film.paused && film.currentTime > 0.02) markPlaying();
+        if (!opened && film.duration && film.currentTime >= Math.max(0, film.duration - 6.2)) showName();
       });
-      window.addEventListener("pageshow", function () {
-        try {
-          sessionStorage.removeItem("sh.gate");
-          localStorage.removeItem("sh.gate");
-        } catch (e) {}
-        kick();
+      film.addEventListener("ended", function () { setTimeout(open, 350); });
+      if (skip) skip.addEventListener("click", function (e) {
+        e.stopPropagation();
+        open();
       });
-      window.addEventListener("focus", kick);
-      ["pointerdown", "touchstart", "keydown"].forEach(function (evt) {
-        document.addEventListener(evt, kick, true);
-      });
+      // Never trap the guest behind a play button — if autoplay is blocked, open the site.
+      setTimeout(function () {
+        if (!started && !opened) open();
+      }, 1600);
+      setTimeout(showName, 8500);
+      kick();
+      setTimeout(kick, 80);
+      setTimeout(kick, 280);
+      setTimeout(kick, 700);
       var watch = setInterval(function () {
         if (opened || !document.getElementById("gate")) {
           clearInterval(watch);
           return;
         }
-        if (film.paused && !document.hidden) kick();
-      }, 400);
-      setTimeout(showName, 9000);
-      setTimeout(function () { if (!started && !opened) showName(); }, 2500);
-      if (skip) skip.addEventListener("click", function (event) {
-        event.stopPropagation();
-        open();
-      });
-      gate.addEventListener("click", function () {
-        if (!started || film.paused) kick();
-        else if (film.currentTime > 1.2) open();
-      });
-      kick();
-      if (window.fetch) {
-        fetch(srcUrl, { cache: "force-cache" }).then(function (res) {
-          if (!res.ok) throw new Error("gate video missing");
-          return res.blob();
-        }).then(function (blob) {
-          blobUrl = URL.createObjectURL(blob);
-          bindSource(blobUrl);
-        }).catch(function () {
-          kick();
-        });
-      }
-      setTimeout(kick, 120);
-      setTimeout(kick, 500);
-      setTimeout(kick, 1200);
+        if (film.paused) kick();
+      }, 500);
     })();
   </script>
 
@@ -247,7 +187,7 @@
     <section class="hero" data-i18n-aria="heroLabel" aria-label="La comida">
       <div class="hero-reel">
         <article class="hero-slide">
-          <img src="assets/bistec.jpg?v=10" alt="Pan con bistec, steak a la plancha con cebolla.">
+          <img src="assets/bistec.jpg?v=13" alt="Pan con bistec, steak a la plancha con cebolla.">
           <div class="hero-copy">
             <p class="hero-brand">Snack Hunter <em>Cafeteria</em></p>
             <h1 data-i18n="hSteak">El bistec.</h1>
@@ -575,7 +515,7 @@
   <script src="js/i18n.js?v=11"></script>
   <script src="js/house.js?v=21"></script>
   <script src="js/app.js?v=32"></script>
-  <script src="js/main.js?v=15"></script>
+  <script src="js/main.js?v=16"></script>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
   <script src="js/voice.js?v=8"></script>
 </body>

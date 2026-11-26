@@ -87,12 +87,13 @@
 .gate-film {
   z-index: 2;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.18s ease;
+  opacity: 1;
 }
 
-.gate.is-playing .gate-film {
+.gate-poster {
+  z-index: 1;
   opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 .gate.is-playing .gate-poster {
