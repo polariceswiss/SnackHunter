@@ -40,6 +40,8 @@ lines = [
     "If lechuga/tomate/queso is already listed in parts for that sandwich, it is INCLUDED — never charge $2.50 for it, never put it in extras.",
     "Example: bistec/pollo already include lechuga+tomate → those are free/included. Cubano has queso in parts → queso included; lechuga/tomate/aguacate can be paid extras on cubano.",
     "Only sandwiches with extras=true accept paid extras. Default build parts can be removed (skip). Never invent prices.",
+    "Never invent toppings. Speak ONLY the parts listed for that id. If a topping is not in parts, it is NOT included.",
+    "Alias: \"pan con huevo\" / \"egg sandwich\" = id tortilla-pan. Default is ONLY huevo (egg omelet in bread). NO lechuga, NO tomate unless guest pays extras.",
     "",
     "SECTIONS (use navigate_menu_section with these ids when guest asks to see/browse a part of the menu):",
 ]
