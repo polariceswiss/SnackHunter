@@ -80,11 +80,11 @@
   function revealChip(id) {
     if (!window.matchMedia("(max-width: 899px)").matches) return;
     var chip = document.querySelector('.carta-index a[href="#' + id + '"]');
-    var parent = chip && chip.closest(".carta-index");
-    if (!chip || !parent) return;
-    if (parent.scrollWidth <= parent.clientWidth + 8) return;
-    parent.scrollTo({
-      left: Math.max(0, chip.offsetLeft - (parent.clientWidth - chip.offsetWidth) / 2),
+    var rail = chip && chip.closest(".carta-links");
+    if (!chip || !rail) return;
+    if (rail.scrollWidth <= rail.clientWidth + 8) return;
+    rail.scrollTo({
+      left: Math.max(0, chip.offsetLeft - (rail.clientWidth - chip.offsetWidth) / 2),
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
     });
   }

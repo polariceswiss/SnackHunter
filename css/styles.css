@@ -22,7 +22,10 @@
 *::before,
 *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
 
 body {
   margin: 0;
@@ -33,6 +36,8 @@ body {
   font-size: 1.05rem;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  max-width: 100vw;
 }
 
 body.nav-open { overflow: hidden; }
@@ -106,6 +111,8 @@ h2 {
   top: 0;
   left: 0;
   right: 0;
+  width: 100%;
+  max-width: 100vw;
   height: var(--header);
   display: flex;
   align-items: center;
@@ -115,6 +122,8 @@ h2 {
   color: #f4f0e8;
   border-bottom: 1px solid rgba(243, 238, 230, 0.08);
   transition: transform 0.25s ease;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 html.header-away .site-header { transform: translateY(-105%); }
@@ -368,6 +377,8 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
   .brand {
     gap: 0.28rem;
     min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
   }
   .brand img,
   .logo-swap img { height: 1.9rem; }
@@ -375,15 +386,20 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
     display: inline;
     font-size: 0.78rem;
     letter-spacing: -0.03em;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .brand em {
-    display: inline;
-    font-size: 0.78rem;
-  }
+  .brand em { display: none; }
   .entrar-btn { display: none; }
-  .lang-switch button { padding: 0.36rem 0.38rem; }
-  .theme-btn { width: 2.05rem; height: 2.05rem; padding: 0; }
-  .call-pill { min-height: 2.15rem; padding-inline: 0.62rem; letter-spacing: 0.08em; }
+  .call-pill { display: none; }
+  .nav-toggle {
+    display: inline-flex;
+    flex: none;
+    margin-left: 0.1rem;
+  }
+  .lang-switch button { padding: 0.36rem 0.32rem; }
+  .theme-btn { width: 2.05rem; height: 2.05rem; padding: 0; flex: none; }
+  .lang-switch { flex: none; }
 }
 
 .nav-panel {
@@ -817,14 +833,13 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
 
 .carta-index {
   display: flex;
-  gap: 0.95rem;
-  overflow-x: auto;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  overflow: hidden;
   padding-bottom: 0.9rem;
   margin-bottom: 0.5rem;
-  scrollbar-width: none;
 }
-
-.carta-index::-webkit-scrollbar { display: none; }
 
 .carta-index p { display: none; }
 
@@ -836,7 +851,7 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
   padding: 0 0.72rem;
   border: 1px solid rgba(224, 168, 74, 0.7);
   border-radius: 999px;
-  background: transparent;
+  background: #000;
   color: #f3eee6;
   font-family: var(--sans);
   font-size: 0.68rem;
@@ -846,7 +861,22 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
   cursor: pointer;
 }
 
-.carta-links { display: contents; }
+.carta-links {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.95rem;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
+
+.carta-links::-webkit-scrollbar { display: none; }
 
 .carta-index.is-shut .carta-links { display: none; }
 
@@ -854,6 +884,7 @@ html:not([data-theme="light"]) .logo-swap .logo-light {
   flex: 0 0 auto;
   color: rgba(243, 238, 230, 0.55);
   letter-spacing: 0.12em;
+  scroll-snap-align: start;
 }
 
 .carta .eyebrow { color: var(--mustard); }
@@ -1462,6 +1493,14 @@ section[id],
     margin: 0;
   }
 
+  .carta-links {
+    display: grid;
+    gap: 0.7rem;
+    overflow: visible;
+    min-width: 0;
+    padding: 0;
+  }
+
   html.header-away .carta-index { top: 1.2rem; }
 
   .index-toggle {
@@ -1529,9 +1568,17 @@ section[id],
     top: var(--header);
     z-index: 8;
     gap: 0.38rem;
+    width: 100%;
+    max-width: 100%;
     margin-bottom: 0.55rem;
     padding: 0.38rem 0 0.5rem;
     background: #000;
+    box-sizing: border-box;
+  }
+
+  .carta-links {
+    gap: 0.38rem;
+    padding-right: 0.35rem;
   }
 
   .site-header { transition: transform 0.25s ease; }
@@ -1578,11 +1625,13 @@ section[id],
   }
 
   .index-toggle {
-    position: sticky;
-    left: 0;
+    position: relative;
     z-index: 1;
     background: #000;
   }
+
+  html.header-away .index-toggle { background: #100e0c; }
+  html[data-theme="light"].header-away .index-toggle { background: #fffaf2; color: #161412; }
 
   .carta-index a {
     display: inline-flex;
